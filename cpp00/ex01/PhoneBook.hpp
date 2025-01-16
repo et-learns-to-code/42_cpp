@@ -16,7 +16,7 @@ class PhoneBook
 		void addContact();
 		void searchContacts() const;
 		void displayContacts() const;
-		void displayContact(int index);
+		void displayContact(int index) const;
 };
 
 #endif

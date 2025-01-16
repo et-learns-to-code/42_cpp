@@ -14,10 +14,11 @@ class Contact
 
 	public:
 		Contact();
-		// By using a reference (std::string&), no copy is made.
-		void setContactDetails(const std::string &first, const std::string &last,
-								const std::string &nick, const std::string &number,
-								const std::string &secret);
+		bool setFirstName();
+		bool setLastName();
+		bool setNickname();
+		bool setPhoneNumber();
+		bool setDarkestSecret();
 };
 
 #endif
