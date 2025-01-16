@@ -1,6 +1,6 @@
 NAME = phonebook
 
-SRC = $(addprefix src/, Contact.cpp main.cpp PhoneBook.cpp)
+SRC = main.cpp
 
 OBJ = ${SRC:.cpp=.o}
 
