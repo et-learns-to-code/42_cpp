@@ -1,34 +1,69 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PhoneBook.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 14:04:04 by etien             #+#    #+#             */
+/*   Updated: 2025/02/13 15:17:38 by etien            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "PhoneBook.hpp"
+
 #include <iostream>
+#include <cstdlib>
+#include <iomanip> // std::setw, std::right
 
-// ":"  The initialization list is used to initialize the data members of the class before the constructor's body executes. currentIndex(0) means the currentIndex member is initialized with the value 0 when an object of type PhoneBook is created. More efficient variable assignment than assigning in constructor body.
-PhoneBook::PhoneBook() : currentIndex(0)
+PhoneBook::PhoneBook() : _contactCount(0), _oldestIndex(0) {}
+
+PhoneBook::~PhoneBook() {}
+
+void PhoneBook::addContact(const Contact &newContact)
 {
-
-}
-
-void PhoneBook::addContact()
-{
-	std::string first, last, nick, phone, secret;
-
-	std::cout << "Enter first name: ";
-	std::getline(std::cin, first);
-	std::cout << "Enter last name: ";
-	std::getline(std::cin, last);
-	std::cout << "Enter nickname: ";
-	std::getline(std::cin, nick);
-	std::cout << "Enter phone number: ";
-	std::getline(std::cin, phone);
-	std::cout << "Enter darkest secret: ";
-	std::getline(std::cin, secret);
-
-	if (first.empty() || last.empty() || nick.empty()
-	|| phone.empty() || secret.empty())
+	if (_contactCount < 8)
 	{
-		std::
+		_contacts[_contactCount] = newContact;
+		_contactCount++;
 	}
+	else
+	{
+		_contacts[_oldestIndex] = newContact;
+		// oldest index will be + 1, but % 8 to remain within the
+		// bounds of the array
+		_oldestIndex = (_oldestIndex + 1) % 8;
+		// contactCount doesn't have to be updated because arr is already
+		// at max contacts
+	}
+}
+
+void PhoneBook::displayContacts() const
+{
+	std::cout << "-----------------------------------------------------" << std::endl;
+	std::cout << "|    Index   | First Name |  Last Name |  Nickname  |" << std::endl;
+	std::cout << "-----------------------------------------------------" << std::endl;
+}
+
+void PhoneBook::displayContactByIndex(int index) const
+{
+	(void)index;
+}
+
+void addPhoneBook()
+{
+	std::cout << "Adding to phonebook." << std::endl;
 
 }
 
+void searchPhoneBook()
+{
+	std::cout << "Searching phonebook." << std::endl;
 
+}
 
+void exitPhoneBook()
+{
+	std::cout << "Exiting PhoneBook program." << std::endl;
+	exit(0);
+}

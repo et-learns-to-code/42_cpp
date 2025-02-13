@@ -1,10 +1,12 @@
 NAME = phonebook
 
-SRC = main.cpp utils.cpp
+SRC = main.cpp PhoneBook.cpp Contact.cpp
 
-OBJ = ${SRC:.cpp=.o}
+OBJ_DIR = obj
 
-CC = g++
+OBJ = $(addprefix $(OBJ_DIR)/, ${SRC:.cpp=.o})
+
+CC = c++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
@@ -12,10 +14,19 @@ RM = rm -f
 
 all: $(NAME)
 
+# Create the obj directory if it doesn't exist
+# -p (parents) flag will create parent directories if
+# necessary and won't throw an error even if the directory
+# already exists
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
 $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-%.o: %.cpp
+# | $(OBJ_DIR) part ensures that the directory is created before
+# the compilation happens.
+$(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

@@ -1,72 +1,67 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Contact.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 13:44:00 by etien             #+#    #+#             */
+/*   Updated: 2025/02/13 14:04:51 by etien            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Contact.hpp"
 
-bool setFirstName()
+Contact::Contact() {};
+
+Contact::~Contact() {};
+
+void Contact::setFirstName(std::string firstName)
 {
-	std::cout << "Enter first name: ";
-	std::getline(std::cin, firstName);
-	if (!isValidName(firstName))
-	{
-		std::cout << "Field cannot be empty.\n"
-		return (false);
-	}
-	return (true);
+	this->_firstName = firstName;
 }
 
-bool setLastName()
+void Contact::setLastName(std::string lastName)
 {
-	std::cout << "Enter last name: ";
-	std::getline(std::cin, lastName);
-	if (!isValidName(lastName))
-	{
-		std::cout << "Field cannot be empty.\n"
-		return (false);
-	}
-	return (true);
+	this->_lastName = lastName;
 }
 
-bool setNickname()
+void Contact::setNickname(std::string nickname)
 {
-	std::cout << "Enter nickname: ";
-	std::getline(std::cin, nickname);
-	if (nickname.empty())
-	{
-		std::cout << "Field cannot be empty.\n"
-		return (false);
-	}
-	return (true);
+	this->_nickname = nickname;
 }
 
-bool setPhoneNumber()
+void Contact::setPhoneNumber(std::string phoneNumber)
 {
-	std::cout << "Enter phone number: ";
-	std::getline(std::cin, phoneNumber);
-	if (phoneNumber.empty())
-	{
-		std::cout << "Field cannot be empty.\n"
-		return (false);
-	}
-	return (true);
+	this->_phoneNumber = phoneNumber;
 }
 
-bool setDarkestSecret()
+void Contact::setDarkestSecret(std::string darkestSecret)
 {
-	std::cout << "Enter darkest secret: ";
-	std::getline(std::cin, darkestSecret);
-	if (darkestSecret.empty())
-	{
-		std::cout << "Field cannot be empty.\n"
-		return (false);
-	}
-	return (true);
+	this->_darkestSecret = darkestSecret;
 }
 
-void addContact()
+std::string Contact::getFirstName() const
 {
-	while (!setFirstName());
-	while (!setLastName());
-	while (!setNickname());
-	while (!setPhoneNumber());
-	while (!setDarkestSecret());
+	return this->_firstName;
+}
 
-	std::cout << "Contact successfully added.\n"
+std::string Contact::getLastName() const
+{
+	return this->_lastName;
+}
+
+std::string Contact::getNickname() const
+{
+	return this->_nickname;
+}
+
+std::string Contact::getPhoneNumber() const
+{
+	return this->_phoneNumber;
+}
+
+std::string Contact::getDarkestSecret() const
+{
+	return this->_darkestSecret;
 }
