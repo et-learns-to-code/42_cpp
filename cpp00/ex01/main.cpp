@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:21:22 by etien             #+#    #+#             */
-/*   Updated: 2025/02/13 15:40:37 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/13 18:24:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "Contact.hpp"
 
 #include <iostream>
+#include <cstdlib>
 
 void displayMenu()
 {
@@ -27,7 +28,7 @@ int main()
 	const char *commands[] = {"ADD", "SEARCH", "EXIT"};
 
 	// An array of function pointers corresponding to commands.
-	void (PhoneBook::*actions[])(void) =
+	void (PhoneBook::*actions[])() =
 	{
 		&PhoneBook::addPhoneBook,
 		&PhoneBook::searchPhoneBook,
@@ -40,7 +41,11 @@ int main()
 		// std::getline(input_stream, string_variable, delimiter);
 		// delimiter is '\n' if unspecified
 
-		std::getline(std::cin, command);
+		if (!std::getline(std::cin, command))
+		{
+			std::cout << "EOF detected. Exiting program." << std::endl;
+			exit(0);
+		}
 		for (int i = 0; i < 3; i++)
 		{
 			if (command.compare(commands[i]) == 0)

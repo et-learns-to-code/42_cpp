@@ -6,13 +6,14 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:37:57 by etien             #+#    #+#             */
-/*   Updated: 2025/02/13 13:52:08 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/13 17:03:36 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONTACT_HPP
 #define CONTACT_HPP
 
+// std::string objects will manage their own memory
 #include <string>
 
 class Contact
