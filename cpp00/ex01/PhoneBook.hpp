@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 13:36:04 by etien             #+#    #+#             */
-/*   Updated: 2025/02/13 15:09:56 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/14 14:55:12 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ class PhoneBook
 		void addContact(const Contact &newContact);
 		void displayContacts() const;
 		void displayContactByIndex(int index) const;
-		void addPhoneBook();
-		void searchPhoneBook();
-		void exitPhoneBook();
+		void addToPhoneBook();
+		void searchPhoneBook() const;
 };
 
 #endif

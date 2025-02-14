@@ -6,20 +6,23 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:04:04 by etien             #+#    #+#             */
-/*   Updated: 2025/02/13 18:37:51 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/14 15:26:26 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PhoneBook.hpp"
 
-#include <iostream>
+#include <iostream> // cin, cout
 #include <cstdlib> // exit
 #include <iomanip> // std::setw, std::right
+#include <sstream> // stringstream in searchPhoneBook()
 
 PhoneBook::PhoneBook() : _contactCount(0), _oldestIndex(0) {}
 
 PhoneBook::~PhoneBook() {}
 
+// This function stores a contact into the phonebook's contacts array and updates
+// the contactCount and oldestIndex variables.
 void PhoneBook::addContact(const Contact &newContact)
 {
 	if (_contactCount < 8)
@@ -47,12 +50,13 @@ static std::string formatText(const std::string& text)
 	return text;
 }
 
-// Set the width of each column to 10 characters.
-// Right-align the text within each column using std::setw and std::right.
-// setw is a non-persistent manipulator (only applies to the next output)
-// so it should be called last.
-// Truncate the text if it exceeds 10 characters, replacing the last
-// character  with a dot.
+// This function displays all the contacts in the phonebook in a summarized form.
+// Workflow:
+// 1) Set the width of each column to 10 characters.
+// setw is a non-persistent manipulator (only applies to the next output) so it should
+// be called last. It will pad shorter text with space on the left (by default).
+// 2) Truncate the text if it exceeds 10 characters, replacing the last
+// character with a dot by calling formatText.
 void PhoneBook::displayContacts() const
 {
 	std::cout << "-----------------------------------------------------" << std::endl;
@@ -63,28 +67,49 @@ void PhoneBook::displayContacts() const
 	{
 		std::cout
 		<< "| "
-		<< std::setw(10) << std::right << i
+		<< std::setw(10) << i + 1
 		<< " | "
-		<< std::setw(10) << std::right << formatText(_contacts[i].getFirstName())
+		<< std::setw(10) << formatText(_contacts[i].getFirstName())
 		<< " | "
-		<< std::setw(10) << std::right << formatText(_contacts[i].getLastName())
+		<< std::setw(10) << formatText(_contacts[i].getLastName())
 		<< " | "
-		<< std::setw(10) << std::right << formatText(_contacts[i].getNickname())
+		<< std::setw(10) << formatText(_contacts[i].getNickname())
 		<< " |"
 		<< std::endl;
 	}
 	std::cout << "-----------------------------------------------------" << std::endl;
 }
 
+// This function will display the full details of the contact with the specified index.
 void PhoneBook::displayContactByIndex(int index) const
 {
-	(void)index;
+	int arr_index = index - 1;
+
+	std::cout << std::endl << "Details for contact #" << index << ": " << std::endl;
+	std::cout << std::left
+		<< std::setw(16)
+		<< "First name: " << this->_contacts[arr_index].getFirstName()
+		<< std::endl
+		<< std::setw(16)
+		<< "Last name: " << this->_contacts[arr_index].getLastName()
+		<< std::endl
+		<< std::setw(16)
+		<< "Nickname: " << this->_contacts[arr_index].getNickname()
+		<< std::endl
+		<< std::setw(16)
+		<< "Phone number: " << this->_contacts[arr_index].getPhoneNumber()
+		<< std::endl
+		<< std::setw(16)
+		<< "Darkest secret: " << this->_contacts[arr_index].getDarkestSecret()
+		<< std::endl << std::endl;
 }
 
+// This helper function trims leading and trailing whitespaces from the input.
 static std::string trim(const std::string& input)
 {
 	// Find the first non-whitespace character
 	size_t start = input.find_first_not_of(" \t");
+	// npos (no-position) means no matches
 	if (start == std::string::npos)
 		return ""; // If only whitespace characters, return empty string.
 	 // Find the last non-whitespace character
@@ -92,16 +117,11 @@ static std::string trim(const std::string& input)
 	return input.substr(start, end - start + 1);
 }
 
-static bool isValidInput(const std::string& input)
-{
-	return !input.empty();
-}
-
 // This function will prompt the user to fill out all contact fields.
-// If an input is invalid, the prompt will repeat.
+// If the input is empty (or consists solely of whitespace), the prompt will repeat.
 // The inputs are stored in an array first then mapped to the correct
-// contact field to be stored in the Contact object.
-void PhoneBook::addPhoneBook()
+// contact field in the Contact object which will be stored in the PhoneBook.
+void PhoneBook::addToPhoneBook()
 {
 	Contact	contact;
 	std::string input[5];
@@ -112,19 +132,22 @@ void PhoneBook::addPhoneBook()
 	for (int i = 0; i < 5; i++)
 	{
 		std::string userInput;
-		bool validInput = false;
-		while (!validInput)
+		while (true)
 		{
-			std::cout << "Enter " << fieldNames[i] << ": ";
-			std::getline(std::cin, userInput);
+			std::cout << "Enter " << fieldNames[i] << ": " << std::endl;
+			if (!std::getline(std::cin, userInput))
+			{
+				std::cout << std::endl << "EOF detected. Exiting program." << std::endl;
+				exit(0);
+			}
 			userInput = trim(userInput);
-			if (isValidInput(userInput))
+			if (!userInput.empty())
 			{
 				input[i] = userInput;
-				validInput = true;
+				break;
 			}
 			else
-				std::cout << "Invalid input." << std::endl;
+				std::cout << "Input is empty." << std::endl;
 		}
 	}
 	contact.setFirstName(input[0]);
@@ -133,18 +156,61 @@ void PhoneBook::addPhoneBook()
 	contact.setPhoneNumber(input[3]);
 	contact.setDarkestSecret(input[4]);
 	this->addContact(contact);
-
 	std::cout << std::endl << "Contact successfully added." << std::endl << std::endl;
 }
 
-void PhoneBook::searchPhoneBook()
+// This function will display all the saved contacts in the phonebook then prompt
+// the user for the specific contact that they want to see.
+// std::stringstream is used to convert the input string object to an integer.
+// std::stringstream is a stream-based class in C++ that works like a buffer.
+// You can "write" a string into it and then "read" it out as different
+// data types, such as an integer.
+// eof() in std::stringstream checks whether the input stream has reached
+// the end of its buffer.
+void PhoneBook::searchPhoneBook() const
 {
-	std::cout << "Searching phonebook." << std::endl;
-	this->displayContacts();
-}
+	std::string index;
+	int index_int;
 
-void PhoneBook::exitPhoneBook()
-{
-	std::cout << "Exiting program." << std::endl;
-	exit(0);
+	if (this->_contactCount == 0)
+	{
+		std::cout << std::endl << "No contacts saved yet." << std::endl << std::endl;
+		return;
+	}
+	this->displayContacts();
+	while (true)
+	{
+		std::cout << "Enter contact index for details: " << std::endl;
+		if (!std::getline(std::cin, index))
+		{
+			std::cout << std::endl << "EOF detected. Exiting program." << std::endl;
+			exit(0);
+		}
+		// index is put into the string stream
+		// then extracted out into index_int
+		std::stringstream ss(index);
+		// !(ss >> index_int) → Checks if the extraction failed.
+		// !(ss.eof()) → Checks for leftover characters.
+		if (!(ss >> index_int) || !(ss.eof()))
+		{
+			std::cout << "Not an index." << std::endl;
+			continue;
+		}
+		if (index_int <= 0 || index_int > this->_contactCount)
+		{
+			std::cout << "Index is out of range." << std::endl;
+			if (index_int > this->_contactCount)
+			{
+				if (this->_contactCount == 1)
+					std::cout << "Only 1 contact in phonebook." << std::endl;
+				else
+					std::cout << "Only " << this->_contactCount
+							<< " contacts in phonebook." << std::endl;
+			}
+			continue;
+		}
+		else
+			break;
+	}
+	this->displayContactByIndex(index_int);
 }
