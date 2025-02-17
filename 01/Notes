@@ -1,0 +1,58 @@
+// 1. Memory allocation
+// Static allocation: Happens at compile time (stack memory).
+// Dynamic allocation: Happens at runtime (heap memory).
+// - Example: int* p = new int(42);
+// - Requires manual cleanup with delete (or delete[] for arrays) to avoid memory leaks.
+
+// 2. Pointers to Members
+// Special pointers that refer to a member of a class, rather than a regular memory address.
+// Usage:
+
+		// class Test {
+		// public:
+		//     int a;
+		//     void print() { std::cout << "Hello\n"; }
+		// };
+
+		// int Test::*ptrA = &Test::a;  // Pointer to a member variable
+		// void (Test::*ptrPrint)() = &Test::print;  // Pointer to a member function
+
+		// Test obj;
+		// obj.*ptrA = 10;      // Access member variable through pointer
+		// (obj.*ptrPrint)();   // Call member function through pointer
+
+// 3. References
+// Aliases for existing variables — safer and easier to use than pointers.
+// Must be initialized when declared, and cannot be changed to reference another variable.
+		// int x = 10;
+		// int& ref = x;  // ref is a reference to x
+		// ref = 20;      // x is now 20
+
+// Advantages of references over pointers
+// a. References cannot be NULL.
+// - Pointer can cause segmentation faults if dereferenced, which means refrences are less risky
+// b. References cannot be reseated (reassigned to another variable).
+// - Once a reference is bound to a variable, it cannot be made to refer to a different one.
+// c. No explicit dereferencing needed.
+		// int x = 10;
+		// int& ref = x;
+		// std::cout << ref;  // No need for *
+// d. Safer for function arguments.
+// - Great for passing large objects to functions without copying
+		// void modify(int& ref) { ref *= 2; }  // Always valid
+		// void modify(int* ptr) { if (ptr) *ptr *= 2; }  // Needs a null check!
+
+// 4. Switch Statement
+// An alternative to multiple if-else statements, used for branching based on integral values.
+// int choice = 2;
+// switch (choice) {
+//     case 1:
+//         std::cout << "One";
+//         break;
+//     case 2:
+//         std::cout << "Two";
+//         break;
+//     default:
+//         std::cout << "Other";
+//         break;
+// }
