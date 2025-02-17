@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:04:04 by etien             #+#    #+#             */
-/*   Updated: 2025/02/14 15:26:26 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/17 13:58:59 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,13 @@ void PhoneBook::addToPhoneBook()
 				exit(0);
 			}
 			userInput = trim(userInput);
-			if (!userInput.empty())
+			// check that trimmed string does not contain tab
+			if (userInput.find('\t') != std::string::npos)
+			{
+				std::cout << "Input cannot contain tabs." << std::endl;
+				continue;
+			}
+			else if (!userInput.empty())
 			{
 				input[i] = userInput;
 				break;
