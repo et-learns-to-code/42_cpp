@@ -12,9 +12,40 @@
 #include <functional>
 #include "Account.hpp"
 
+// Test file for an Account class, simulating bank account operations —
+// creating accounts, making deposits, and making withdrawals.
+
+// Key Syntax:
+
+// 1) Vectors as Containers:
+// std::vector is a dynamic array that makes it easy to manage collections of objects.
+// Initialized with a range (from array start to array end).
+
+// 2) Iterators for Traversal:
+// accounts.begin() → Points to the first account.
+// accounts.end() → Points one past the last account (loop terminates here).
+
+// 3) std::for_each with std::mem_fun_ref:
+// Applies a member function to each object in a container.
+// std::mem_fun_ref → Used with non-static member functions (like displayStatus).
+
+// 4) Iterator Pairs:
+// acc_int_t → Combines two iterators into one unit.
+// Makes parallel iteration through two containers easy.
+
+// Overall Flow
+// - Initialize accounts (with balances).
+// - Display initial state (bank-wide and per-account).
+// - Make deposits (from a vector of amounts).
+// - Display updated state.
+// - Make withdrawals (from another vector).
+// - Display final state.
 
 int		main( void ) {
 
+	// accounts_t → A vector of Account::t objects (probably an alias or nested type for Account instances).
+	// ints_t → A vector of int (for deposits/withdrawals).
+	// acc_int_t → A pair of iterators, one for the accounts_t vector and one for the ints_t vector.
 	typedef std::vector<Account::t>							  accounts_t;
 	typedef std::vector<int>								  ints_t;
 	typedef std::pair<accounts_t::iterator, ints_t::iterator> acc_int_t;
