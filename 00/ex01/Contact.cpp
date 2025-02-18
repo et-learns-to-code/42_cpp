@@ -6,15 +6,15 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 13:44:00 by etien             #+#    #+#             */
-/*   Updated: 2025/02/13 14:04:51 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/18 16:45:47 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Contact.hpp"
 
-Contact::Contact() {};
+Contact::Contact() {}
 
-Contact::~Contact() {};
+Contact::~Contact() {}
 
 void Contact::setFirstName(std::string firstName)
 {
