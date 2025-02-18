@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:54:55 by etien             #+#    #+#             */
-/*   Updated: 2025/02/18 11:43:52 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/18 16:52:09 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 Zombie::Zombie() :_name("")
 {
 	std::cout
-	<< "Zombie object (default) created."
+	<< "Zombie (default) created."
 	<< std::endl;
 }
 
@@ -31,14 +31,14 @@ Zombie::Zombie( std::string name )
 {
 	this->_name = name;
 	std::cout
-	<< "Zombie object (" << this->_name << ") created."
+	<< "Zombie (" << this->_name << ") created."
 	<< std::endl;
 }
 
 Zombie::~Zombie()
 {
 	std::cout
-	<< "Zombie object (" << this->_name << ") destroyed."
+	<< "Zombie (" << this->_name << ") destroyed."
 	<< std::endl;
 }
 

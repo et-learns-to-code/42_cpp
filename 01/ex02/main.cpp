@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:50:34 by etien             #+#    #+#             */
-/*   Updated: 2025/02/18 13:13:11 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/18 16:42:32 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 // If implemented correctly, address and values for all three
 // variables should be identical.
 
-// This exercise intends to familiarize us with the syntax of references.
+// This exercise intends to familiarize us with the syntax of using references.
 
 int main()
 {
