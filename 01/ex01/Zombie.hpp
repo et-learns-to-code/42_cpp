@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   randomChump.cpp                                    :+:      :+:    :+:   */
+/*   Zombie.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/17 17:04:27 by etien             #+#    #+#             */
-/*   Updated: 2025/02/18 11:15:32 by etien            ###   ########.fr       */
+/*   Created: 2025/02/17 16:54:52 by etien             #+#    #+#             */
+/*   Updated: 2025/02/18 11:38:59 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
+#ifndef ZOMBIE_HPP
+#define ZOMBIE_HPP
 
-// This function creates a Zombie object stored on the stack that will
-// announce itself.
-void randomChump( std::string name )
+#include <string>
+
+class Zombie
 {
-	Zombie chump = Zombie(name);
-	chump.announce();
-}
+	private:
+		std::string _name;
+
+	public:
+		Zombie();
+		Zombie( std::string name );
+		~Zombie();
+
+		void announce( void );
+		void setName( std::string name);
+};
+
+#endif

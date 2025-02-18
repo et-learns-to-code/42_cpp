@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   randomChump.cpp                                    :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/17 17:04:27 by etien             #+#    #+#             */
-/*   Updated: 2025/02/18 11:15:32 by etien            ###   ########.fr       */
+/*   Created: 2025/02/17 16:58:38 by etien             #+#    #+#             */
+/*   Updated: 2025/02/18 11:55:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Zombie.hpp"
 
-// This function creates a Zombie object stored on the stack that will
-// announce itself.
-void randomChump( std::string name )
+Zombie* zombieHorde( int N, std::string name );
+
+// call delete[] to free the array.
+int main()
 {
-	Zombie chump = Zombie(name);
-	chump.announce();
+	int N = 10;
+
+	Zombie *horde = zombieHorde(N, "Zombie");
+	for (int i = 0; i < N; i++)
+		horde[i].announce();
+	delete[] horde;
 }
