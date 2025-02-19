@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:24:57 by etien             #+#    #+#             */
-/*   Updated: 2025/02/18 17:42:37 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/19 10:58:56 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ void HumanA::attack()
 {
 	std::cout
 	<< this->_name << " attacks with their "
-	<< this->_weapon.getType()
+	<< this->_weapon.getType() << "."
 	<< std::endl;
 }

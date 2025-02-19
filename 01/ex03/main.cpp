@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:21:17 by etien             #+#    #+#             */
-/*   Updated: 2025/02/18 13:27:35 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/19 11:11:17 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #include "HumanA.hpp"
 #include "HumanB.hpp"
 
+// The {} blocks create local scopes, and any variables (like club and bob
+// in the first block) are automatically destroyed when the scope ends.
+// That’s why HumanA (Bob) is destroyed right after the first block concludes,
+// and then HumanB (Jim) is created fresh in the second block.
 int main()
 {
 	{
