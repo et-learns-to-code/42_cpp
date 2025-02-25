@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:08:39 by etien             #+#    #+#             */
-/*   Updated: 2025/02/25 19:25:07 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/25 21:36:59 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,32 +93,130 @@ int Fixed::toInt( void ) const
 
 bool Fixed::operator>(Fixed const &other) const
 {
-	return (this->_value > other._value);
+	return (this->getRawBits() > other.getRawBits());
 }
 
 bool Fixed::operator<(Fixed const &other) const
 {
-	return (this->_value < other._value);	
+	return (this->getRawBits() < other.getRawBits());	
 }
 
 bool Fixed::operator>=(Fixed const &other) const
 {
-	return (this->_value >= other._value);	
+	return (this->getRawBits() >= other.getRawBits());	
 }
 
 bool Fixed::operator<=(Fixed const &other) const
 {
-	return (this->_value <= other._value);	
+	return (this->getRawBits() <= other.getRawBits());	
 }
 
 bool Fixed::operator==(Fixed const &other) const
 {
-	return (this->_value == other._value);	
+	return (this->getRawBits() == other.getRawBits());	
 }
 
 bool Fixed::operator!=(Fixed const &other) const
 {
-	return (this->_value != other._value);	
+	return (this->getRawBits() != other.getRawBits());	
+}
+
+Fixed Fixed::operator+(Fixed const &other) const
+{
+	return Fixed(this->toFloat() + other.toFloat());
+}
+
+Fixed Fixed::operator-(Fixed const &other) const
+{
+	return Fixed(this->toFloat() - other.toFloat());
+}
+
+Fixed Fixed::operator*(Fixed const &other) const
+{
+	return Fixed(this->toFloat() * other.toFloat());
+}
+
+Fixed Fixed::operator/(Fixed const &other) const
+{
+	return Fixed(this->toFloat() / other.toFloat());
+}
+
+// Pre-increment (++x) should modify the current instance and 
+// return a reference to *this.
+// Post-increment (x++) should return a copy of the instance 
+// before modifying it.
+// Different function signatures: 
+// - Pre-increment does not take any parameters and returns a 
+//   reference to *this.
+// - Post-increment takes a dummy int parameter.
+
+// What does "increase or decrease the fixed-point value from the smallest representable ϵ" mean?
+// In fixed-point representation, the smallest increment is not 1, but rather 1 / (1 << _fraction).
+// Example: _fraction = 8 (which means shifting by 8, or 256)
+// The smallest representable step (ϵ) in fixed-point arithmetic is 1 / 256 = 0.00390625.
+// If _value is incremented by 1, the actual float value increases by ϵ = 1 / 256.
+// ϵ is increment/decrement of the smallest possible step in fixed-point precision.
+
+// pre-increment
+Fixed &Fixed::operator++()
+{
+	this->setRawBits(this->getRawBits() + 1);
+	return (*this);
+}
+
+// post-increment
+Fixed Fixed::operator++(int)
+{
+	Fixed prev = *this;
+	this->setRawBits(this->getRawBits() + 1);
+	return prev;
+}
+
+// pre-decrement
+Fixed &Fixed::operator--()
+{
+	this->setRawBits(this->getRawBits() - 1);
+	return (*this);
+}
+
+// post-decrement
+Fixed Fixed::operator--(int)
+{
+	Fixed prev = *this;
+	this->setRawBits(this->getRawBits() - 1);
+	return prev;
+}
+
+// The non-const version is for modifiable objects.
+// The const version is for read-only objects.
+// The reason min and max are static is that they do not operate on a specific instance of Fixed. 
+// Instead, they take two Fixed instances as arguments and return one of them.
+// A static member function min that takes as parameters two references on fixed-point
+// numbers, and returns a reference to the smallest one.
+Fixed &Fixed::min(Fixed &a, Fixed &b)
+{
+	return (a < b) ? a : b;
+}
+
+// A static member function min that takes as parameters two references to constant
+// fixed-point numbers, and returns a reference to the smallest one.
+Fixed const &Fixed::min(Fixed const &a, Fixed const &b)
+{
+	return (a < b) ? a : b;
+}
+
+// A static member function max that takes as parameters two references on fixed-point
+// numbers, and returns a reference to the greatest one.
+Fixed &Fixed::max(Fixed &a, Fixed &b)
+{
+	return (a > b) ? a : b;
+}
+
+// A static member function max that takes as parameters two references to constant
+// fixed-point numbers, and returns a reference to the greatest one.
+Fixed const &Fixed::max(Fixed const &a, Fixed const &b)
+{
+	return (a > b) ? a : b;
 }
 
 std::ostream &operator<<(std::ostream &out, Fixed const &fixed)
