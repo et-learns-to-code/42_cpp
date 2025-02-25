@@ -6,12 +6,14 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:08:14 by etien             #+#    #+#             */
-/*   Updated: 2025/02/25 11:54:59 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/25 18:21:30 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FIXED_HPP
 #define FIXED_HPP
+
+#include <iostream>
 
 class Fixed
 {
