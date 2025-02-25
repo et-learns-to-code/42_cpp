@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:08:39 by etien             #+#    #+#             */
-/*   Updated: 2025/02/25 11:53:13 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/25 12:01:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ const int Fixed::_fraction = 8;
 Fixed::Fixed() : _value(0)
 {
 	std::cout << "Fixed object default constructor called." << std::endl;
+}
+
+Fixed::Fixed(const int value)
+{
+
+}
+
+Fixed::Fixed(const float value)
+{
+
 }
 
 // A copy constructor is a special constructor used to create a new
