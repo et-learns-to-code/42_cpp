@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:37:27 by etien             #+#    #+#             */
-/*   Updated: 2025/02/26 15:37:22 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/26 18:19:26 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,22 @@ Point::Point() : _x(0), _y(0) {}
 Point::Point(const float x, const float y) : _x(x), _y(y) {}
 
 // Copy constructor
-Point::Point(const Point &src)
-{
-	*this = src;
-}
+// The copy constructor is modified. It usually relies on the copy assignment
+// operator overload to correctly assign the variables. However, the variables
+// are const and cannnot be reassigned. The solution is to initialize the
+// variables in an initialization list.
+Point::Point(const Point &src) : _x(src.getX()), _y(src.getY()) {}
 
+// Copy assignment operator overload
 // Since _x and _y are const, their values must be initialized at
 // the moment of construction and cannot be modified later.
 // The copy assignment operator is meant to modify an existing object,
 // but because _x and _y are immutable, you cannot reassign them.
-// Copy assignment operator overload
+// Simply to fulfill the Orthodox Canonical form, we create a redundant
+// copy assignment operator overload.
 Point &Point::operator=(const Point &src)
 {
+	(void) src;
 	return *this;
 }
 
@@ -45,4 +49,9 @@ Fixed const &Point::getX() const
 Fixed const &Point::getY() const
 {
 	return this->_y;
+}
+
+std::ostream &operator<<(std::ostream &out, Point const &point)
+{
+	return (out << "(" << point.getX() << ", " << point.getY() << ")");
 }

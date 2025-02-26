@@ -6,13 +6,13 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:37:48 by etien             #+#    #+#             */
-/*   Updated: 2025/02/26 16:37:34 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/26 17:47:17 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Point.hpp"
 
-bool bsp( Point const a, Point const b, Point const c, Point const point)
+bool bsp(Point const a, Point const b, Point const c, Point const point)
 {
 	Fixed xA = a.getX();
 	Fixed xB = b.getX();
@@ -34,5 +34,5 @@ bool bsp( Point const a, Point const b, Point const c, Point const point)
 	// will return true.
 	return ((alpha >= Fixed(0) && alpha <= Fixed(1)) &&
 			(beta >= Fixed(0) && beta <= Fixed(1)) &&
-			(gamma >= Fixed(0) && gamma <= Fixed(1)))
+			(gamma >= Fixed(0) && gamma <= Fixed(1)));
 }

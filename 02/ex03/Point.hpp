@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:36:08 by etien             #+#    #+#             */
-/*   Updated: 2025/02/26 15:24:41 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/26 16:57:35 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ class Point
 
 		Fixed const &getX() const;
 		Fixed const &getY() const;
-
-
 };
+
+// extractor operator overload to display coordinates of point
+std::ostream &operator<<(std::ostream &out, Point const &point);
 
 #endif
