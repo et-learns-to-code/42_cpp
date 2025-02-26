@@ -1,0 +1,60 @@
+Understanding Barycentric Coordinates in an Intuitive Way
+
+barycentric: relating to the centre of gravity
+
+Imagine you have a triangle with three points:
+
+A, B, and C
+You also have a test point P somewhere in the plane.
+Now, you want to answer:
+"Is P inside the triangle?"
+
+Instead of using absolute positions (like x and y coordinates), we use relative positions called barycentric coordinates.
+
+Key Idea: Expressing P as a Weighted Combination of A, B, and C
+Think of P as being "made up of" parts of A, B, and C in some proportion:
+
+P=αA+βB+γC
+α tells us how much of A is in P
+β tells us how much of B is in P
+γ tells us how much of C is in P
+If all these weights are between 0 and 1, then P is inside the triangle.
+If any weight is negative or greater than 1, P is outside.
+
+Why This Works Intuitively
+Think of the weights α,β,γ like percentages:
+
+If α=1, then P is exactly at A.
+If β=1, then P is exactly at B.
+If γ=1, then P is exactly at C.
+If α=β=γ= 1/3, then P is exactly in the center of the triangle.
+By adjusting these values, you can move P anywhere in or around the triangle.
+
+Mathematical Formula to Compute α, β, γ
+To calculate these weights, we use determinants (or cross-products):
+
+α= area of triangle PBC / area of triangle ABC
+
+β= area of triangle PCA / area of triangle ABC
+
+γ= area of triangle PAB / area of triangle ABC
+
+Each weight is the ratio of a sub-triangle’s area to the total area.
+
+Final Decision: Is P Inside?
+Once you calculate α,β,γ, check:
+- If all are between 0 and 1, P is inside. ✅
+- If any is negative or greater than 1, P is outside. ❌
+
+Why Barycentric Coordinates Are Useful
+Fast Computation – No need for expensive square roots or trigonometry.
+Works for Any Triangle Shape – Even if it's not equilateral or right-angled.
+Stable for Floating-Point Math – Unlike some other geometric tests.
+Summary
+A point P is inside a triangle if it can be written as a weighted sum of A, B, and C.
+The weights α,β,γ are found using area ratios.
+If all weights are between 0 and 1, P is inside the triangle.
+
+
+
+
