@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:37:27 by etien             #+#    #+#             */
-/*   Updated: 2025/02/26 18:19:26 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/26 18:23:21 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Point::Point(const Point &src) : _x(src.getX()), _y(src.getY()) {}
 // the moment of construction and cannot be modified later.
 // The copy assignment operator is meant to modify an existing object,
 // but because _x and _y are immutable, you cannot reassign them.
-// Simply to fulfill the Orthodox Canonical form, we create a redundant
+// Simply to fulfill the Orthodox Canonical form, we create a no-op
 // copy assignment operator overload.
 Point &Point::operator=(const Point &src)
 {

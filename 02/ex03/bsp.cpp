@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:37:48 by etien             #+#    #+#             */
-/*   Updated: 2025/02/26 17:47:17 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/26 18:30:37 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool bsp(Point const a, Point const b, Point const c, Point const point)
 	// If alpha, beta and gamma are all between 0 and 1,
 	// then the point is within the triangle and the function
 	// will return true.
-	return ((alpha >= Fixed(0) && alpha <= Fixed(1)) &&
-			(beta >= Fixed(0) && beta <= Fixed(1)) &&
-			(gamma >= Fixed(0) && gamma <= Fixed(1)));
+	return ((alpha > Fixed(0) && alpha < Fixed(1)) &&
+			(beta > Fixed(0) && beta < Fixed(1)) &&
+			(gamma > Fixed(0) && gamma < Fixed(1)));
 }
