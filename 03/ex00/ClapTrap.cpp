@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:31:13 by etien             #+#    #+#             */
-/*   Updated: 2025/02/28 17:12:32 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/28 17:16:40 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void ClapTrap::setAttackDamage(unsigned int const attackDamage)
 	this->_attackDamage = attackDamage;
 }
 
-void ClapTrap::printClapTrapStatus()
+void ClapTrap::printClapTrapStatus() const
 {
 	std::cout
 	<< "HP: " << this->getHitPoints() << ", "
@@ -173,7 +173,7 @@ void ClapTrap::printClapTrapStatus()
 	<< std::endl;
 }
 
-bool ClapTrap::checkDeath()
+bool ClapTrap::checkDeath() const
 {
 	if (this->_hitPoints == 0)
 	{
@@ -185,7 +185,7 @@ bool ClapTrap::checkDeath()
 	return false;
 }
 
-bool ClapTrap::checkEnergyPoints()
+bool ClapTrap::checkEnergyPoints() const
 {
 	if (this->_energyPoints == 0)
 	{
