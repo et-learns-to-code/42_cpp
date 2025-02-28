@@ -6,17 +6,21 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:21:09 by etien             #+#    #+#             */
-/*   Updated: 2025/02/28 18:03:49 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/28 21:14:05 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScavTrap.hpp"
 
-
 // default constructor
 ScavTrap::ScavTrap()
 {
 	std::cout << "ScavTrap object default constructor called." << std::endl;
+	this->_name = "Default ScavTrap";
+	this->_hitPoints = 100;
+	this->_energyPoints = 50;
+	this->_attackDamage = 20;
+	this->_maxHitPoints = 100;
 }
 
 // custom constructor
@@ -26,7 +30,11 @@ ScavTrap::ScavTrap()
 ScavTrap::ScavTrap(std::string name) : ClapTrap(name)
 {
 	std::cout << "ScavTrap object (" << this->_name << ") constructor called." << std::endl;
-	// this->_name = "Default ScavTrap";
+	this->_name = name;
+	this->_hitPoints = 100;
+	this->_energyPoints = 50;
+	this->_attackDamage = 20;
+	this->_maxHitPoints = 100;
 }
 
 // copy constructor
@@ -49,6 +57,7 @@ ScavTrap &ScavTrap::operator=(const ScavTrap &src)
 		this->_hitPoints = src._hitPoints;
 		this->_energyPoints = src._energyPoints;
 		this->_attackDamage = src._attackDamage;
+		this->_maxHitPoints = src._maxHitPoints;
 	}
 	return *this;
 }
@@ -70,5 +79,14 @@ void ScavTrap::attack(const std::string& target)
 	<< std::endl
 	<< "ScavTrap " << this->_name << " has used up one energy point."
 	<< std::endl;
-	printClapTrapStatus();
+	printStatus();
+}
+
+void ScavTrap::guardGate()
+{
+	std::cout
+	<< "ScavTrap " << this->_name
+	<< " is now in Gatekeeper mode."
+	<< std::endl
+	<< std::endl;
 }

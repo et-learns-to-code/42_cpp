@@ -6,20 +6,20 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:31:13 by etien             #+#    #+#             */
-/*   Updated: 2025/02/28 17:16:40 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/28 21:09:38 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ClapTrap.hpp"
 
 // default constructor
-ClapTrap::ClapTrap() : _name("default"), _hitPoints(10), _energyPoints(10), _attackDamage(0)
+ClapTrap::ClapTrap() : _name("Default ClapTrap"), _hitPoints(10), _energyPoints(10), _attackDamage(0), _maxHitPoints(10)
 {
 	std::cout << "ClapTrap object default constructor called." << std::endl;
 }
 
 // custom constructor
-ClapTrap::ClapTrap(std::string name) : _name(name), _hitPoints(10), _energyPoints(10), _attackDamage(0)
+ClapTrap::ClapTrap(std::string name) : _name(name), _hitPoints(10), _energyPoints(10), _attackDamage(0), _maxHitPoints(10)
 {
 	std::cout << "ClapTrap object (" << this->_name << ") constructor called." << std::endl;
 }
@@ -43,6 +43,7 @@ ClapTrap &ClapTrap::operator=(const ClapTrap &src)
 		this->_hitPoints = src._hitPoints;
 		this->_energyPoints = src._energyPoints;
 		this->_attackDamage = src._attackDamage;
+		this->_maxHitPoints = src._maxHitPoints;
 	}
 	return *this;
 }
@@ -64,7 +65,7 @@ void ClapTrap::attack(const std::string& target)
 	<< std::endl
 	<< "ClapTrap " << this->_name << " has used up one energy point."
 	<< std::endl;
-	printClapTrapStatus();
+	printStatus();
 }
 
 void ClapTrap::takeDamage(unsigned int amount)
@@ -86,23 +87,23 @@ void ClapTrap::takeDamage(unsigned int amount)
 		<< amount << " points of damage!"
 		<< std::endl;
 	}
-	printClapTrapStatus();
+	printStatus();
 }
 
 void ClapTrap::beRepaired(unsigned int amount)
 {
 	if (checkDeath() || checkEnergyPoints())
 		return;
-	if (this->_hitPoints == 10)
+	if (this->_hitPoints == this->_maxHitPoints)
 	{
 		std::cout
 		<< "ClapTrap " << this->_name << " is already at max hit points."
 		<< std::endl;
-		printClapTrapStatus();
+		printStatus();
 		return;
 	}
 	this->setEnergyPoints(this->getEnergyPoints() - 1);
-	if (amount < 10 && (this->getHitPoints() + amount) < 10)
+	if (amount < this->_maxHitPoints && (this->getHitPoints() + amount) < this->_maxHitPoints)
 	{
 		this->setHitPoints(this->getHitPoints() + amount);
 		std::cout
@@ -112,7 +113,7 @@ void ClapTrap::beRepaired(unsigned int amount)
 	}
 	else
 	{
-		this->setHitPoints(10);
+		this->setHitPoints(this->_maxHitPoints);
 		std::cout
 		<< "ClapTrap " << this->_name << " has been restored to max hit points."
 		<< std::endl;
@@ -120,7 +121,7 @@ void ClapTrap::beRepaired(unsigned int amount)
 	std::cout
 	<< "ClapTrap " << this->_name << " has used up one energy point."
 	<< std::endl;
-	printClapTrapStatus();
+	printStatus();
 }
 
 std::string ClapTrap::getName() const
@@ -143,6 +144,11 @@ unsigned int ClapTrap::getAttackDamage() const
 	return this->_attackDamage;
 }
 
+unsigned int ClapTrap::getMaxHitPoints() const
+{
+	return this->_maxHitPoints;
+}
+
 void ClapTrap::setName(std::string const name)
 {
 	this->_name = name;
@@ -163,12 +169,18 @@ void ClapTrap::setAttackDamage(unsigned int const attackDamage)
 	this->_attackDamage = attackDamage;
 }
 
-void ClapTrap::printClapTrapStatus() const
+void ClapTrap::setMaxHitPoints(unsigned int const maxHitPoints)
+{
+	this->_maxHitPoints = maxHitPoints;
+}
+
+void ClapTrap::printStatus() const
 {
 	std::cout
 	<< "HP: " << this->getHitPoints() << ", "
 	<< "EP: " << this->getEnergyPoints() << ", "
-	<< "AD: " << this->getAttackDamage()
+	<< "AD: " << this->getAttackDamage() << ", "
+	<< "Max HP: " << this->getMaxHitPoints()
 	<< std::endl
 	<< std::endl;
 }
@@ -193,7 +205,7 @@ bool ClapTrap::checkEnergyPoints() const
 		<< "ClapTrap " << this->_name
 		<< " is out of energy points."
 		<< std::endl;
-		printClapTrapStatus();
+		printStatus();
 		return true;
 	}
 	return false;

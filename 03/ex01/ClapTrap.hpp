@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:30:31 by etien             #+#    #+#             */
-/*   Updated: 2025/02/28 17:39:33 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/28 21:05:42 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class ClapTrap
 		unsigned int _hitPoints;
 		unsigned int _energyPoints;
 		unsigned int _attackDamage;
+		unsigned int _maxHitPoints;
 
 	public:
 		ClapTrap();
@@ -40,12 +41,14 @@ class ClapTrap
 		unsigned int getHitPoints() const;
 		unsigned int getEnergyPoints() const;
 		unsigned int getAttackDamage() const;
+		unsigned int getMaxHitPoints() const;
 		void setName(std::string const name);
 		void setHitPoints(unsigned int const hitPoints);
 		void setEnergyPoints(unsigned int const energyPoints);
 		void setAttackDamage(unsigned int const attackDamage);
+		void setMaxHitPoints(unsigned int const attackDamage);
 
-		void printClapTrapStatus() const;
+		void printStatus() const;
 		bool checkDeath() const;
 		bool checkEnergyPoints() const;
 };
