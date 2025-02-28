@@ -6,28 +6,32 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:31:13 by etien             #+#    #+#             */
-/*   Updated: 2025/02/28 15:11:35 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/28 17:12:32 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ClapTrap.hpp"
 
+// default constructor
 ClapTrap::ClapTrap() : _name("default"), _hitPoints(10), _energyPoints(10), _attackDamage(0)
 {
 	std::cout << "ClapTrap object default constructor called." << std::endl;
 }
 
+// custom constructor
 ClapTrap::ClapTrap(std::string name) : _name(name), _hitPoints(10), _energyPoints(10), _attackDamage(0)
 {
 	std::cout << "ClapTrap object (" << this->_name << ") constructor called." << std::endl;
 }
 
+// copy constructor
 ClapTrap::ClapTrap(const ClapTrap &src)
 {
 	std::cout << "ClapTrap object copy constructor called." << std::endl;
 	*this = src;
 }
 
+// assignment operator
 ClapTrap &ClapTrap::operator=(const ClapTrap &src)
 {
 	std::cout << "ClapTrap object copy assignment operator called." << std::endl;
@@ -43,6 +47,7 @@ ClapTrap &ClapTrap::operator=(const ClapTrap &src)
 	return *this;
 }
 
+// destructor
 ClapTrap::~ClapTrap()
 {
 	std::cout << "ClapTrap object destructor called." << std::endl;
@@ -50,9 +55,8 @@ ClapTrap::~ClapTrap()
 
 void ClapTrap::attack(const std::string& target)
 {
-	checkDeath();
-	checkEnergyPoints();
-
+	if (checkDeath() || checkEnergyPoints())
+		return;
 	this->setEnergyPoints(this->getEnergyPoints() - 1);
 	std::cout
 	<< "ClapTrap " << this->_name << " attacks " << target
@@ -65,14 +69,14 @@ void ClapTrap::attack(const std::string& target)
 
 void ClapTrap::takeDamage(unsigned int amount)
 {
-	checkDeath();
+	if (checkDeath())
+		return;
 	if (amount >= this->_hitPoints)
 	{
 		this->setHitPoints(0);
 		std::cout
 		<< "ClapTrap " << this->_name << " has died!"
 		<< std::endl;
-		printClapTrapStatus();
 	}
 	else
 	{
@@ -81,14 +85,14 @@ void ClapTrap::takeDamage(unsigned int amount)
 		<< "ClapTrap " << this->_name << " has taken "
 		<< amount << " points of damage!"
 		<< std::endl;
-		printClapTrapStatus();
 	}
+	printClapTrapStatus();
 }
 
 void ClapTrap::beRepaired(unsigned int amount)
 {
-	checkDeath();
-	checkEnergyPoints();
+	if (checkDeath() || checkEnergyPoints())
+		return;
 	if (this->_hitPoints == 10)
 	{
 		std::cout
@@ -117,7 +121,6 @@ void ClapTrap::beRepaired(unsigned int amount)
 	<< "ClapTrap " << this->_name << " has used up one energy point."
 	<< std::endl;
 	printClapTrapStatus();
-
 }
 
 std::string ClapTrap::getName() const
@@ -170,26 +173,28 @@ void ClapTrap::printClapTrapStatus()
 	<< std::endl;
 }
 
-void ClapTrap::checkDeath()
+bool ClapTrap::checkDeath()
 {
 	if (this->_hitPoints == 0)
 	{
 		std::cout
 		<< "ClapTrap " << this->_name << " is dead."
 		<< std::endl;
-		return;
+		return true;
 	}
+	return false;
 }
 
-void ClapTrap::checkEnergyPoints()
+bool ClapTrap::checkEnergyPoints()
 {
-	if (this->_energyPoints <= 0)
+	if (this->_energyPoints == 0)
 	{
 		std::cout
 		<< "ClapTrap " << this->_name
 		<< " is out of energy points."
 		<< std::endl;
 		printClapTrapStatus();
-		return;
+		return true;
 	}
+	return false;
 }

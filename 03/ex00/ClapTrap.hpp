@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:30:31 by etien             #+#    #+#             */
-/*   Updated: 2025/02/28 14:58:56 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/28 16:55:20 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ class ClapTrap
 		void setAttackDamage(unsigned int const attackDamage);
 
 		void printClapTrapStatus();
-		void checkDeath();
-		void checkEnergyPoints();
+		bool checkDeath();
+		bool checkEnergyPoints();
 };
 
 #endif
