@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:30:31 by etien             #+#    #+#             */
-/*   Updated: 2025/02/28 14:03:12 by etien            ###   ########.fr       */
+/*   Updated: 2025/02/28 14:58:56 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ class ClapTrap
 {
 	private:
 		std::string _name;
-		int _hitPoints;
-		int _energyPoints;
-		int _attackDamage;
+		unsigned int _hitPoints;
+		unsigned int _energyPoints;
+		unsigned int _attackDamage;
 
 	public:
 		ClapTrap();
@@ -36,15 +36,17 @@ class ClapTrap
 
 		// getters and setters
 		std::string getName() const;
-		int getHitPoints() const;
-		int getEnergyPoints() const;
-		int getAttackDamage() const;
+		unsigned int getHitPoints() const;
+		unsigned int getEnergyPoints() const;
+		unsigned int getAttackDamage() const;
 		void setName(std::string const name);
-		void setHitPoints(int const hitPoints);
-		void setEnergyPoints(int const energyPoints);
-		void setAttackDamage(int const attackDamage);
+		void setHitPoints(unsigned int const hitPoints);
+		void setEnergyPoints(unsigned int const energyPoints);
+		void setAttackDamage(unsigned int const attackDamage);
 
 		void printClapTrapStatus();
+		void checkDeath();
+		void checkEnergyPoints();
 };
 
 #endif
