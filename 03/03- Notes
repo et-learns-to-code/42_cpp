@@ -139,6 +139,18 @@ D
 So yes, the vtable helps ensure that all references to A point to the same memory location 
 instead of creating duplicates. That way, D doesn’t get confused about which A to use.
 
+~~~~~
+
+The order of base classes does matter when resolving inheritance chains and constructors. 
+For example:
+
+class A { };
+class B { };
+class C : public A, public B { };  // A is constructed before B
+class D : public B, public A { };  // B is constructed before A
+
+Changing the order of inheritance affects construction and memory layout.
+
 --------------------------------------------------------------------------------------------------------------
 
 Do you know the -Wshadow and -Wno-shadow compiler flags?
