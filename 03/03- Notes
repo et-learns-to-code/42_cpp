@@ -1,0 +1,182 @@
+Inheritance
+
+What Happens Behind the Scenes When a Derived Class Inherits a Base Class?
+
+When a derived class inherits from a base class, the compiler ensures that the base 
+class part is constructed first before the derived class part is created. 
+This happens in one single object, not two separate objects.
+
+1. One Object, Not Two
+Even though a base class is constructed first, it is not a separate object—rather, 
+it is a part of the derived class object. You can think of it as a substructure inside the derived class.
+
+For example, consider:
+
+class Base {
+public:
+    int x;
+    Base() { std::cout << "Base constructor called\n"; }
+};
+
+class Derived : public Base {
+public:
+    int y;
+    Derived() { std::cout << "Derived constructor called\n"; }
+};
+
+int main() {
+    Derived d;
+    return 0;
+}
+
+Behind the scenes, the memory layout of d looks something like this:
+
++----------------+
+| Base::x        |  <-- Base part
++----------------+
+| Derived::y     |  <-- Derived part
++----------------+
+The object d contains both Base::x and Derived::y, all within one single object.
+
+2. How the Base Class Constructor is Called
+When you create an object of Derived, the Base class constructor runs first before the Derived constructor runs.
+This ensures that any base class properties are initialized before the derived class tries to use them.
+
+✔ Behind the scenes:
+1️⃣ Memory is allocated for one object containing both the base and derived class parts.
+2️⃣ The Base class constructor is called first.
+3️⃣ The Derived class constructor runs next.
+4️⃣ The object is now fully initialized.
+
+✔ Destruction happens in reverse order:
+1️⃣ The Derived class destructor runs first.
+2️⃣ The Base class destructor runs afterward.
+
+3. How the Derived Class Accesses Base Class Members
+The derived class can access public and protected members of the base class as if they were its own.
+
+For example:
+
+class Base {
+public:
+    int x;
+    void show() { std::cout << "Base x = " << x << std::endl; }
+};
+
+class Derived : public Base {
+public:
+    void setX(int value) { x = value; }  // Direct access to Base's x
+};
+The Derived class can directly use x because it is inherited from Base.
+It can also call Base::show() since that function is public.
+
+Summary
+✔ There is only ONE object, but it has a base-class subobject inside it.
+✔ The Base class is constructed first, and then the Derived class.
+✔ The Derived class accesses base class members as if they were part of itself.
+✔ When destroyed, the Derived destructor runs first, followed by the Base destructor. 
+
+--------------------------------------------------------------------------------------------------------------
+
+The Diamond Inheritance Problem (Simple Explanation)
+
+Imagine you have a base class called A. Then, two classes (B and C) inherit from A. Finally, another class D inherits from both B and C.
+
+class A { public: int value; };
+class B : public A {};
+class C : public A {};
+class D : public B, public C {};  // Uh-oh! Diamond problem!
+Now, D has two copies of A—one from B and one from C. This means:
+
+There are two value variables inside D.
+If you try to access value, the compiler doesn’t know which one you mean (B::A::value or C::A::value?).
+This is called the diamond problem because of how the inheritance structure looks like a diamond:
+
+       A
+      / \
+     B   C
+      \ /
+       D
+
+How virtual Fixes This
+If we mark A as a virtual base class, it ensures that only one instance of A exists, no matter how many classes inherit from it.
+
+class A { public: int value; };
+class B : virtual public A {};
+class C : virtual public A {};
+class D : public B, public C {};  // Fixed with virtual inheritance
+Now, D has only one A instance, so there’s no ambiguity when accessing value.
+
+What Does virtual Do Behind the Scenes?
+Instead of each derived class (B and C) creating its own A instance, a single shared A instance is used.
+A "virtual table" (vtable) is created to ensure that all references to A point to the correct shared instance.
+When D is created, the compiler ensures that A is initialized only once, even though D inherits from both B and C.
+
+Key Takeaways
+Without virtual inheritance: Each derived class (B and C) creates its own copy of A, causing duplication and ambiguity.
+With virtual inheritance: Only one instance of A exists, and D correctly accesses it.
+Behind the scenes, the compiler uses a virtual table (vtable) to ensure correct access.
+
+~~~~~
+
+Initially, without virtual, both B and C separately create their own instances of A, leading to two copies inside D:
+
+A  (from B)
+B
+A  (from C)
+C
+D
+
+With virtual, B still declares that it needs A, but instead of creating a new instance, 
+it just marks it as shared. When C checks, it sees that A already exists and reuses the same instance, 
+leading to this layout:
+
+A  (one shared instance)
+B
+C
+D
+
+So yes, the vtable helps ensure that all references to A point to the same memory location 
+instead of creating duplicates. That way, D doesn’t get confused about which A to use.
+
+--------------------------------------------------------------------------------------------------------------
+
+Do you know the -Wshadow and -Wno-shadow compiler flags?
+
+What is -Wshadow?
+-Wshadow is a compiler warning that detects when a local variable or function parameter has 
+the same name as a variable in an outer scope (like a member variable of a class or a global variable). 
+This can lead to confusion and unintended behavior.
+
+Example of shadowing:
+
+#include <iostream>
+
+class ClapTrap {
+private:
+    int hp;  // Member variable
+public:
+    ClapTrap(int hp) {  // Constructor parameter with the same name
+        hp = hp;  // Oops! This does nothing because of shadowing
+    }
+
+    void setHp(int hp) {  // Function parameter with the same name
+        hp = hp;  // Oops! Again, this does nothing
+    }
+};
+
+🔴 Why is this a problem?
+In both cases, hp inside the function refers only to the parameter and not to the class member.
+To fix this, we should use this->hp = hp; to clearly refer to the member variable.
+
+What is -Wno-shadow?
+-Wno-shadow disables the warning, meaning the compiler won't notify you about shadowed variables.
+
+📌 When would you use -Wno-shadow?
+
+If you don't care about shadowing warnings.
+If you're working with old code that uses shadowing a lot and you don’t want to see the warnings.
+📌 When should you use -Wshadow?
+
+When you want to avoid accidental mistakes.
+When working on large projects where shadowing can lead to subtle bugs.
