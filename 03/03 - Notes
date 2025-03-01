@@ -192,3 +192,52 @@ If you're working with old code that uses shadowing a lot and you don’t want t
 
 When you want to avoid accidental mistakes.
 When working on large projects where shadowing can lead to subtle bugs.
+
+~~~~~
+
+-Wshadow only warns when a local variable (inside a function or block) has the same name as a class member:
+
+class Test {
+    int x;
+public:
+    void setX(int x) {  // <- Warning: x shadows member variable
+        x = x;          // No effect because x is shadowed
+    }
+};
+
+If you only shadow variables via inheritance (like DiamondTrap::_name hiding ClapTrap::_name), -Wshadow does not trigger a warning.
+The flag is designed for local vs. member conflicts, not inheritance-based shadowing.
+
+--------------------------------------------------------------------------------------------------------------
+
+Key Observations from Your Experiment
+
+DiamondTrap has its own _name, separate from the inherited ClapTrap::_name.
+If you modify ClapTrap::_name, ScavTrap and FragTrap see the updated value, 
+but DiamondTrap::_name remains unchanged because it is an independent variable.
+
+Variable name precedence:
+When two variables with the same name exist in a class hierarchy, 
+the most derived class' variable shadows the inherited one.
+Accessing ClapTrap::_name inside DiamondTrap is not possible directly via this->_name because 
+this->_name refers only to DiamondTrap's own variable.
+
+How to Interact with the Inherited _name
+Even though this->_name will always refer to DiamondTrap::_name, you can still interact 
+with ClapTrap::_name explicitly:
+
+std::cout << "DiamondTrap name: " << this->_name << std::endl;
+std::cout << "ClapTrap name: " << ClapTrap::_name << std::endl;
+
+Here, ClapTrap::_name accesses the inherited variable from ClapTrap, bypassing DiamondTrap::_name.
+
+Why This Matters
+This principle is important because shadowing inherited variables can lead to unexpected behavior, 
+especially when dealing with functions that rely on those variables.
+
+In cases like this, it's often better to avoid naming conflicts or explicitly use getter functions 
+from the base class to maintain clarity:
+
+std::cout << "ClapTrap name: " << ClapTrap::getName() << std::endl;
+
+This ensures DiamondTrap can still interact with the base class's version of the variable even if it has its own.
