@@ -174,6 +174,8 @@ static std::string formatText(const std::string& text)
 // be called last. It will pad shorter text with space on the left (by default).
 // 2) Truncate the text if it exceeds 10 characters, replacing the last
 // character with a dot by calling formatText.
+// std::right is a stream manipulator, meaning once it's applied to std::cout,
+// it remains in effect for all subsequent outputs until changed.
 void PhoneBook::displayContacts() const
 {
 	std::cout << "-----------------------------------------------------" << std::endl;
@@ -183,6 +185,7 @@ void PhoneBook::displayContacts() const
 	for (int i = 0; i < _contactCount; i++)
 	{
 		std::cout
+		<< std::right
 		<< "| "
 		<< std::setw(10) << i + 1
 		<< " | "
