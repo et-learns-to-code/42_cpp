@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:21:09 by etien             #+#    #+#             */
-/*   Updated: 2025/03/01 17:30:09 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 13:52:28 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ DiamondTrap::DiamondTrap(std::string name) : ClapTrap(name), ScavTrap(name), Fra
 
 // copy constructor
 // If ClapTrap(src) not specified, ClapTrap object default constructor will be called.
-// The order of base class initialization in the constructor must match the order in which 
+// The order of base class initialization in the constructor must match the order in which
 // they are declared in the class.
 DiamondTrap::DiamondTrap(const DiamondTrap &src) : ClapTrap(src), ScavTrap(src), FragTrap(src)
 {
@@ -67,14 +67,13 @@ DiamondTrap &DiamondTrap::operator=(const DiamondTrap &src)
 {
 	std::cout << "DiamondTrap object copy assignment operator called." << std::endl;
 	// check for self-assignment
-	// getters and setters not used here to avoid unnecessary function calls.
 	if (this != &src)
 	{
-		this->_name = src._name;
-		this->_hitPoints = src._hitPoints;
-		this->_energyPoints = src._energyPoints;
-		this->_attackDamage = src._attackDamage;
-		this->_maxHitPoints = src._maxHitPoints;
+		this->_name = src.getName();
+		this->_hitPoints = src.getHitPoints();
+		this->_energyPoints = src.getEnergyPoints();
+		this->_attackDamage = src.getAttackDamage();
+		this->_maxHitPoints = src.getMaxHitPoints();
 	}
 	return *this;
 }
