@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:08:39 by etien             #+#    #+#             */
-/*   Updated: 2025/02/25 21:36:59 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 12:58:56 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ Fixed::Fixed(const int value) : _value(value << this->_fraction)
 }
 
 // roundf() ensures correct rounding before converting to an integer.
-// roundf() is a function from the cmath library that rounds a floating-point 
+// roundf() is a function from the cmath library that rounds a floating-point
 // number to the nearest integer (but still returns a float).
 // Without roundf, conversion to an integer would simply truncate the number
 // without accounting for the round up/down that the decimal portion would
 // typically need.
-// Floats are stored in IEEE 754 format, which means they have a sign bit, 
-// exponent, and mantissa. Unlike integers, bitwise operations (like <<) 
-// don't shift the actual value but instead modify the binary representation, 
+// Floats are stored in IEEE 754 format, which means they have a sign bit,
+// exponent, and mantissa. Unlike integers, bitwise operations (like <<)
+// don't shift the actual value but instead modify the binary representation,
 // which can lead to incorrect results.
 // The workaround is to bit shift 1 (an integer) then multiply it with the
 // float value.
@@ -93,32 +93,32 @@ int Fixed::toInt( void ) const
 
 bool Fixed::operator>(Fixed const &other) const
 {
-	return (this->getRawBits() > other.getRawBits());
+	return (this->_value > other.getRawBits());
 }
 
 bool Fixed::operator<(Fixed const &other) const
 {
-	return (this->getRawBits() < other.getRawBits());	
+	return (this->_value < other.getRawBits());
 }
 
 bool Fixed::operator>=(Fixed const &other) const
 {
-	return (this->getRawBits() >= other.getRawBits());	
+	return (this->_value >= other.getRawBits());
 }
 
 bool Fixed::operator<=(Fixed const &other) const
 {
-	return (this->getRawBits() <= other.getRawBits());	
+	return (this->_value <= other.getRawBits());
 }
 
 bool Fixed::operator==(Fixed const &other) const
 {
-	return (this->getRawBits() == other.getRawBits());	
+	return (this->_value == other.getRawBits());
 }
 
 bool Fixed::operator!=(Fixed const &other) const
 {
-	return (this->getRawBits() != other.getRawBits());	
+	return (this->_value != other.getRawBits());
 }
 
 Fixed Fixed::operator+(Fixed const &other) const
@@ -141,12 +141,12 @@ Fixed Fixed::operator/(Fixed const &other) const
 	return Fixed(this->toFloat() / other.toFloat());
 }
 
-// Pre-increment (++x) should modify the current instance and 
+// Pre-increment (++x) should modify the current instance and
 // return a reference to *this.
-// Post-increment (x++) should return a copy of the instance 
+// Post-increment (x++) should return a copy of the instance
 // before modifying it.
-// Different function signatures: 
-// - Pre-increment does not take any parameters and returns a 
+// Different function signatures:
+// - Pre-increment does not take any parameters and returns a
 //   reference to *this.
 // - Post-increment takes a dummy int parameter.
 
@@ -160,7 +160,7 @@ Fixed Fixed::operator/(Fixed const &other) const
 // pre-increment
 Fixed &Fixed::operator++()
 {
-	this->setRawBits(this->getRawBits() + 1);
+	this->_value++;
 	return (*this);
 }
 
@@ -168,14 +168,14 @@ Fixed &Fixed::operator++()
 Fixed Fixed::operator++(int)
 {
 	Fixed prev = *this;
-	this->setRawBits(this->getRawBits() + 1);
+	this->_value++;
 	return prev;
 }
 
 // pre-decrement
 Fixed &Fixed::operator--()
 {
-	this->setRawBits(this->getRawBits() - 1);
+	this->_value--;
 	return (*this);
 }
 
@@ -183,13 +183,13 @@ Fixed &Fixed::operator--()
 Fixed Fixed::operator--(int)
 {
 	Fixed prev = *this;
-	this->setRawBits(this->getRawBits() - 1);
+	this->_value--;
 	return prev;
 }
 
 // The non-const version is for modifiable objects.
 // The const version is for read-only objects.
-// The reason min and max are static is that they do not operate on a specific instance of Fixed. 
+// The reason min and max are static is that they do not operate on a specific instance of Fixed.
 // Instead, they take two Fixed instances as arguments and return one of them.
 // A static member function min that takes as parameters two references on fixed-point
 // numbers, and returns a reference to the smallest one.
