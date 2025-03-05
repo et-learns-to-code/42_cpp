@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:56:16 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 17:45:19 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 19:00:44 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 #include "Cat.hpp"
 #include "WrongCat.hpp"
 #include "WrongAnimal.hpp"
+
+// This exercise is designed to introduce you to subtype polymorphism
+// (also known as runtime polymorphism) in C++.
 
 int main()
 {

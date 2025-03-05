@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:24:59 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 17:38:12 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 18:47:05 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,5 @@ WrongCat::~WrongCat()
 
 void WrongCat::makeSound() const
 {
-	std::cout << this->_type << "meows." << std::endl;
+	std::cout << this->_type << " meows." << std::endl;
 }

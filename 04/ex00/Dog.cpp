@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:19:35 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 17:23:29 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 18:46:57 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,5 @@ Dog::~Dog()
 
 void Dog::makeSound() const
 {
-	std::cout << this->_type << "barks." << std::endl;
+	std::cout << this->_type << " barks." << std::endl;
 }
