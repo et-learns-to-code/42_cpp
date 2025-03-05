@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:31:13 by etien             #+#    #+#             */
-/*   Updated: 2025/02/28 21:07:38 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 13:27:47 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,13 @@ ClapTrap &ClapTrap::operator=(const ClapTrap &src)
 {
 	std::cout << "ClapTrap object copy assignment operator called." << std::endl;
 	// check for self-assignment
-	// getters and setters not used here to avoid unnecessary function calls.
 	if (this != &src)
 	{
-		this->_name = src._name;
-		this->_hitPoints = src._hitPoints;
-		this->_energyPoints = src._energyPoints;
-		this->_attackDamage = src._attackDamage;
-		this->_maxHitPoints = src._maxHitPoints;
+		this->_name = src.getName();
+		this->_hitPoints = src.getHitPoints();
+		this->_energyPoints = src.getEnergyPoints();
+		this->_attackDamage = src.getAttackDamage();
+		this->_maxHitPoints = src.getMaxHitPoints();
 	}
 	return *this;
 }
@@ -58,7 +57,7 @@ void ClapTrap::attack(const std::string& target)
 {
 	if (checkDeath() || checkEnergyPoints())
 		return;
-	this->setEnergyPoints(this->getEnergyPoints() - 1);
+	this->_energyPoints--;
 	std::cout
 	<< "ClapTrap " << this->_name << " attacks " << target
 	<< ", causing " << this->_attackDamage << " points of damage!"
@@ -74,14 +73,14 @@ void ClapTrap::takeDamage(unsigned int amount)
 		return;
 	if (amount >= this->_hitPoints)
 	{
-		this->setHitPoints(0);
+		this->_hitPoints = 0;
 		std::cout
 		<< "ClapTrap " << this->_name << " has died!"
 		<< std::endl;
 	}
 	else
 	{
-		this->setHitPoints(this->getHitPoints() - amount);
+		this->_hitPoints -= amount;
 		std::cout
 		<< "ClapTrap " << this->_name << " has taken "
 		<< amount << " points of damage!"
@@ -102,10 +101,10 @@ void ClapTrap::beRepaired(unsigned int amount)
 		printStatus();
 		return;
 	}
-	this->setEnergyPoints(this->getEnergyPoints() - 1);
-	if (amount < this->_maxHitPoints && (this->getHitPoints() + amount) < this->_maxHitPoints)
+	this->_energyPoints--;
+	if (amount < this->_maxHitPoints && (this->_hitPoints + amount) < this->_maxHitPoints)
 	{
-		this->setHitPoints(this->getHitPoints() + amount);
+		this->_hitPoints += amount;
 		std::cout
 		<< "ClapTrap " << this->_name << " has regained "
 		<< amount << " hit points."
@@ -113,7 +112,7 @@ void ClapTrap::beRepaired(unsigned int amount)
 	}
 	else
 	{
-		this->setHitPoints(this->_maxHitPoints);
+		this->_hitPoints = this->_maxHitPoints;
 		std::cout
 		<< "ClapTrap " << this->_name << " has been restored to max hit points."
 		<< std::endl;
@@ -177,10 +176,10 @@ void ClapTrap::setMaxHitPoints(unsigned int const maxHitPoints)
 void ClapTrap::printStatus() const
 {
 	std::cout
-	<< "HP: " << this->getHitPoints() << ", "
-	<< "EP: " << this->getEnergyPoints() << ", "
-	<< "AD: " << this->getAttackDamage() << ", "
-	<< "Max HP: " << this->getMaxHitPoints()
+	<< "HP: " << this->_hitPoints << ", "
+	<< "EP: " << this->_energyPoints << ", "
+	<< "AD: " << this->_attackDamage << ", "
+	<< "Max HP: " << this->_maxHitPoints
 	<< std::endl
 	<< std::endl;
 }

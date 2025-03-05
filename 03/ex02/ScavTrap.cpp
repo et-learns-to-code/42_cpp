@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 17:21:09 by etien             #+#    #+#             */
-/*   Updated: 2025/02/28 21:14:05 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 13:42:30 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,13 @@ ScavTrap &ScavTrap::operator=(const ScavTrap &src)
 {
 	std::cout << "ScavTrap object copy assignment operator called." << std::endl;
 	// check for self-assignment
-	// getters and setters not used here to avoid unnecessary function calls.
 	if (this != &src)
 	{
-		this->_name = src._name;
-		this->_hitPoints = src._hitPoints;
-		this->_energyPoints = src._energyPoints;
-		this->_attackDamage = src._attackDamage;
-		this->_maxHitPoints = src._maxHitPoints;
+		this->_name = src.getName();
+		this->_hitPoints = src.getHitPoints();
+		this->_energyPoints = src.getEnergyPoints();
+		this->_attackDamage = src.getAttackDamage();
+		this->_maxHitPoints = src.getMaxHitPoints();
 	}
 	return *this;
 }
@@ -72,7 +71,7 @@ void ScavTrap::attack(const std::string& target)
 {
 	if (checkDeath() || checkEnergyPoints())
 		return;
-	this->setEnergyPoints(this->getEnergyPoints() - 1);
+	this->_energyPoints--;
 	std::cout
 	<< "ScavTrap " << this->_name << " attacks " << target
 	<< ", causing " << this->_attackDamage << " points of damage!"

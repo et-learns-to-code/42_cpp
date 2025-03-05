@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:19:35 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 11:27:17 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 13:12:19 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ Dog &Dog::operator=(const Dog &src)
 {
 	std::cout << "Dog object copy assignment operator called." << std::endl;
 	// check for self-assignment
-	// getters and setters not used here to avoid unnecessary function calls.
 	if (this != &src)
 		this->_type = src._type;
 	return *this;

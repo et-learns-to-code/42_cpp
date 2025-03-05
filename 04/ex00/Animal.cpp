@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:00:04 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 11:19:15 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 13:12:37 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ ScavTrap &ScavTrap::operator=(const ScavTrap &src)
 {
 	std::cout << "ScavTrap object copy assignment operator called." << std::endl;
 	// check for self-assignment
-	// getters and setters not used here to avoid unnecessary function calls.
 	if (this != &src)
 	{
 		this->_name = src._name;
