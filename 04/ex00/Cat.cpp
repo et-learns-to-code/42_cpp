@@ -1,35 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Animal.cpp                                         :+:      :+:    :+:   */
+/*   Cat.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 11:00:04 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 17:19:54 by etien            ###   ########.fr       */
+/*   Created: 2025/03/05 17:24:59 by etien             #+#    #+#             */
+/*   Updated: 2025/03/05 17:30:08 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Animal.hpp"
+#include "Cat.hpp"
 
 // default constructor
-Animal::Animal()
+Cat::Cat()
 {
-	std::cout << "Animal object default constructor called." << std::endl;
-	this->_type = "Animal";
+	std::cout << "Cat object default constructor called." << std::endl;
+	this->_type = "Cat";
 }
 
 // copy constructor
-Animal::Animal(const Animal &src)
+// If Cat(src) not specified, Cat object default constructor will be called.
+Cat::Cat(const Cat &src) : Animal(src)
 {
-	std::cout << "Animal object copy constructor called." << std::endl;
+	std::cout << "Cat object copy constructor called." << std::endl;
 	*this = src;
 }
 
 // assignment operator
-Animal &Animal::operator=(const Animal &src)
+Cat &Cat::operator=(const Cat &src)
 {
-	std::cout << "Animal object copy assignment operator called." << std::endl;
+	std::cout << "Cat object copy assignment operator called." << std::endl;
 	// check for self-assignment
 	if (this != &src)
 		this->_type = src.getType();
@@ -37,17 +38,12 @@ Animal &Animal::operator=(const Animal &src)
 }
 
 // destructor
-Animal::~Animal()
+Cat::~Cat()
 {
-	std::cout << "Animal object destructor called." << std::endl;
+	std::cout << "Cat object destructor called." << std::endl;
 }
 
-std::string Animal::getType() const
+void Cat::makeSound() const
 {
-	return this->_type;
-}
-
-void Animal::makeSound() const
-{
-	std::cout << "* animal sounds *" << std::endl;
+	std::cout << this->_type << "meows." << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:19:35 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 13:12:19 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 17:23:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Dog &Dog::operator=(const Dog &src)
 	std::cout << "Dog object copy assignment operator called." << std::endl;
 	// check for self-assignment
 	if (this != &src)
-		this->_type = src._type;
+		this->_type = src.getType();
 	return *this;
 }
 
@@ -45,5 +45,5 @@ Dog::~Dog()
 
 void Dog::makeSound() const
 {
-	std::cout << this->_type
+	std::cout << this->_type << "barks." << std::endl;
 }

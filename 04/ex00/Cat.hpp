@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:07:46 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 11:17:02 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 17:24:38 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define CAT_HPP
 
 #include "Animal.hpp"
+
+#include <iostream>
 
 class Cat : public Animal
 {

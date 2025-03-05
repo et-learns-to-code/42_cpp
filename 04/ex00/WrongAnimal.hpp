@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Animal.hpp                                         :+:      :+:    :+:   */
+/*   WrongAnimal.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:58:47 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 16:57:57 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/05 17:41:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ANIMAL_HPP
-#define ANIMAL_HPP
+#ifndef WRONGANIMAL_HPP
+#define WRONGANIMAL_HPP
 
 #include <iostream>
 #include <string>
 
-class Animal
+class WrongAnimal
 {
 	protected:
 		std::string _type;
 
 	public:
-		Animal();
-		Animal(const Animal &src);
-		Animal &operator=(const Animal &src);
-		~Animal();
+		WrongAnimal();
+		WrongAnimal(const WrongAnimal &src);
+		WrongAnimal &operator=(const WrongAnimal &src);
+		~WrongAnimal();
 
 		std::string getType() const;
 
