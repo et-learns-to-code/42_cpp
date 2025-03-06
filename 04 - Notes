@@ -1,3 +1,98 @@
 Exercise 00
 
 This exercise is designed to introduce you to subtype polymorphism (also known as runtime polymorphism) in C++.
+
+Polymorphism allows you to use a base class pointer or reference to interact with derived class objects in a way that calls the correct function at runtime.
+This is crucial for writing flexible and scalable code.
+
+~~~~~
+
+Key Concept: Virtual Functions
+If a base class function is not virtual, the function that gets called depends on the type of the pointer, not the actual object.
+If a base class function is virtual, the function that gets called depends on the actual type of the object, enabling true polymorphism.
+
+Without Virtual Functions
+If makeSound() is not virtual, calling it through a base class pointer will execute the base class’s version, even if the object is a WrongCat.
+
+const WrongAnimal* wrong = new WrongCat();
+wrong->makeSound();  // This will call WrongAnimal's makeSound(), not WrongCat's!
+
+This demonstrates how polymorphism fails without virtual.
+
+~~~~~
+
+Why Do We Need a Virtual Destructor?
+A virtual destructor ensures that when you delete a derived class object through a base class pointer, the correct destructor gets called.
+
+Without a virtual destructor, only the base class destructor runs, which can cause memory leaks or undefined behavior if the derived class allocates dynamic memory.
+
+Example: What Happens Without a Virtual Destructor?
+
+class Base {
+public:
+    Base() { std::cout << "Base Constructor\n"; }
+    ~Base() { std::cout << "Base Destructor\n"; } // ❌ Not virtual!
+};
+
+class Derived : public Base {
+public:
+    Derived() { std::cout << "Derived Constructor\n"; }
+    ~Derived() { std::cout << "Derived Destructor\n"; }
+};
+
+int main() {
+    Base* obj = new Derived();
+    delete obj;  // Only Base's destructor gets called!
+}
+Output:
+
+Base Constructor
+Derived Constructor
+Base Destructor  // ❌ Derived destructor never runs!
+
+The Derived destructor is never called because ~Base() is not virtual.
+If Derived allocated dynamic memory in its constructor, it would never be freed → Memory leak!
+
+~~~
+
+With virtual destructor
+
+class Base {
+public:
+    Base() { std::cout << "Base Constructor\n"; }
+    virtual ~Base() { std::cout << "Base Destructor\n"; } // ✅ Virtual!
+};
+
+Output:
+
+Base Constructor
+Derived Constructor
+Derived Destructor  // ✅ Derived is properly destroyed
+Base Destructor
+
+~~~~~
+
+What Does virtual Actually Do?
+The virtual keyword tells the compiler to use dynamic dispatch instead of static binding.
+
+Without virtual, function calls are resolved at compile time based on the type of the pointer (Base*).
+With virtual, function calls are resolved at runtime based on the actual object (Derived).
+
+How This Relates to Virtual Destructors
+When you delete a base class pointer, the destructor is also resolved dynamically.
+If the destructor is not virtual, only the base class’s destructor runs.
+If the destructor is virtual, it ensures that the derived class destructor is called first, followed by the base class destructor.
+
+~~~~~
+
+Why Don’t We Make the Entire Orthodox Canonical Form (OCF) Virtual?
+
+Only the destructor is usually marked as virtual, because:
+
+Constructors cannot be virtual. The compiler needs to know at compile-time which constructor to call.
+Copy constructors and assignment operators don’t need polymorphism.
+These functions work at the object level, not through a base class pointer.
+If you need polymorphic copying, you should use a clone() method instead.
+
+✔ Virtual destructors prevent memory leaks by ensuring derived class destructors run.
+✔ Without a virtual destructor, deleting a derived object through a base class pointer results in incomplete destruction.
