@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:25:09 by etien             #+#    #+#             */
-/*   Updated: 2025/02/19 11:02:51 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/06 14:26:25 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,19 @@ HumanB::~HumanB()
 
 void HumanB::attack()
 {
-	std::cout
-	<< this->_name << " attacks with their "
-	<< this->_weapon->getType() << "."
-	<< std::endl;
+	if (!this->_weapon)
+	{
+		std::cout
+		<< this->_name << " is unarmed."
+		<< std::endl;
+	}
+	else
+	{
+		std::cout
+		<< this->_name << " attacks with their "
+		<< this->_weapon->getType() << "."
+		<< std::endl;
+	}
 }
 
 // The two ampersands (&) here have different meanings:
