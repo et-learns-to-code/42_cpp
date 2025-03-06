@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:27:16 by etien             #+#    #+#             */
-/*   Updated: 2025/02/19 17:15:43 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/06 14:04:59 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void replace_word(std::string &str, char **av)
 	std::string s2 = av[3];
 	size_t pos = 0;
 
+	if (s1 == "")
+		return;
 	while (true)
 	{
 		pos = str.find(s1, pos);
@@ -94,8 +96,11 @@ int main(int ac, char **av)
 	while (std::getline(infile, line))
 	{
 		str += line;
-		// getline will remove the newline character by default
-		str += '\n';
+		// infile.peek() != EOF checks if there is more content in the file.
+		// It returns the next character in the input sequence, without extracting it.
+		if (infile.peek() != EOF)
+			// getline will remove the newline character by default
+			str += '\n';
 	}
 	infile.close();
 	if (str.empty())
