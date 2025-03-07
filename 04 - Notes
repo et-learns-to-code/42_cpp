@@ -96,3 +96,73 @@ If you need polymorphic copying, you should use a clone() method instead.
 
 ✔ Virtual destructors prevent memory leaks by ensuring derived class destructors run.
 ✔ Without a virtual destructor, deleting a derived object through a base class pointer results in incomplete destruction.
+
+--------------------------------------------------------------------------------------
+
+Exercise 01
+
+ For regular data types like integers and strings (in most cases), shallow vs. deep copies aren't a concern because they are copied by value. But when dealing with dynamically allocated memory (like arrays or objects allocated with new), shallow vs. deep copying becomes crucial.
+
+Shallow Copy vs. Deep Copy
+1. Shallow Copy
+A shallow copy copies only the pointer, not the actual data it points to. This means multiple objects will share the same memory.
+
+Example:
+
+class Shallow {
+public:
+    int* ptr;
+    Shallow(int val) { ptr = new int(val); }
+    ~Shallow() { delete ptr; }
+};
+
+int main() {
+    Shallow a(42);
+    Shallow b = a; // Default copy constructor does shallow copy
+}
+➡️ Problem: b will point to the same int as a. When b is destroyed, it deletes the memory, and then when a is destroyed, it tries to delete the same memory again, leading to a double free error.
+
+
+2. Deep Copy
+A deep copy creates a new independent copy of the dynamically allocated data.
+
+Example:
+
+class Deep {
+public:
+    int* ptr;
+    Deep(int val) { ptr = new int(val); }
+
+    // Custom copy constructor for deep copy
+    Deep(const Deep& other) {
+        ptr = new int(*other.ptr); // Allocate new memory & copy value
+    }
+
+	// *other.ptr → Dereferences the old pointer to get the actual value.
+	// new int(...) → Allocates new memory and stores that value.
+
+    ~Deep() { delete ptr; }
+};
+
+int main() {
+    Deep a(42);
+    Deep b = a; // Deep copy, so b.ptr is a new independent allocation
+}
+➡️ No memory corruption, because b has its own int copy.
+
+
+Why It Matters for Arrays (Brain Class in Your Exercise)
+In your exercise, the Brain class contains an array of 100 std::string. If you use a shallow copy, both instances will share the same array, leading to:
+
+Unexpected modifications: If one object modifies an idea, the other sees the change.
+Double deletion: When the second object is destroyed, it tries to delete the same memory again.
+To avoid this, you must implement a custom copy constructor and copy assignment operator in Brain to perform a deep copy.
+
+
+Key Syntax Difference
+Shallow Copy							Deep Copy
+Uses default copy constructor			Has a custom copy constructor
+Copies only the pointer (not the data)	Allocates new memory and copies the data
+Two objects share the same memory		Each object has its own independent memory
+Dangerous when objects go out of scope	Safe memory management
+
