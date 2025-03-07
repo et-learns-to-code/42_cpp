@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:58:47 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 16:57:57 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/07 14:15:11 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ class Animal
 		Animal();
 		Animal(const Animal &src);
 		Animal &operator=(const Animal &src);
-		~Animal();
+		virtual ~Animal();
 
 		std::string getType() const;
 
-		void makeSound() const;
+		virtual void makeSound() const;
 };
 
 #endif
