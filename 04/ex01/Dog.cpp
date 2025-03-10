@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:19:35 by etien             #+#    #+#             */
-/*   Updated: 2025/03/07 17:00:11 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/10 14:38:37 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ Dog::Dog() : _brain(new Brain())
 }
 
 // copy constructor
-// If Dog(src) not specified, Dog object default constructor will be called.
-Dog::Dog(const Dog &src) : Animal(src)
+// If Animal(src) not specified, Animal object default constructor will be called.
+// Initialize brain pointer to NULL otherwise deleting brain in operator overload
+// will produce error messages in valgrind.
+Dog::Dog(const Dog &src) : Animal(src), _brain(NULL)
 {
 	std::cout << "Dog object copy constructor called." << std::endl;
 	*this = src;

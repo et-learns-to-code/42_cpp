@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:22:09 by etien             #+#    #+#             */
-/*   Updated: 2025/03/07 16:28:31 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/10 14:26:47 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 Brain::Brain()
 {
 	std::cout << "Brain object default constructor called." << std::endl;
+	for (int i = 0; i < 100; i++)
+		this->_ideas[i] = "Head empty. No thoughts.";
 }
 
 // copy constructor

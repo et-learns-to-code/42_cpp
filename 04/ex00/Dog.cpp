@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 11:19:35 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 18:46:57 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/10 14:31:45 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Dog::Dog()
 }
 
 // copy constructor
-// If Dog(src) not specified, Dog object default constructor will be called.
+// If Animal(src) not specified, Animal object default constructor will be called.
 Dog::Dog(const Dog &src) : Animal(src)
 {
 	std::cout << "Dog object copy constructor called." << std::endl;

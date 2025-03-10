@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:24:59 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 18:47:00 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/10 14:31:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Cat::Cat()
 }
 
 // copy constructor
-// If Cat(src) not specified, Cat object default constructor will be called.
+// If Animal(src) not specified, Animal object default constructor will be called.
 Cat::Cat(const Cat &src) : Animal(src)
 {
 	std::cout << "Cat object copy constructor called." << std::endl;

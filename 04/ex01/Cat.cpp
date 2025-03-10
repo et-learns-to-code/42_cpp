@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:24:59 by etien             #+#    #+#             */
-/*   Updated: 2025/03/07 17:00:19 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/10 14:39:30 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ Cat::Cat() : _brain(new Brain())
 }
 
 // copy constructor
-// If Cat(src) not specified, Cat object default constructor will be called.
-Cat::Cat(const Cat &src) : Animal(src)
+// If Animal(src) not specified, Animal object default constructor will be called.
+// Initialize brain pointer to NULL otherwise deleting brain in operator overload
+// will produce error messages in valgrind.
+Cat::Cat(const Cat &src) : Animal(src), _brain(NULL)
 {
 	std::cout << "Cat object copy constructor called." << std::endl;
 	*this = src;
@@ -41,7 +43,6 @@ Cat &Cat::operator=(const Cat &src)
 		delete this->_brain;
 		// deep copy of Brain by creating a new instance
 		this->_brain = new Brain(*src.getBrain());
-
 	}
 	return *this;
 }

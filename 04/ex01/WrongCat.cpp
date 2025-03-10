@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:24:59 by etien             #+#    #+#             */
-/*   Updated: 2025/03/05 18:47:05 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/10 14:33:18 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ WrongCat::WrongCat()
 }
 
 // copy constructor
-// If WrongCat(src) not specified, WrongCat object default constructor will be called.
+// If WrongAnimal(src) not specified, WrongAnimal object default constructor will be called.
 WrongCat::WrongCat(const WrongCat &src) : WrongAnimal(src)
 {
 	std::cout << "WrongCat object copy constructor called." << std::endl;
