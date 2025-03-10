@@ -166,3 +166,16 @@ Copies only the pointer (not the data)	Allocates new memory and copies the data
 Two objects share the same memory		Each object has its own independent memory
 Dangerous when objects go out of scope	Safe memory management
 
+--------------------------------------------------------------------------------------
+
+An abstract class is a class that cannot be instantiated on its own. It is meant to be a base class for other classes to inherit from.
+
+To make a class abstract in C++, you declare at least one pure virtual function, like this:
+
+class AAnimal {
+public:
+    virtual void makeSound() const = 0; // Pure virtual function
+};
+
+The = 0 part means this function must be implemented by any derived class (like Dog or Cat).
+If a class has at least one pure virtual function, it cannot be instantiated.

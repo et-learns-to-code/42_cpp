@@ -6,11 +6,11 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:56:16 by etien             #+#    #+#             */
-/*   Updated: 2025/03/10 17:00:08 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/10 17:00:22 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Animal.hpp"
+#include "AAnimal.hpp"
 #include "Cat.hpp"
 #include "Dog.hpp"
 #include "WrongAnimal.hpp"
@@ -22,27 +22,20 @@
 #define RED "\033[31m"
 #define RESET "\033[0m"
 
-// Dog and Cat classes now have a Brain object containing ideas[100].
-// Update the Dog and Cat classes to correctly construct and destroy their brains.
-// Take note to make deep copies of both the ideas and Brain objects.
-// Deep copies means independent memory allocations where the values are
-// copied to a separate memory location rather than two objects sharing
-// pointers to the same memory.
-
 // Test cases from subject
 void testSubject()
 {
 	std::cout << GREEN << "TEST: SUBJECT" << RESET << std::endl;
-	const Animal* j = new Dog();
-	const Animal* i = new Cat();
-	delete j;//should not create a leak - leak will result if Animal destructor is not virtual
+	const AAnimal* j = new Dog();
+	const AAnimal* i = new Cat();
+	delete j;//should not create a leak - leak will result if AAnimal destructor is not virtual
 	delete i;
 }
 
 void testArray()
 {
 	std::cout << GREEN << "TEST: ANIMALS ARRAY" << RESET << std::endl;
-	Animal *animals[4];
+	AAnimal *animals[4];
 	int i = 0;
 	std::cout << RED << "Creating two dogs." << RESET << std::endl;
 	while (i < 2)
@@ -104,11 +97,13 @@ void testCatDeepCopy()
 	std::cout << "cat2 - ideas[0]: " << cat2.getBrain()->getIdea(0) << std::endl;
 }
 
+// main function is identical to ex01.
 int main()
 {
 	testSubject();
 	testArray();
 	testDogDeepCopy();
 	testCatDeepCopy();
+	// AAnimal animal;
 	return 0;
 }
