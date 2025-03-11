@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 19:14:54 by etien             #+#    #+#             */
-/*   Updated: 2025/03/11 15:35:20 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/11 16:07:24 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void Character::equip(AMateria* m)
 	{
 		if (this->_inventory[i] == m)
 		{
-			std::cout << this->_name << " already has " << m->getType() << " equipped at slot " << i << "." << std::endl;
+			std::cout << this->_name << ": already has " << m->getType() << " equipped at slot " << i << "." << std::endl;
 			return;
 		}
 	}
@@ -97,11 +97,11 @@ void Character::equip(AMateria* m)
 		if (!this->_inventory[i])
 		{
 			this->_inventory[i] = m;
-			std::cout << this->_name << " equipped " << m->getType() << " at slot " << i << "." << std::endl;
+			std::cout << this->_name << ": equipped " << m->getType() << " at slot " << i << "." << std::endl;
 			return;
 		}
 	}
-	std::cout << this->_name << "'s inventory is full." << std::endl;
+	std::cout << this->_name << ": inventory is full." << std::endl;
 }
 
 // In case they try to add a Materia to a full inventory, or use/unequip
@@ -111,17 +111,17 @@ void Character::unequip(int idx)
 {
 	if (idx < 0 || idx >= _inventorySize)
 	{
-		std::cout << this->_name << ": Invalid slot index." << std::endl;
+		std::cout << this->_name << ": invalid slot index." << std::endl;
 		return;
 	}
 	if (!this->_inventory[idx])
 	{
-		std::cout << this->_name << " does not have Materia equipped at slot " << idx << "." << std::endl;
+		std::cout << this->_name << ": does not have Materia equipped at slot " << idx << "." << std::endl;
 		return;
 	}
 	// statement must be printed before setting to null otherwise getType will be called on null value.
 	std::cout
-		<< this->_name << " has unequipped " << this->_inventory[idx]->getType()
+		<< this->_name << ": has unequipped " << this->_inventory[idx]->getType()
 		<< " from slot " << idx << "." << std::endl;
 	this->_inventory[idx] = NULL;
 }
@@ -131,14 +131,14 @@ void Character::use(int idx, ICharacter& target)
 {
 	if (idx < 0 || idx >= _inventorySize)
 	{
-		std::cout << this->_name << ": Invalid slot index." << std::endl;
+		std::cout << this->_name << ": invalid slot index." << std::endl;
 		return;
 	}
 	if (!this->_inventory[idx])
 	{
-		std::cout << this->_name << " does not have Materia equipped at slot " << idx << "." << std::endl;
+		std::cout << this->_name << ": does not have Materia equipped at slot " << idx << "." << std::endl;
 		return;
 	}
-	std::cout << this->_name << " ";
+	std::cout << this->_name << ": ";
 	this->_inventory[idx]->use(target);
 }

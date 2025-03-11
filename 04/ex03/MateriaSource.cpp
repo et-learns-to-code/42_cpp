@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:21:19 by etien             #+#    #+#             */
-/*   Updated: 2025/03/11 15:34:10 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/11 16:06:36 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void MateriaSource::learnMateria(AMateria *m)
 			return;
 		}
 	}
-	std::cout << "Unable to store more Materia templates." << std::endl;
+	std::cout << "unable to store more Materia templates." << std::endl;
 }
 
 // Returns a new Materia. The latter is a copy of the Materia previously learned by
@@ -88,10 +88,10 @@ AMateria* MateriaSource::createMateria(std::string const & type)
 	{
 		if (this->_templates[i] && type == this->_templates[i]->getType())
 		{
-			std::cout << "Creating a new " << type << " Materia." << std::endl;
+			std::cout << "creating a new " << type << " Materia." << std::endl;
 			return this->_templates[i]->clone();
 		}
 	}
-	std::cout << "Unable to create Materia. " << type << " is not in templates." << std::endl;
+	std::cout << "unable to create Materia. " << type << " is not in templates." << std::endl;
 	return 0;
 }
