@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:16:22 by etien             #+#    #+#             */
-/*   Updated: 2025/03/10 19:05:00 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/11 14:19:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 
 
 // abstract class - AMateria
-// concrete classes - Character, Cure, Ice
-// interface - ICharacter
+// concrete classes - Character, Cure, Ice, MateriaSource
+// interface - ICharacter, IMateriaSource
 // ^ (all functions = 0)
 
 void testSubject()

@@ -6,29 +6,29 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:30:30 by etien             #+#    #+#             */
-/*   Updated: 2025/03/10 18:31:31 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/11 15:38:24 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Cure.hpp"
 
 // default constructor
-Cure::Cure() : AMateria("ice")
+Cure::Cure() : AMateria("cure")
 {
-	std::cout << "Cure object default constructor called." << std::endl;
+	// std::cout << "Cure object default constructor called." << std::endl;
 }
 
 // copy constructor
 Cure::Cure(const Cure &src)
 {
-	std::cout << "Cure object copy constructor called." << std::endl;
+	// std::cout << "Cure object copy constructor called." << std::endl;
 	*this = src;
 }
 
 // assignment operator
 Cure &Cure::operator=(const Cure &src)
 {
-	std::cout << "Cure object copy assignment operator called." << std::endl;
+	// std::cout << "Cure object copy assignment operator called." << std::endl;
 	// check for self-assignment
 	if (this != &src)
 		this->_type = src.getType();
@@ -38,7 +38,7 @@ Cure &Cure::operator=(const Cure &src)
 // destructor
 Cure::~Cure()
 {
-	std::cout << "Cure object destructor called." << std::endl;
+	// std::cout << "Cure object destructor called." << std::endl;
 }
 
 // clone() will return a new instance of the same type

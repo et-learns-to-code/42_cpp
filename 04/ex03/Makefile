@@ -1,6 +1,6 @@
 NAME = interface
 
-SRC = main.cpp
+SRC = AMateria.cpp Character.cpp Cure.cpp Ice.cpp main.cpp MateriaSource.cpp
 
 OBJ_DIR = obj
 

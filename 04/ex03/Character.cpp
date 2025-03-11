@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 19:14:54 by etien             #+#    #+#             */
-/*   Updated: 2025/03/11 14:04:57 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/11 15:35:20 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // default constructor
 Character::Character() : _name("default")
 {
-	std::cout << "Character object default constructor called." << std::endl;
+	// std::cout << "Character object default constructor called." << std::endl;
 	// set the array of AMateria pointers to null to avoid undefined behaviour
 	for (int i = 0; i < _inventorySize; i++)
 		this->_inventory[i] = NULL;
@@ -24,14 +24,14 @@ Character::Character() : _name("default")
 // copy constructor
 Character::Character(const Character &src)
 {
-	std::cout << "Character object copy constructor called." << std::endl;
+	// std::cout << "Character object copy constructor called." << std::endl;
 	*this = src;
 }
 
 // assignment operator
 Character &Character::operator=(const Character &src)
 {
-	std::cout << "Character object copy assignment operator called." << std::endl;
+	// std::cout << "Character object copy assignment operator called." << std::endl;
 	// check for self-assignment
 	if (this != &src)
 	{
@@ -53,7 +53,7 @@ Character &Character::operator=(const Character &src)
 // destructor
 Character::~Character()
 {
-	std::cout << "Character object destructor called." << std::endl;
+	// std::cout << "Character object destructor called." << std::endl;
 	for (int i = 0; i < _inventorySize; i++)
 		delete this->_inventory[i];
 }
@@ -61,13 +61,14 @@ Character::~Character()
 // custom constructor
 Character::Character(std::string name) : _name(name)
 {
-	std::cout << "Character object (" << this->_name << ") custom constructor called." << std::endl;
+	// std::cout << "Character object (" << this->_name << ") custom constructor called." << std::endl;
 	// set the array of AMateria pointers to null to avoid undefined behaviour
 	for (int i = 0; i < _inventorySize; i++)
 		this->_inventory[i] = NULL;
 }
 
 // override of pure virtual functions in base class
+
 std::string const & Character::getName() const
 {
 	return this->_name;

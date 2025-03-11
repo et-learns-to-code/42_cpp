@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:21:24 by etien             #+#    #+#             */
-/*   Updated: 2025/03/10 18:29:33 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/11 15:36:32 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 // default constructor
 Ice::Ice() : AMateria("ice")
 {
-	std::cout << "Ice object default constructor called." << std::endl;
+	// std::cout << "Ice object default constructor called." << std::endl;
 }
 
 // copy constructor
 Ice::Ice(const Ice &src)
 {
-	std::cout << "Ice object copy constructor called." << std::endl;
+	// std::cout << "Ice object copy constructor called." << std::endl;
 	*this = src;
 }
 
 // assignment operator
 Ice &Ice::operator=(const Ice &src)
 {
-	std::cout << "Ice object copy assignment operator called." << std::endl;
+	// std::cout << "Ice object copy assignment operator called." << std::endl;
 	// check for self-assignment
 	if (this != &src)
 		this->_type = src.getType();
@@ -38,7 +38,7 @@ Ice &Ice::operator=(const Ice &src)
 // destructor
 Ice::~Ice()
 {
-	std::cout << "Ice object destructor called." << std::endl;
+	// std::cout << "Ice object destructor called." << std::endl;
 }
 
 // clone() will return a new instance of the same type
