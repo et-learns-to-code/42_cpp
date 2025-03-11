@@ -6,17 +6,16 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:26:58 by etien             #+#    #+#             */
-/*   Updated: 2025/03/10 18:21:22 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/11 14:10:21 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AMateria.hpp"
 
 // default constructor
-AMateria::AMateria()
+AMateria::AMateria() : _type("AMateria")
 {
 	std::cout << "AMateria object default constructor called." << std::endl;
-	this->_type = "AMateria";
 }
 
 // copy constructor
@@ -51,4 +50,9 @@ AMateria::AMateria(std::string const & type) : _type(type)
 std::string const & AMateria::getType() const
 {
 	return this->_type;
+}
+
+void use(ICharacter& target)
+{
+	std::cout << "* uses Materia on " << target.getName() << " *" << std::endl;
 }
