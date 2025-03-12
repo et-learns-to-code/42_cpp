@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:08:14 by etien             #+#    #+#             */
-/*   Updated: 2025/02/25 11:53:05 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/12 11:13:50 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class Fixed
 		static const int _fraction;
 
 	public:
+		// OCF
 		Fixed();
 		Fixed(Fixed const &src);
 		Fixed &operator=(Fixed const &src);

@@ -1,0 +1,348 @@
+1) Ad-hoc Polymorphism
+
+Definition
+Ad-hoc polymorphism allows a function or operator to behave differently based on the types of its arguments.
+This is achieved in C++ through:
+- Function overloading
+- Operator overloading
+
+Function Overloading
+Multiple functions with the same name but different parameters.
+The compiler determines which function to call based on argument types.
+Example:
+
+class Printer {
+public:
+    void print(int i) { std::cout << "Integer: " << i << std::endl; }
+    void print(double d) { std::cout << "Double: " << d << std::endl; }
+    void print(std::string s) { std::cout << "String: " << s << std::endl; }
+};
+
+int main() {
+    Printer p;
+    p.print(42);        // Calls print(int)
+    p.print(3.14);      // Calls print(double)
+    p.print("Hello");   // Calls print(std::string)
+}
+
+Key Points:
+Function name stays the same, but the parameter list differs.
+The correct function is selected at compile time.
+
+-------------------------------------------------------------------------------------------------------------
+
+2) Operator Overloading
+
+Definition
+Operator overloading allows you to define custom behaviors for operators when applied to user-defined classes.
+
+Example: Overloading + for a Vector Class
+
+class Vector {
+private:
+    int x, y;
+public:
+    Vector(int x, int y) : x(x), y(y) {}
+
+    // Overloading the + operator
+    Vector operator+(const Vector& other) const {
+        return Vector(this->x + other.x, this->y + other.y);
+    }
+
+    void print() const {
+        std::cout << "Vector(" << x << ", " << y << ")" << std::endl;
+    }
+};
+
+int main() {
+    Vector v1(1, 2);
+    Vector v2(3, 4);
+    Vector v3 = v1 + v2;  // Calls overloaded operator+
+    v3.print();  // Output: Vector(4, 6)
+}
+
+Key Points:
+Overloaded operators must be either a member function or a friend function.
+At least one operand must be a user-defined type.
+const should be used where possible to prevent unwanted modifications.
+
+-------------------------------------------------------------------------------------------------------------
+
+3) Orthodox Canonical Class Form (OCCF)
+Definition
+The OCCF ensures that a class behaves correctly when copied, assigned, and destroyed.
+To be canonical, a class must implement the following four special functions:
+- Default Constructor
+- Copy Constructor
+- Copy Assignment Operator (operator=)
+- Destructor
+
+Example:
+
+class Sample {
+private:
+    int* data;
+public:
+    // 1. Default Constructor
+    Sample() : data(new int(0)) {}
+
+    // 2. Copy Constructor
+    Sample(const Sample& other) : data(new int(*other.data)) {}
+
+    // 3. Copy Assignment Operator
+    Sample& operator=(const Sample& other) {
+        if (this != &other) {  // Self-assignment check
+            *data = *other.data;
+        }
+        return *this;
+    }
+
+    // 4. Destructor
+    ~Sample() { delete data; }
+
+    void print() const { std::cout << "Value: " << *data << std::endl; }
+};
+
+int main() {
+    Sample a;
+    Sample b = a; // Calls Copy Constructor
+    Sample c;
+    c = a; // Calls Copy Assignment Operator
+}
+
+Key Points:
+Copy Constructor: Makes a deep copy of another object.
+Copy Assignment Operator: Handles object assignment (=).
+Destructor: Prevents memory leaks by freeing allocated resources.
+
+When is OCCF Needed?
+When a class manages dynamic memory.
+When a class has pointers or file handles.
+When a class requires deep copies instead of shallow copies.
+
+🚀 Summary
+Concept	Explanation		Example
+Ad-hoc Polymorphism		Function/operator behaves differently based on argument types.	Function overloading (print(int), print(double))
+Operator Overloading	Custom behavior for operators (+, =, <<, etc.).	Vector operator+(const Vector&)
+OCCF					A class has a full set of constructors, destructor, and assignment operators.	Default, copy constructor, copy assignment, and destructor
+
+-------------------------------------------------------------------------------------------------------------
+
+1️⃣ Differences Between Integers, Floats, and Fixed-Point Numbers in C++
+
+Type
+	Description
+	Precision
+	Performance
+	Use Case
+
+Integer (int, long, etc.)
+	Whole numbers (no decimals)
+	Exact (no rounding)
+	Fastest (simple arithmetic)
+	Counting, indexing, memory addresses
+
+Floating-Point (float, double)
+	Uses scientific notation (e.g., 1.23e4)
+	Imprecise (rounding errors)
+	Slower (due to floating-point operations)
+	Scientific calculations, graphics
+
+Fixed-Point
+	Stores numbers as scaled integers
+	Exact for some decimals (no rounding within range)
+	Faster than float, but slower than int
+	Embedded systems, financial applications
+
+2️⃣ Why Are Fixed-Point Numbers a Good Balance?
+- Faster than floats:
+No complex floating-point operations.
+- More precise than floats:
+No floating-point rounding errors in many cases.
+- Handles decimals better than integers:
+Can represent fractions precisely within a fixed range.
+For example, if you need precise currency calculations ($3.45 stored as 345 with two decimal places), fixed-point prevents
+floating-point errors like 0.1 + 0.2 ≠ 0.3 (which happens in floats due to binary approximation).
+
+3️⃣ How Fixed-Point Numbers Work (Simply Explained)
+A fixed-point number is an integer with an implicit decimal point at a fixed position.
+
+Example: Using Q16.16 Format
+Q16.16 means 16 bits for integer part and 16 bits for fractional part.
+A number stored as an integer but interpreted with a decimal shift.
+Stored Value (int)	Interpreted Value (Fixed-Point Q16.16)
+	65536				1.0000
+	131072				2.0000
+	98304				1.5
+
+Arithmetic in Fixed-Point
+Addition/Subtraction: Works like integers.
+Multiplication: Multiply normally, then shift right by fractional_bits.
+Division: Shift left before division.
+
+Example (Q16.16)
+
+#include <iostream>
+using namespace std;
+
+typedef int FixedPoint;  // Assume 16.16 fixed point
+#define SCALE (1 << 16)  // 2^16 = 65536
+
+FixedPoint toFixed(double value) { return (FixedPoint)(value * SCALE); }
+double toDouble(FixedPoint value) { return (double)value / SCALE; }
+
+int main() {
+    FixedPoint a = toFixed(1.5);  // 1.5 stored as 98304
+    FixedPoint b = toFixed(2.0);  // 2.0 stored as 131072
+    FixedPoint c = (a * b) >> 16; // Multiplication with shift
+
+    cout << "Fixed-Point Multiplication: " << toDouble(c) << endl; // 3.0
+}
+
+✅ Exact decimal representation
+✅ No floating-point errors
+✅ Fast integer-based calculations
+
+🔹 TL;DR
+Integer: Precise, but no decimals.
+Float: Supports decimals, but has rounding errors.
+Fixed-Point: Stores decimals as integers, allowing precise calculations with efficient performance.
+
+💡 Fixed-point is best when you need decimals but can't afford floating-point inaccuracies or performance overhead! 🚀
+
+-------------------------------------------------------------------------------------------------------------
+
+1️⃣ How Is a Fixed-Point Number Represented in Memory?
+A fixed-point number is stored in memory as an integer, but with an implicit binary point at a predetermined position.
+
+For Q8 format (8 fractional bits):
+
+We use a 16-bit integer (int16_t) or 32-bit integer (int32_t).
+The upper bits store the integer part.
+The lower 8 bits store the fractional part.
+The binary point is fixed between bit 8 and bit 7.
+
+Example: Let’s store 5.75 in Q8 format (8 fractional bits)
+
+👉 Convert 5.75 to binary:
+5    = 0000 0000 0000 0101  (Integer part)
+0.75 = 0.11                 (Fractional part)
+
+👉 Combine them:
+0000 0000 0000 0101.1100 0000  (Fixed-point Q8)
+
+👉 Store in memory as an integer (int16_t):
+5.75 * 2⁸ = 5.75 * 256 = 1472  (Stored as 1472 in memory)
+
+✅ Key takeaway: The binary point is fixed after the 8th bit. The number is stored as an integer but interpreted differently.
+
+2️⃣ What Portion Is Integer vs Fraction?
+Since we are using Q8 (8 fractional bits):
+
+Higher bits (upper 8 bits) store the integer part.
+Lower bits (lower 8 bits) store the fractional part.
+Bit Position	Meaning
+15  - 8			Integer part
+7   - 0			Fractional part
+
+Example: Representing 3.125 in Q8
+3   = 0000 0011  (Integer)
+0.125 = 0.001    (Fractional part)
+
+Binary representation:
+0000 0011.0010 0000  (Stored as `800` in decimal)
+
+Stored in memory as:
+3.125 * 256 = 800  (Stored as integer 800)
+
+✅ Fixed-point numbers always store values as integers but shift the interpretation using the fractional bit count.
+
+3️⃣ Where Is the Binary Point?
+The binary point is not stored explicitly; it’s implicitly assumed based on the format.
+For Q8 format, the binary point is after bit 8.
+For Q16 format, the binary point is after bit 16.
+
+Example: For Q8 representation:
+
+Binary stored:  0000 0011 0010 0000
+                ---- ---- ---- ----
+                3      .  125
+It looks like an integer, but we interpret it with the binary point in mind.
+
+4️⃣ Mathematical Operations in Q8 Fixed-Point Format
+Fixed-point arithmetic mimics integer arithmetic but requires shifting.
+
+➤ Addition & Subtraction
+Works exactly like integer arithmetic, because both numbers have the same binary point.
+
+FixedPoint a = toFixed(3.5);   // 3.5 * 256 = 896
+FixedPoint b = toFixed(1.25);  // 1.25 * 256 = 320
+FixedPoint result = a + b;     // 896 + 320 = 1216
+cout << toDouble(result);      // 1216 / 256 = 4.75 ✅
+
+➤ Multiplication
+Multiplication of two fixed-point numbers increases precision.
+
+If we multiply two Q8 numbers, the result is in Q16 (because each number has 8 fractional bits).
+To correct this, we shift the result right by 8 bits (>> 8).
+Example: 3.5 × 2.5 in Q8
+3.5  = 0000 0011 1000 0000  (Stored as 896)
+2.5  = 0000 0010 1000 0000  (Stored as 640)
+
+Multiply as integers:
+896 * 640 = 573440
+
+Adjust for Q8 by shifting right 8 bits:
+573440 >> 8 = 2240
+
+Convert back:
+2240 / 256 = 8.75 ✅ (Correct!)
+
+➤ Division
+Division requires shifting left before dividing to maintain precision.
+
+Example: 5 / 2 in Q8
+5   = 0000 0101 0000 0000  (Stored as 1280)
+2   = 0000 0010 0000 0000  (Stored as 512)
+
+Shift numerator left by 8:
+(1280 << 8) / 512 = 6400 / 512 = 2.5 ✅
+
+5️⃣ Does fractional_bits = 8 Mean We Can’t Represent Integers?
+No! Q8 can store both integers and fractions.
+
+Integers are still representable but are stored as multiples of 256.
+
+Example:
+
+1 is stored as 1 × 256 = 256
+10 is stored as 10 × 256 = 2560
+100 is stored as 100 × 256 = 25600
+
+The limitation: Larger integers require more bits.
+If you're using a 16-bit integer, the highest representable integer is 127 (32767 / 256).
+
+✅ Fixed-point can represent integers, but they take up more space.
+✅ For large numbers, you need more integer bits (e.g., Q16 instead of Q8).
+
+💡 TL;DR
+🔹 Fixed-point numbers store decimals as integers with an implicit binary point.
+🔹 Fractional bits (e.g., 8) determine precision and where the binary point is.
+🔹 Addition/Subtraction works like integers.
+🔹 Multiplication requires a right shift (>> 8).
+🔹 Division requires a left shift (<< 8).
+🔹 Q8 can still store integers, but their maximum value is limited.
+
+💡 Fixed-point arithmetic is an efficient alternative to floating point for precision-critical applications like graphics, finance, and embedded systems! 🚀
+
+
+If you use a 32-bit integer to represent fixed-point numbers in Q8 format (8 fractional bits), that means:
+
+24 bits are used for the integer part
+8 bits are used for the fractional part
+
+The highest representable integer in Q8 format using a 32-bit integer is:
+16,777,215
+
+💡 Key Takeaway
+The fractional part reduces the available range for whole numbers, but increases precision for decimals. 🚀
