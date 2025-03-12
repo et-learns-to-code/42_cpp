@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:07:11 by etien             #+#    #+#             */
-/*   Updated: 2025/02/26 20:20:18 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/12 20:24:16 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,18 +87,18 @@ int main( void )
 	print(A8, B8, C8, P8);
 
 	// 9. Large triangle with point inside
+	Point A9(-1000, -1000);
+	Point B9(1000, -1000);
+	Point C9(0, 1000);
+	Point P9(0, 0); // Expected: Inside
+	print(A9, B9, C9, P9);
+
+	// 10. Large triangle with point outside
 	Point A10(-1000, -1000);
 	Point B10(1000, -1000);
 	Point C10(0, 1000);
-	Point P10(0, 0); // Expected: Inside
+	Point P10(1500, 1500); // Expected: Outside
 	print(A10, B10, C10, P10);
-
-	// 10. Large triangle with point outside
-	Point A11(-1000, -1000);
-	Point B11(1000, -1000);
-	Point C11(0, 1000);
-	Point P11(1500, 1500); // Expected: Outside
-	print(A11, B11, C11, P11);
 
 	return 0;
 }
