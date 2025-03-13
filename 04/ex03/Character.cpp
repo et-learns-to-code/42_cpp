@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 19:14:54 by etien             #+#    #+#             */
-/*   Updated: 2025/03/11 16:07:24 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/13 10:40:37 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ void Character::equip(AMateria* m)
 {
 	// null check
 	if (!m)
+	{
+		std::cout << this->_name << ": cannot equip non-existing Materia." << std::endl;
 		return;
+	}
 	// check that Materia has not already been equipped in a different slot
 	for (int i = 0; i < _inventorySize; i++)
 	{
