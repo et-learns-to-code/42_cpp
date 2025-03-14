@@ -6,19 +6,19 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:30:02 by etien             #+#    #+#             */
-/*   Updated: 2025/03/01 18:17:28 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/14 13:31:54 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "DiamondTrap.hpp"
 
-// This project teaches the precedence of variables and functions 
-// in multiple inheritance.Precedence is typically determined by the 
+// This project teaches the precedence of variables and functions
+// in multiple inheritance.Precedence is typically determined by the
 // order in which base classes are initialized.
-// Functions and variables with the same name can cause shadowing—always 
-// be mindful of what the local scope refers to. Avoid name conflicts or 
+// Functions and variables with the same name can cause shadowing. Always
+// be mindful of what the local scope refers to. Avoid name conflicts or
 // resolve them using the scope resolution operator.
-// When a variable is inherited from a base class, only a single instance of 
+// When a variable is inherited from a base class, only a single instance of
 // that variable exists, but the derived class can modify it.
 
 int main()
