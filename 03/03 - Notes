@@ -2,12 +2,12 @@ Inheritance
 
 What Happens Behind the Scenes When a Derived Class Inherits a Base Class?
 
-When a derived class inherits from a base class, the compiler ensures that the base 
-class part is constructed first before the derived class part is created. 
+When a derived class inherits from a base class, the compiler ensures that the base
+class part is constructed first before the derived class part is created.
 This happens in one single object, not two separate objects.
 
 1. One Object, Not Two
-Even though a base class is constructed first, it is not a separate object—rather, 
+Even though a base class is constructed first, it is not a separate object—rather,
 it is a part of the derived class object. You can think of it as a substructure inside the derived class.
 
 For example, consider:
@@ -74,7 +74,7 @@ Summary
 ✔ There is only ONE object, but it has a base-class subobject inside it.
 ✔ The Base class is constructed first, and then the Derived class.
 ✔ The Derived class accesses base class members as if they were part of itself.
-✔ When destroyed, the Derived destructor runs first, followed by the Base destructor. 
+✔ When destroyed, the Derived destructor runs first, followed by the Base destructor.
 
 --------------------------------------------------------------------------------------------------------------
 
@@ -112,6 +112,25 @@ Instead of each derived class (B and C) creating its own A instance, a single sh
 A "virtual table" (vtable) is created to ensure that all references to A point to the correct shared instance.
 When D is created, the compiler ensures that A is initialized only once, even though D inherits from both B and C.
 
+What Is A Virtual Table
+In computer programming, a virtual method table (VMT), virtual function table, virtual call table, dispatch table,
+vtable, or vftable is a mechanism used in a programming language to support dynamic dispatch (or run-time method binding).
+
+Whenever a class defines a virtual function (or method), most compilers add a hidden member variable to the class that
+points to an array of pointers to (virtual) functions called the virtual method table. These pointers are used at runtime
+to invoke the appropriate function implementations, because at compile time it may not yet be known if the base function
+is to be called or a derived one implemented by a class that inherits from the base class.
+
+V-tables (or virtual tables) are how most C++ implementations do polymorphism. For each concrete implementation of a class,
+there is a table of function pointers to all the virtual methods. A pointer to this table (called the virtual table) exists
+as a data member in all the objects. When one calls a virtual method, we lookup the object's v-table and call the appropriate
+derived class method.
+
+✅ The Base and Derived classes have separate vtables.
+✅ The Derived class's vtable starts as a copy of the Base class's vtable.
+✅ If the Derived class overrides a function, the entry in its vtable is updated.
+✅ Every object has a hidden vptr that points to the correct vtable at runtime.
+
 Key Takeaways
 Without virtual inheritance: Each derived class (B and C) creates its own copy of A, causing duplication and ambiguity.
 With virtual inheritance: Only one instance of A exists, and D correctly accesses it.
@@ -127,8 +146,8 @@ A  (from C)
 C
 D
 
-With virtual, B still declares that it needs A, but instead of creating a new instance, 
-it just marks it as shared. When C checks, it sees that A already exists and reuses the same instance, 
+With virtual, B still declares that it needs A, but instead of creating a new instance,
+it just marks it as shared. When C checks, it sees that A already exists and reuses the same instance,
 leading to this layout:
 
 A  (one shared instance)
@@ -136,12 +155,12 @@ B
 C
 D
 
-So yes, the vtable helps ensure that all references to A point to the same memory location 
+So yes, the vtable helps ensure that all references to A point to the same memory location
 instead of creating duplicates. That way, D doesn’t get confused about which A to use.
 
 ~~~~~
 
-The order of base classes does matter when resolving inheritance chains and constructors. 
+The order of base classes does matter when resolving inheritance chains and constructors.
 For example:
 
 class A { };
@@ -156,8 +175,8 @@ Changing the order of inheritance affects construction and memory layout.
 Do you know the -Wshadow and -Wno-shadow compiler flags?
 
 What is -Wshadow?
--Wshadow is a compiler warning that detects when a local variable or function parameter has 
-the same name as a variable in an outer scope (like a member variable of a class or a global variable). 
+-Wshadow is a compiler warning that detects when a local variable or function parameter has
+the same name as a variable in an outer scope (like a member variable of a class or a global variable).
 This can lead to confusion and unintended behavior.
 
 Example of shadowing:
@@ -213,17 +232,17 @@ The flag is designed for local vs. member conflicts, not inheritance-based shado
 Key Observations from Your Experiment
 
 DiamondTrap has its own _name, separate from the inherited ClapTrap::_name.
-If you modify ClapTrap::_name, ScavTrap and FragTrap see the updated value, 
+If you modify ClapTrap::_name, ScavTrap and FragTrap see the updated value,
 but DiamondTrap::_name remains unchanged because it is an independent variable.
 
 Variable name precedence:
-When two variables with the same name exist in a class hierarchy, 
+When two variables with the same name exist in a class hierarchy,
 the most derived class' variable shadows the inherited one.
-Accessing ClapTrap::_name inside DiamondTrap is not possible directly via this->_name because 
+Accessing ClapTrap::_name inside DiamondTrap is not possible directly via this->_name because
 this->_name refers only to DiamondTrap's own variable.
 
 How to Interact with the Inherited _name
-Even though this->_name will always refer to DiamondTrap::_name, you can still interact 
+Even though this->_name will always refer to DiamondTrap::_name, you can still interact
 with ClapTrap::_name explicitly:
 
 std::cout << "DiamondTrap name: " << this->_name << std::endl;
@@ -232,10 +251,10 @@ std::cout << "ClapTrap name: " << ClapTrap::_name << std::endl;
 Here, ClapTrap::_name accesses the inherited variable from ClapTrap, bypassing DiamondTrap::_name.
 
 Why This Matters
-This principle is important because shadowing inherited variables can lead to unexpected behavior, 
+This principle is important because shadowing inherited variables can lead to unexpected behavior,
 especially when dealing with functions that rely on those variables.
 
-In cases like this, it's often better to avoid naming conflicts or explicitly use getter functions 
+In cases like this, it's often better to avoid naming conflicts or explicitly use getter functions
 from the base class to maintain clarity:
 
 std::cout << "ClapTrap name: " << ClapTrap::getName() << std::endl;
