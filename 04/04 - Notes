@@ -150,6 +150,23 @@ int main() {
 }
 ➡️ No memory corruption, because b has its own int copy.
 
+---
+
+If you want a deep copy (where copy has its own separate memory), you need to allocate new memory for each string:
+
+char *hello[] = {"Hello", "Bye"};
+char **copy = new char *[2];
+
+copy[0] = strdup(hello[0]);  // Create new memory for "Hello"
+copy[1] = strdup(hello[1]);  // Create new memory for "Bye"
+
+// Now modifying copy does NOT affect hello
+copy[0] = "Hey";
+std::cout << hello[0] << std::endl;  // Output: "Hello"
+
+Don't forget to delete[] the allocated memory when done!
+
+---
 
 Why It Matters for Arrays (Brain Class in Your Exercise)
 In your exercise, the Brain class contains an array of 100 std::string. If you use a shallow copy, both instances will share the same array, leading to:
@@ -179,3 +196,20 @@ public:
 
 The = 0 part means this function must be implemented by any derived class (like Dog or Cat).
 If a class has at least one pure virtual function, it cannot be instantiated.
+
+--------------------------------------------------------------------------------------
+
+Declaration	Meaning
+WrongAnimal* const meta = new WrongAnimal();		The pointer cannot be reassigned, but the object can be modified.
+const WrongAnimal* meta = new WrongAnimal();		The pointer can be reassigned, but the object cannot be modified through meta.
+const WrongAnimal* const meta = new WrongAnimal();	Both the pointer and the object are immutable.
+
+Example:
+const WrongAnimal* meta = new WrongAnimal();
+
+// ✅ Allowed (pointer reassignment)
+meta = new WrongAnimal();
+
+// ❌ Error: Cannot modify const object
+meta->setType("Dog");
+
