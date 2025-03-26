@@ -1,0 +1,61 @@
+Where to Declare the Exceptions?
+The exceptions are usually nested classes inside Bureaucrat, following this pattern:
+
+Why Nested Classes?
+They are tightly coupled with Bureaucrat, so it makes sense to define them within the class.
+
+It keeps the global namespace clean.
+
+Makes it clear that these exceptions are only relevant to Bureaucrat.
+
+~~~
+
+class GradeTooHighException : public std::exception {
+public:
+    const char* what() const noexcept {
+        return "Grade is too high!";
+    }
+};
+
+Declares a custom exception class called GradeTooHighException.
+
+It inherits from std::exception, which is the base class for all standard exceptions in C++.
+
+public std::exception means we inherit std::exception publicly, allowing us to override its what() method.
+
+what() is declared as public so it can be called from outside when the exception is caught.
+
+const char* → The function returns a const char* (a pointer to a C-style string).
+
+- This is the error message describing the exception.
+
+what() → The function name.
+
+- This is an override of the what() function from std::exception.
+
+const (after the function name) → Indicates that the function does not modify the object it is called on.
+
+throw(); → (Legacy exception specification)
+
+- Older C++ versions allowed specifying what exceptions a function might throw.
+
+- In modern C++ (C++11 onwards), you should use noexcept instead.
+
+- Modern version: const char* what() const noexcept;
+
+
+Example usage:
+
+try {
+    throw GradeTooHighException();
+} catch (std::exception &e) {
+    std::cout << e.what() << std::endl; // "Grade is too high!"
+}
+
+~~~
+
+Exception Handling Effect:
+
+If not caught, the program terminates.
+
+If caught, the program handles the error and continues.
