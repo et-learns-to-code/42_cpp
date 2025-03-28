@@ -59,3 +59,269 @@ Exception Handling Effect:
 If not caught, the program terminates.
 
 If caught, the program handles the error and continues.
+
+~~~
+
+What Exactly Does throw Do?
+
+When you write:
+
+throw Bureaucrat::GradeTooLowException();
+
+The following happens:
+
+An instance of GradeTooLowException is created.
+
+Since GradeTooLowException is a class, calling GradeTooLowException() invokes its constructor.
+
+The program execution stops and "unwinds" the call stack.
+
+The program starts looking for a catch block that can handle this specific exception.
+
+If no suitable catch block is found, the program terminates.
+
+If a matching catch block is found, execution jumps there.
+
+~~~
+
+The what() method is not called automatically. Instead, it’s called explicitly inside the catch block if needed.
+
+How Does what() Get Called?
+The what() function is not called automatically when an exception is thrown. Instead, it is typically called inside a catch block.
+
+Example:
+try {
+    throw Bureaucrat::GradeTooLowException();
+}
+catch (std::exception &e) {
+    std::cout << e.what() << std::endl;  // `what()` is explicitly called here
+}
+
+What happens here?
+
+throw Bureaucrat::GradeTooLowException(); is executed.
+
+The exception object is caught as a reference to std::exception &e.
+
+e.what() is explicitly called, which prints:
+
+Grade is too low!
+
+~~~
+Deep Dive into Stack Unwinding
+
+Stack unwinding is the process of rolling back function calls when an exception is thrown. This ensures that resources (such as memory, files, or dynamically allocated objects) are properly cleaned up before transferring control to a catch block.
+
+1️⃣ What Happens When an Exception is Thrown?
+
+When a function throws an exception, C++ begins stack unwinding, which does the following:
+
+The current function stops executing immediately.
+
+The stack starts "unwinding" — meaning:
+
+The function where the exception was thrown returns without completing normally.
+
+If that function was called by another function, that function also starts unwinding.
+
+This continues until a matching catch block is found.
+
+Local variables of each function are destroyed (going in reverse order of creation).
+
+If no matching catch block is found, the program terminates (std::terminate() is called).
+
+2️⃣ Example: Stack Unwinding in Action
+
+Let's consider a simple example.
+
+Code Example
+
+#include <iostream>
+#include <exception>
+
+class Bureaucrat {
+public:
+    Bureaucrat(int grade) {
+        std::cout << "Bureaucrat Constructor" << std::endl;
+        if (grade > 150)
+            throw std::runtime_error("Grade too low!"); // Exception thrown here
+    }
+    ~Bureaucrat() {
+        std::cout << "Bureaucrat Destructor" << std::endl;
+    }
+};
+
+void functionC() {
+    std::cout << "Entering functionC" << std::endl;
+    Bureaucrat b(151); // Exception is thrown here
+    std::cout << "Leaving functionC" << std::endl; // ❌ This line is skipped
+}
+
+void functionB() {
+    std::cout << "Entering functionB" << std::endl;
+    functionC();
+    std::cout << "Leaving functionB" << std::endl; // ❌ Skipped
+}
+
+void functionA() {
+    try {
+        std::cout << "Entering functionA" << std::endl;
+        functionB();
+        std::cout << "Leaving functionA" << std::endl; // ❌ Skipped
+    } catch (const std::exception &e) {
+        std::cout << "Exception caught: " << e.what() << std::endl;
+    }
+}
+
+int main() {
+    functionA();
+    return 0;
+}
+
+3️⃣ Understanding the Stack Unwinding Process
+
+When functionC() throws an exception, stack unwinding happens in reverse order of function calls:
+
+Call Stack Before Exception
+main() → functionA() → functionB() → functionC()
+
+functionC() throws an exception.
+
+functionC() does not complete.
+
+functionB() also does not complete.
+
+functionA() catches the exception and resumes execution.
+
+Output of the Program
+Entering functionA
+Entering functionB
+Entering functionC
+Bureaucrat Constructor
+Exception caught: Grade too low!
+
+What happened?
+
+The Bureaucrat constructor was called before the exception was thrown.
+
+functionC() threw an exception.
+
+functionC(), functionB(), and functionA() all stopped executing immediately.
+
+The catch block in functionA() handled the exception and printed the error message.
+
+The destructor for Bureaucrat was never called, meaning objects allocated before the throw statement were never destroyed.
+
+4️⃣ What Happens to Local Variables?
+
+When an exception is thrown, C++ destroys all local variables in each function as the stack unwinds.
+
+Example with Destructor Calls
+
+#include <iostream>
+#include <exception>
+
+class Test {
+public:
+    Test(std::string name) : _name(name) {
+        std::cout << _name << " constructor called" << std::endl;
+    }
+    ~Test() {
+        std::cout << _name << " destructor called" << std::endl;
+    }
+private:
+    std::string _name;
+};
+
+void functionC() {
+    Test objC("C");
+    throw std::runtime_error("Something went wrong in C!");
+}
+
+void functionB() {
+    Test objB("B");
+    functionC();
+}
+
+void functionA() {
+    try {
+        Test objA("A");
+        functionB();
+    } catch (const std::exception &e) {
+        std::cout << "Exception caught: " << e.what() << std::endl;
+    }
+}
+
+int main() {
+    functionA();
+    return 0;
+}
+
+Output:
+A constructor called
+B constructor called
+C constructor called
+C destructor called
+B destructor called
+Exception caught: Something went wrong in C!
+A destructor called
+
+Key Observations:
+
+When functionC() threw an exception, it destroyed objC first (last in, first out).
+
+Then objB was destroyed as functionB() unwound.
+
+Finally, objA was destroyed when functionA() unwound.
+
+Why?
+
+Automatic objects (local variables) are destroyed in reverse order of their creation when stack unwinding happens.
+
+Only objects that were fully constructed get destroyed (so if a constructor throws an exception, its object is never fully created and doesn't get destroyed).
+
+5️⃣ When No Matching catch Block is Found
+
+If an exception is thrown and no catch block matches, the program terminates.
+
+Example Without a Matching catch Block
+
+void functionC() {
+    throw 42; // Throws an int, not an exception object
+}
+
+void functionA() {
+    try {
+        functionC();
+    } catch (const std::exception &e) { // ❌ Won't catch because 42 is not a std::exception
+        std::cout << "Caught exception: " << e.what() << std::endl;
+    }
+}
+
+int main() {
+    functionA();
+    return 0;
+}
+
+Output:
+terminate called after throwing an instance of 'int'
+Aborted (core dumped)
+
+Since we threw an int, but catch (const std::exception &e) only catches std::exception-derived objects, there's no matching catch block, and the program aborts.
+
+6️⃣ How to Ensure Proper Cleanup?
+
+Since stack unwinding does not free heap-allocated memory automatically, you should:
+
+- Use smart pointers (std::unique_ptr, std::shared_ptr) to manage dynamic memory.
+
+- Use RAII (Resource Acquisition Is Initialization) — wrap resources in classes with destructors.
+
+- Always catch exceptions at an appropriate level to avoid program termination.
+
+🔹 Summary
+✅ When an exception is thrown, the call stack starts unwinding — functions return one by one without completing.
+✅ Local objects are destroyed in reverse order of creation (LIFO order).
+✅ If no catch block is found, the program terminates (std::terminate()).
+✅ Heap-allocated memory is not automatically freed unless handled properly.
+✅ Using RAII and smart pointers ensures proper resource cleanup.

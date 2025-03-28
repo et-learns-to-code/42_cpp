@@ -6,72 +6,79 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/03/26 18:17:05 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/28 16:32:44 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bureaucrat.hpp"
 
 // default constructor
-Bureaucrat::Bureaucrat()
+Bureaucrat::Bureaucrat() : _name("Default"), _grade(150)
 {
-	std::cout << "Bureaucrat object default constructor called." << std::endl;
-	this->_type = "Bureaucrat";
+	// std::cout << "Bureaucrat object default constructor called." << std::endl;
 }
 
 // copy constructor
-Bureaucrat::Bureaucrat(const Bureaucrat &src)
+// _name variable is const so it must be initialized in initialization list
+Bureaucrat::Bureaucrat(const Bureaucrat &src) : _name(src.getName())
 {
-	std::cout << "Bureaucrat object copy constructor called." << std::endl;
+	// std::cout << "Bureaucrat object copy constructor called." << std::endl;
 	*this = src;
 }
 
 // assignment operator
+// _name variable is const so it cannot be reassigned
 Bureaucrat &Bureaucrat::operator=(const Bureaucrat &src)
 {
-	std::cout << "Bureaucrat object copy assignment operator called." << std::endl;
+	// std::cout << "Bureaucrat object copy assignment operator called." << std::endl;
 	// check for self-assignment
 	if (this != &src)
-	{
-		this->_type = src.getType();
-		// deleting a nullptr is safe in C++.
-		// it will not cause crashes or undefined behaviour.
-		// delete old brain to avoid memory leaks
-		delete this->_brain;
-		// deep copy of Brain by creating a new instance
-		this->_brain = new Brain(*src.getBrain());
-	}
+		this->_grade = src.getGrade();
 	return *this;
 }
 
 // destructor
 Bureaucrat::~Bureaucrat()
 {
-	std::cout << "Bureaucrat object destructor called." << std::endl;
-	delete this->_brain;
+	// std::cout << "Bureaucrat object destructor called." << std::endl;
 }
 
+// custom constructor
+Bureaucrat::Bureaucrat(std::string name, int grade) : _name(name)
+{
+	// std::cout << "Bureaucrat object custom constructor called." << std::endl;
+	if (grade < 1)
+		throw(Bureaucrat::GradeTooHighException());
+	else if (grade > 150)
+		throw(Bureaucrat::GradeTooLowException());
+	this->_grade = grade;
+}
 
 const std::string Bureaucrat::getName() const
 {
-
+	return this->_name;
 }
 
 int Bureaucrat::getGrade() const
 {
-
+	return this->_grade;
 }
 
+// decrement grade because a lower value means a higher grade.
 void Bureaucrat::incrementGrade()
 {
-	this->_grade++;
-}
-
-void Bureaucrat::decrementGrade()
-{
+	if (this->_grade == 1)
+		throw(Bureaucrat::GradeTooHighException());
 	this->_grade--;
 }
 
+// increment grade because a higher value means a lower grade.
+void Bureaucrat::decrementGrade()
+{
+	if (this->_grade == 150)
+		throw(Bureaucrat::GradeTooLowException());
+	this->_grade++;
+}
 
 const char *Bureaucrat::GradeTooHighException::what() const throw()
 {
