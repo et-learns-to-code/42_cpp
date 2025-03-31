@@ -6,14 +6,14 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/03/31 15:18:26 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/31 19:19:02 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Form.hpp"
 
 // default constructor
-Form::Form() : _name("Default"), _isSigned(false), _gradeToSign(50), _gradeToExecute(100)
+Form::Form() : _name("Default Form"), _isSigned(false), _gradeToSign(50), _gradeToExecute(100)
 {
 	// std::cout << "Form object default constructor called." << std::endl;
 }

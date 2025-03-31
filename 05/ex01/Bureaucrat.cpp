@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/03/31 15:05:20 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/31 19:18:50 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "Form.hpp"
 
 // default constructor
-Bureaucrat::Bureaucrat() : _name("Default"), _grade(150)
+Bureaucrat::Bureaucrat() : _name("Default Bureaucrat"), _grade(150)
 {
 	// std::cout << "Bureaucrat object default constructor called." << std::endl;
 }

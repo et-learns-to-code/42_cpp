@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:17:30 by etien             #+#    #+#             */
-/*   Updated: 2025/03/31 15:16:35 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/31 19:20:49 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void testConstructorGradeTooLow()
 	}
 }
 
-void testFormSignSucess()
+void testFormSignSuccess()
 {
 	std::cout << GREEN << "TEST: FORM SIGN SUCCESS" << RESET << std::endl;
 	Bureaucrat senior("Senior", 50);
@@ -116,7 +116,7 @@ int main()
 	std::cout << std::endl;
 	testConstructorGradeTooLow();
 	std::cout << std::endl;
-	testFormSignSucess();
+	testFormSignSuccess();
 	std::cout << std::endl;
 	testFormSignFail();
 	std::cout << std::endl;
