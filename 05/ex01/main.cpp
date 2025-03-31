@@ -6,40 +6,51 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:17:30 by etien             #+#    #+#             */
-/*   Updated: 2025/03/28 16:29:11 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/31 15:16:35 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 
 #include <iostream>
 
-#define GREEN "\033[32m"
 #define RED "\033[31m"
+#define GREEN "\033[32m"
 #define RESET "\033[0m"
 
-void testDefaultBureaucrat()
+void testDefaultForm()
 {
-	std::cout << GREEN << "TEST: DEFAULT BUREAUCRAT" << RESET << std::endl;
-	Bureaucrat bureaucrat;
-	std::cout << bureaucrat << std::endl;
+	std::cout << GREEN << "TEST: DEFAULT FORM" << RESET << std::endl;
+	Form form;
+	std::cout << form << std::endl;
 }
 
-void testCopiedBureaucrat()
+void testCustomCopiedForm()
 {
-	std::cout << GREEN << "TEST: COPIED BUREAUCRAT" << RESET << std::endl;
-	Bureaucrat original("Original", 75);
+	std::cout << GREEN << "TEST: CUSTOM AND COPIED FORM" << RESET << std::endl;
+	Form original("Original", 30, 60);
 	std::cout << original << std::endl;
-	Bureaucrat copycat(original);
-	std::cout << copycat << std::endl;
+	Form copy(original);
+	std::cout << copy << std::endl;
 }
 
 void testConstructorGradeTooHigh()
 {
 	try
 	{
-		std::cout << GREEN << "TEST: CONSTRUCTOR - GRADE TOO HIGH" << RESET << std::endl;
-		Bureaucrat alpha("Alpha", 0);
+		std::cout << GREEN << "TEST: FORM CONSTRUCTOR - SIGN GRADE TOO HIGH" << RESET << std::endl;
+		Form alpha("Alpha", 0, 60);
+		std::cout << alpha << std::endl;
+	}
+	catch (std::exception & e)
+	{
+		std::cout << RED << e.what() << RESET << std::endl;
+	}
+	try
+	{
+		std::cout << GREEN << "TEST: FORM CONSTRUCTOR - EXEC GRADE TOO HIGH" << RESET << std::endl;
+		Form alpha("Alpha", 30, 0);
 		std::cout << alpha << std::endl;
 	}
 	catch (std::exception & e)
@@ -52,8 +63,18 @@ void testConstructorGradeTooLow()
 {
 	try
 	{
-		std::cout << GREEN << "TEST: CONSTRUCTOR - GRADE TOO LOW" << RESET << std::endl;
-		Bureaucrat beta("Beta", 151);
+		std::cout << GREEN << "TEST: FORM CONSTRUCTOR - SIGN GRADE TOO LOW" << RESET << std::endl;
+		Form beta("Beta", 151, 60);
+		std::cout << beta << std::endl;
+	}
+	catch (std::exception & e)
+	{
+		std::cout << RED << e.what() << RESET << std::endl;
+	}
+	try
+	{
+		std::cout << GREEN << "TEST: FORM CONSTRUCTOR - EXEC GRADE TOO LOW" << RESET << std::endl;
+		Form beta("Beta", 30, 151);
 		std::cout << beta << std::endl;
 	}
 	catch (std::exception & e)
@@ -62,58 +83,42 @@ void testConstructorGradeTooLow()
 	}
 }
 
-void testIncrementGrade()
+void testFormSignSucess()
 {
-	try
-	{
-		std::cout << GREEN << "TEST: INCREMENT GRADE" << RESET << std::endl;
-		Bureaucrat promoted("Promoted", 3);
-		std::cout << promoted << std::endl;
-		for (int i = 0; i < 3; i++)
-		{
-			promoted.incrementGrade();
-			std::cout << promoted << std::endl;
-		}
-	}
-	catch (std::exception & e)
-	{
-		std::cout << RED << e.what() << RESET << std::endl;
-	}
+	std::cout << GREEN << "TEST: FORM SIGN SUCCESS" << RESET << std::endl;
+	Bureaucrat senior("Senior", 50);
+	std::cout << senior << std::endl;
+	Form form;
+	std::cout << form << std::endl;
+	senior.signForm(form);
+	std::cout << form << std::endl;
 }
 
-void testDecrementGrade()
+void testFormSignFail()
 {
-	try
-	{
-		std::cout << GREEN << "TEST: DECREMENT GRADE" << RESET << std::endl;
-		Bureaucrat demoted("Demoted", 148);
-		std::cout << demoted << std::endl;
-		for (int i = 0; i < 3; i++)
-		{
-			demoted.decrementGrade();
-			std::cout << demoted << std::endl;
-		}
-	}
-	catch (std::exception & e)
-	{
-		std::cout << RED << e.what() << RESET << std::endl;
-	}
+	std::cout << GREEN << "TEST: FORM SIGN FAIL" << RESET << std::endl;
+	Bureaucrat junior("Junior", 51);
+	std::cout << junior << std::endl;
+	Form form;
+	std::cout << form << std::endl;
+	junior.signForm(form);
+	std::cout << form << std::endl;
 }
 
 int main()
 {
 	std::cout << std::endl;
-	testDefaultBureaucrat();
+	testDefaultForm();
 	std::cout << std::endl;
-	testCopiedBureaucrat();
+	testCustomCopiedForm();
 	std::cout << std::endl;
 	testConstructorGradeTooHigh();
 	std::cout << std::endl;
 	testConstructorGradeTooLow();
 	std::cout << std::endl;
-	testIncrementGrade();
+	testFormSignSucess();
 	std::cout << std::endl;
-	testDecrementGrade();
+	testFormSignFail();
 	std::cout << std::endl;
 	return 0;
 }

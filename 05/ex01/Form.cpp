@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/03/28 17:27:50 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/31 15:18:26 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,44 +44,48 @@ Form::~Form()
 	// std::cout << "Form object destructor called." << std::endl;
 }
 
-static int
-
-// custom constructor
-Form::Form(std::string name, int gradeToSign, int gradeToExecute) : _name(name), _isSigned(false)
+static int validateGrade(int grade)
 {
-	// std::cout << "Form object custom constructor called." << std::endl;
-	if (gradeToSign < 1 || gradeToExecute < 1)
+	if (grade < 1)
 		throw Form::GradeTooHighException();
-	else if (gradeToSign > 150 || gradeToExecute > 150)
+	else if (grade > 150)
 		throw Form::GradeTooLowException();
-	this->_gradeToSign = gradeToSign;
-	this->_gradeToExecute = gradeToExecute;
+	return grade;
 }
 
-const std::string Form::getName() const
+// custom constructor
+Form::Form(std::string name, int gradeToSign, int gradeToExecute)
+: _name(name), _isSigned(false), _gradeToSign(validateGrade(gradeToSign)), _gradeToExecute(validateGrade(gradeToExecute))
+{
+	// std::cout << "Form object custom constructor called." << std::endl;
+}
+
+std::string Form::getName() const
 {
 	return this->_name;
 }
 
-int Form::getGrade() const
+bool Form::getIsSigned() const
 {
-	return this->_grade;
+	return this->_isSigned;
 }
 
-// decrement grade because a lower value means a higher grade.
-void Form::incrementGrade()
+int Form::getGradeToSign() const
 {
-	if (this->_grade == 1)
-		throw Form::GradeTooHighException();
-	this->_grade--;
+	return this->_gradeToSign;
 }
 
-// increment grade because a higher value means a lower grade.
-void Form::decrementGrade()
+int Form::getGradeToExecute() const
 {
-	if (this->_grade == 150)
+	return this->_gradeToExecute;
+}
+
+void Form::beSigned(const Bureaucrat &bureaucrat)
+{
+	if (bureaucrat.getGrade() <= this->_gradeToSign)
+		this->_isSigned = true;
+	else
 		throw Form::GradeTooLowException();
-	this->_grade++;
 }
 
 const char *Form::GradeTooHighException::what() const throw()
@@ -98,6 +102,10 @@ const char *Form::GradeTooLowException::what() const throw()
 std::ostream &operator<<(std::ostream &out, const Form &form)
 {
 	// <name>, form grade <grade>.
-	return (out << form.getName() << ", form grade "
-		<< form.getGrade() << ".");
+	return (out << YELLOW
+		<< "_name: " << form.getName()
+		<< "; _isSigned: " << form.getIsSigned() << ";" << std::endl
+		<< "_gradeToSign: " << form.getGradeToSign() << ";" << std::endl
+		<< "_gradeToExecute: " << form.getGradeToExecute()
+		<< "." << RESET);
 }

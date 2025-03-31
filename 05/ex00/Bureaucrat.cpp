@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/03/28 17:27:00 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/31 14:56:53 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ Bureaucrat::Bureaucrat(std::string name, int grade) : _name(name)
 	this->_grade = grade;
 }
 
-const std::string Bureaucrat::getName() const
+std::string Bureaucrat::getName() const
 {
 	return this->_name;
 }

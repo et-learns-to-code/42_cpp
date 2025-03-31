@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/03/28 17:03:39 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/31 15:17:04 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 
 #include <iostream>
 #include <string>
+
+#include "Bureaucrat.hpp"
+
+#define YELLOW "\033[33m"
+#define RESET "\033[0m"
 
 class Form
 {
@@ -35,10 +40,12 @@ class Form
 		Form(std::string name, int gradeToSign, int gradeToExecute);
 
 		// getters
-		const std::string getName() const;
+		std::string getName() const;
 		bool getIsSigned() const;
-		const int getGradeToSign() const;
-		const int getGradeToExecute() const;
+		int getGradeToSign() const;
+		int getGradeToExecute() const;
+
+		void beSigned(const Bureaucrat &bureaucrat);
 
 		// exception classes are typically nested classes
 		class GradeTooHighException : public std::exception

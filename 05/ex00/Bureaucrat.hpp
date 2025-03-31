@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/03/28 14:50:41 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/31 14:56:30 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Bureaucrat
 		// custom constructor
 		Bureaucrat(std::string name, int grade);
 
-		const std::string getName() const;
+		std::string getName() const;
 		int getGrade() const;
 
 		void incrementGrade();

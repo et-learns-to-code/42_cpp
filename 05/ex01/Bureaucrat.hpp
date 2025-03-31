@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/03/28 14:50:41 by etien            ###   ########.fr       */
+/*   Updated: 2025/03/31 15:04:57 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 #include <iostream>
 #include <string>
+
+// Forward declare Form class to prevent circular dependency
+class Form;
 
 class Bureaucrat
 {
@@ -32,11 +35,13 @@ class Bureaucrat
 		// custom constructor
 		Bureaucrat(std::string name, int grade);
 
-		const std::string getName() const;
+		std::string getName() const;
 		int getGrade() const;
 
 		void incrementGrade();
 		void decrementGrade();
+
+		void signForm(Form &form);
 
 		// exception classes are typically nested classes
 		class GradeTooHighException : public std::exception
