@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:42:34 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 12:26:43 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/01 18:00:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void ShrubberyCreationForm::beExecuted() const
 	}
 	// Write ASCII trees to the outfile
 	outfile
-	<< std::endl
 	<< "               ,@@@@@@@,\n"
 	<< "       ,,,.   ,@@@@@@/@@,  .oo8888o.\n"
 	<< "    ,&%%&%&&%,@@@@@/@@@@@@,8888\\88/8o\n"
@@ -88,4 +87,5 @@ void ShrubberyCreationForm::beExecuted() const
 	<< "\n"
 	<< "               (Art by jgs)\n";
 	// ofstream automatically closes the file when it goes out of scope
+	std::cout << "ASCII trees have been written to " << outfile_name << "." << std::endl;
 }

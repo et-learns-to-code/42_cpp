@@ -6,14 +6,13 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:42:29 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 12:26:16 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/01 18:07:52 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RobotomyRequestForm.hpp"
 
-#include <cstdlib> // srand(), rand()
-#include <ctime> // time()
+#include <cstdlib> // rand()
 
 // default constructor
 // _target() will implicitly initialize _target to an empty string
@@ -63,11 +62,6 @@ std::string RobotomyRequestForm::getTarget() const
 void RobotomyRequestForm::beExecuted() const
 {
 	std::cout << "* drilling noises *" << std::endl;
-
-	// By default, rand() produces the same sequence every time your program runs.
-	// To ensure randomness, seed the random number generator with current time
-	// to ensure different results each run.
-	srand(time(NULL));
 
 	// rand() % 2 generates either 0 or 1 randomly to simulate a 50% success rate
 	bool successful = rand() % 2 == 0;

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:17:30 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 12:02:38 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/01 18:25:52 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,126 +16,137 @@
 #include "ShrubberyCreationForm.hpp"
 
 #include <iostream>
+#include <cstdlib> // srand()
+#include <ctime> // time()
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"
+#define BLUE "\033[34m"
 #define RESET "\033[0m"
 
-// void testDefaultForm()
-// {
-// 	std::cout << GREEN << "TEST: DEFAULT FORM" << RESET << std::endl;
-// 	Form form;
-// 	std::cout << form << std::endl;
-// }
+void testShrubberyCreationForm()
+{
+	std::cout << GREEN << "------------------------------------- TEST: SHRUBBERY CREATION FORM -------------------------------------" << RESET << std::endl << std::endl;
 
-// void testCustomCopiedForm()
-// {
-// 	std::cout << GREEN << "TEST: CUSTOM AND COPIED FORM" << RESET << std::endl;
-// 	Form original("Original", 30, 60);
-// 	std::cout << original << std::endl;
-// 	Form copy(original);
-// 	std::cout << copy << std::endl;
-// }
+	std::cout << GREEN << "- default constructor" << RESET << std::endl;
+	ShrubberyCreationForm test;
+	std::cout << test << std::endl;
 
-// void testConstructorGradeTooHigh()
-// {
-// 	try
-// 	{
-// 		std::cout << GREEN << "TEST: FORM CONSTRUCTOR - SIGN GRADE TOO HIGH" << RESET << std::endl;
-// 		Form alpha("Alpha", 0, 60);
-// 		std::cout << alpha << std::endl;
-// 	}
-// 	catch (std::exception & e)
-// 	{
-// 		std::cout << RED << e.what() << RESET << std::endl;
-// 	}
-// 	try
-// 	{
-// 		std::cout << GREEN << "TEST: FORM CONSTRUCTOR - EXEC GRADE TOO HIGH" << RESET << std::endl;
-// 		Form alpha("Alpha", 30, 0);
-// 		std::cout << alpha << std::endl;
-// 	}
-// 	catch (std::exception & e)
-// 	{
-// 		std::cout << RED << e.what() << RESET << std::endl;
-// 	}
-// }
+	std::cout << GREEN << "- copy constructor" << RESET << std::endl;
+	ShrubberyCreationForm copy(test);
+	std::cout << copy << std::endl;
 
-// void testConstructorGradeTooLow()
-// {
-// 	try
-// 	{
-// 		std::cout << GREEN << "TEST: FORM CONSTRUCTOR - SIGN GRADE TOO LOW" << RESET << std::endl;
-// 		Form beta("Beta", 151, 60);
-// 		std::cout << beta << std::endl;
-// 	}
-// 	catch (std::exception & e)
-// 	{
-// 		std::cout << RED << e.what() << RESET << std::endl;
-// 	}
-// 	try
-// 	{
-// 		std::cout << GREEN << "TEST: FORM CONSTRUCTOR - EXEC GRADE TOO LOW" << RESET << std::endl;
-// 		Form beta("Beta", 30, 151);
-// 		std::cout << beta << std::endl;
-// 	}
-// 	catch (std::exception & e)
-// 	{
-// 		std::cout << RED << e.what() << RESET << std::endl;
-// 	}
-// }
+	std::cout << GREEN << "- custom constructor" << RESET << std::endl;
+	ShrubberyCreationForm shrubbery("home");
+	std::cout << shrubbery << std::endl;
 
-// void testFormSignSuccess()
-// {
-// 	std::cout << GREEN << "TEST: FORM SIGN SUCCESS" << RESET << std::endl;
-// 	Bureaucrat senior("Senior", 50);
-// 	std::cout << senior << std::endl;
-// 	Form form;
-// 	std::cout << form << std::endl;
-// 	senior.signForm(form);
-// 	std::cout << form << std::endl;
-// }
+	Bureaucrat senior("Senior", 137);
+	std::cout << senior << std::endl;
+	Bureaucrat junior("Junior", 138);
+	std::cout << junior << std::endl;
+	std::cout << std::endl;
 
-// void testFormSignFail()
-// {
-// 	std::cout << GREEN << "TEST: FORM SIGN FAIL" << RESET << std::endl;
-// 	Bureaucrat junior("Junior", 51);
-// 	std::cout << junior << std::endl;
-// 	Form form;
-// 	std::cout << form << std::endl;
-// 	junior.signForm(form);
-// 	std::cout << form << std::endl;
-// }
+	std::cout << GREEN << "- form execution failure (unsigned form)" << RESET << std::endl;
+	senior.executeForm(shrubbery);
+	std::cout << shrubbery << std::endl;
+
+	std::cout << GREEN << "- form execution failure (unqualified bureaucrat)" << RESET << std::endl;
+	senior.signForm(shrubbery);
+	junior.executeForm(shrubbery);
+	std::cout << shrubbery << std::endl;
+
+	std::cout << GREEN << "- form execution success" << RESET << std::endl;
+	senior.executeForm(shrubbery);
+	std::cout << shrubbery << std::endl;
+}
+
+void testRobotomyRequestForm()
+{
+	std::cout << GREEN << "------------------------------------- TEST: ROBOTOMY REQUEST FORM -------------------------------------" << RESET << std::endl << std::endl;
+
+	std::cout << GREEN << "- default constructor" << RESET << std::endl;
+	RobotomyRequestForm test;
+	std::cout << test << std::endl;
+
+	std::cout << GREEN << "- copy constructor" << RESET << std::endl;
+	RobotomyRequestForm copy(test);
+	std::cout << copy << std::endl;
+
+	std::cout << GREEN << "- custom constructor" << RESET << std::endl;
+	RobotomyRequestForm robotomy("Robot");
+	std::cout << robotomy << std::endl;
+
+	Bureaucrat senior("Senior", 45);
+	std::cout << senior << std::endl;
+	Bureaucrat junior("Junior", 46);
+	std::cout << junior << std::endl;
+	std::cout << std::endl;
+
+	std::cout << GREEN << "- form execution failure (unsigned form)" << RESET << std::endl;
+	senior.executeForm(robotomy);
+	std::cout << robotomy << std::endl;
+
+	std::cout << GREEN << "- form execution failure (unqualified bureaucrat)" << RESET << std::endl;
+	senior.signForm(robotomy);
+	junior.executeForm(robotomy);
+	std::cout << robotomy << std::endl;
+
+	std::cout << GREEN << "- form execution success" << RESET << std::endl;
+	for (int i = 0; i < 10; i++)
+	{
+		std::cout << BLUE <<  "Robotomy attempt " << i + 1 << ":" << RESET << std::endl;
+		senior.executeForm(robotomy);
+		std::cout << std::endl;
+	}
+	std::cout << robotomy << std::endl;
+}
+
+void testPresidentialPardonForm()
+{
+	std::cout << GREEN << "------------------------------------- TEST: PRESIDENTIAL PARDON FORM -------------------------------------" << RESET << std::endl << std::endl;
+
+	std::cout << GREEN << "- default constructor" << RESET << std::endl;
+	PresidentialPardonForm test;
+	std::cout << test << std::endl;
+
+	std::cout << GREEN << "- copy constructor" << RESET << std::endl;
+	PresidentialPardonForm copy(test);
+	std::cout << copy << std::endl;
+
+	std::cout << GREEN << "- custom constructor" << RESET << std::endl;
+	PresidentialPardonForm pardon("Criminal");
+	std::cout << pardon << std::endl;
+
+	Bureaucrat senior("Senior", 5);
+	std::cout << senior << std::endl;
+	Bureaucrat junior("Junior", 6);
+	std::cout << junior << std::endl;
+	std::cout << std::endl;
+
+	std::cout << GREEN << "- form execution failure (unsigned form)" << RESET << std::endl;
+	senior.executeForm(pardon);
+	std::cout << pardon << std::endl;
+
+	std::cout << GREEN << "- form execution failure (unqualified bureaucrat)" << RESET << std::endl;
+	senior.signForm(pardon);
+	junior.executeForm(pardon);
+	std::cout << pardon << std::endl;
+
+	std::cout << GREEN << "- form execution success" << RESET << std::endl;
+	senior.executeForm(pardon);
+	std::cout << pardon << std::endl;
+}
 
 int main()
 {
-	std::cout << std::endl;
-	std::cout << "               ,@@@@@@@," << std::endl;
-	std::cout << "       ,,,.   ,@@@@@@/@@,  .oo8888o." << std::endl;
-	std::cout << "    ,&%%&%&&%,@@@@@/@@@@@@,8888\\88/8o" << std::endl;
-	std::cout << "   ,%&\\%&&%&&%,@@@\\@@@/@@@88\\88888/88'" << std::endl;
-	std::cout << "   %&&%&%&/%&&%@@\\@@/ /@@@88888\\88888'" << std::endl;
-	std::cout << "   %&&%/ %&%%&&@@\\ V /@@' `88\\8 `/88'" << std::endl;
-	std::cout << "   `&%\\ ` /%&'    |.|        \\ '|8'" << std::endl;
-	std::cout << "       |o|        | |         | |" << std::endl;
-	std::cout << "       |.|        | |         | |" << std::endl;
-	std::cout << "    \\\\/ ._\\//_/__/  ,\\_//__\\\\/.  \\_//__/_ " << std::endl;
-	std::cout << std::endl;
-	std::cout << "               (Art by jgs)" << std::endl;
+	// Random seeding for Robotomy Request Form.
+	// By default, rand() produces the same sequence every time your program runs.
+	// To ensure randomness, seed the random number generator with current time
+	// to ensure different results each run.
+	srand(time(NULL));
 
-
-	// std::cout << std::endl;
-	// testDefaultForm();
-	// std::cout << std::endl;
-	// testCustomCopiedForm();
-	// std::cout << std::endl;
-	// testConstructorGradeTooHigh();
-	// std::cout << std::endl;
-	// testConstructorGradeTooLow();
-	// std::cout << std::endl;
-	// testFormSignSuccess();
-	// std::cout << std::endl;
-	// testFormSignFail();
-	// std::cout << std::endl;
+	testShrubberyCreationForm();
+	testRobotomyRequestForm();
+	testPresidentialPardonForm();
 	return 0;
 }

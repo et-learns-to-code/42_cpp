@@ -45,6 +45,9 @@ class AForm
 		int getGradeToSign() const;
 		int getGradeToExecute() const;
 
+		// getter for derived classes
+		virtual std::string getTarget() const = 0;
+
 		void beSigned(const Bureaucrat &bureaucrat);
 
 		void execute(Bureaucrat const & executor) const;
