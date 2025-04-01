@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/03/31 19:18:50 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/01 12:35:53 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void Bureaucrat::signForm(Form &form)
 	catch (std::exception & e)
 	{
 		std::cout << this->_name << " couldn't sign " << form.getName()
-			<< " because " << e.what() << std::endl;
+			<< " because: " << e.what() << std::endl;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/03/31 19:59:00 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/01 12:32:48 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,15 @@ void AForm::beSigned(const Bureaucrat &bureaucrat)
 		throw AForm::GradeTooLowException();
 }
 
+void AForm::execute(Bureaucrat const & executor) const
+{
+	if (!this->_isSigned)
+		throw AForm::FormNotSignedException();
+	if (executor.getGrade() > this->_gradeToExecute)
+		throw AForm::GradeTooLowException();
+	beExecuted();
+}
+
 const char *AForm::GradeTooHighException::what() const throw()
 {
 	return "Grade is too high.";
@@ -98,13 +107,18 @@ const char *AForm::GradeTooLowException::what() const throw()
 	return "Grade is too low.";
 }
 
+const char *AForm::FormNotSignedException::what() const throw()
+{
+	return "Form has not been signed.";
+}
+
 // insertion operator overload
-std::ostream &operator<<(std::ostream &out, const AForm &aform)
+std::ostream &operator<<(std::ostream &out, const AForm &form)
 {
 	return (out << YELLOW
-		<< "_name: " << aform.getName()
-		<< "; _isSigned: " << aform.getIsSigned() << ";" << std::endl
-		<< "_gradeToSign: " << aform.getGradeToSign() << ";" << std::endl
-		<< "_gradeToExecute: " << aform.getGradeToExecute()
+		<< "_name: " << form.getName()
+		<< "; _isSigned: " << form.getIsSigned() << ";" << std::endl
+		<< "_gradeToSign: " << form.getGradeToSign() << ";" << std::endl
+		<< "_gradeToExecute: " << form.getGradeToExecute()
 		<< "." << RESET);
 }

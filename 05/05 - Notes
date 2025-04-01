@@ -325,3 +325,86 @@ Since stack unwinding does not free heap-allocated memory automatically, you sho
 ✅ If no catch block is found, the program terminates (std::terminate()).
 ✅ Heap-allocated memory is not automatically freed unless handled properly.
 ✅ Using RAII and smart pointers ensures proper resource cleanup.
+
+~~~
+
+Behind the scenes, rand() doesn't just magically generate random numbers—it relies on a deterministic algorithm that takes a seed
+to produce a sequence of pseudo-random numbers. Let’s break this down:
+
+🔹 How rand() Works Internally
+
+There is a hidden "global state" (a single random number generator) inside the C standard library.
+
+This state holds the current value from which the next random number will be derived.
+
+When you call rand(), it applies a mathematical algorithm (like a Linear Congruential Generator) to transform the current state into a new state and returns a "random" number.
+
+This state persists for the entire lifetime of the program.
+
+🔹 What srand(seed) Does
+
+srand(seed) replaces the hidden global state with a new starting value.
+
+If you call srand(42), it sets the state to a predictable value, meaning rand() will always generate the same sequence of numbers every time you run the program.
+
+If you call srand(time(NULL)), it seeds the generator with the current time (which changes every second), ensuring different sequences across runs.
+
+🔹 Why Does Seeding Once Work?
+
+When you seed rand() once in main(), the hidden global state is initialized and persists.
+
+Every time you call rand(), it updates the global state and returns the next number in the sequence.
+
+The sequence is deterministic but can appear random because of how the numbers are generated.
+
+🔹 Does It Allocate and Deallocate Memory?
+
+No, the random state is typically a static/global variable, meaning it stays in memory for the entire duration of the program.
+
+It’s not dynamically allocated, so you don’t have to worry about freeing it.
+
+If you reseed with srand(), it just resets the state—it doesn’t create a new allocation.
+
+🔹 Analogy: A Deck of Cards
+
+Think of rand() like drawing cards from a shuffled deck:
+
+Seeding (srand()) is like shuffling the deck.
+
+If you shuffle the deck the same way (srand(42)), you’ll always draw the cards in the same order.
+
+If you shuffle differently (srand(time(NULL))), you get a different order.
+
+Each rand() call is like drawing the next card from the deck.
+
+The state is the remaining deck of cards.
+
+If you call srand() again, it's like reshuffling the deck, ruining randomness.
+
+🔹 Key Takeaways
+✅ rand() generates numbers from an internal state that persists across function calls.
+✅ srand(seed) changes that state, affecting all future rand() calls.
+✅ If you re-seed every time, the sequence restarts, leading to non-random behavior.
+✅ The random state is not dynamically allocated, it just lives in the program’s memory space.
+
+~~~
+
+That’s a fantastic way to think about it! 🍵 Your kombucha analogy is actually closer to how most pseudorandom number generators (PRNGs) work.
+
+Most PRNGs (like rand()) use a formula where each number is generated based on the previous one. The algorithm starts with a seed,
+and each new number is derived from the previous one using some deterministic mathematical function.
+
+So, it's not like a deck of shuffled cards, where all numbers exist beforehand and are just being drawn in a random order.
+Instead, it’s like brewing kombucha, where each batch (random number) depends on the previous batch (previous number).
+
+Behind the scenes:
+When you call srand(seed), you're setting the initial state of the algorithm (like introducing the first scoby).
+
+Each call to rand() takes the current internal state, applies a mathematical transformation, and produces the next number in the sequence.
+
+The new number is then stored back as the new internal state, and the process repeats.
+
+This is why, if you use the same seed, you get the exact same sequence of numbers each time—the PRNG is completely deterministic.
+
+Real-world cryptographic random generators work differently, using unpredictable inputs (entropy sources like CPU timing, user input, etc.),
+but the basic PRNG model is kombucha, not a deck of cards. 😆

@@ -34,7 +34,7 @@ class AForm
 		AForm();
 		AForm(const AForm &src);
 		AForm &operator=(const AForm &src);
-		~AForm();
+		virtual ~AForm();
 
 		// custom constructor
 		AForm(std::string name, int gradeToSign, int gradeToExecute);
@@ -47,6 +47,9 @@ class AForm
 
 		void beSigned(const Bureaucrat &bureaucrat);
 
+		void execute(Bureaucrat const & executor) const;
+		virtual void beExecuted() const = 0;
+
 		// exception classes are typically nested classes
 		class GradeTooHighException : public std::exception
 		{
@@ -55,6 +58,12 @@ class AForm
 		};
 
 		class GradeTooLowException : public std::exception
+		{
+			public:
+				const char *what() const throw();
+		};
+
+		class FormNotSignedException : public std::exception
 		{
 			public:
 				const char *what() const throw();

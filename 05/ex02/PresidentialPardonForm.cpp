@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:41:48 by etien             #+#    #+#             */
-/*   Updated: 2025/03/31 20:17:50 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/01 12:26:08 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // default constructor
 // _target() will implicitly initialize _target to an empty string
 PresidentialPardonForm::PresidentialPardonForm()
-: AForm("PresidentialPardonForm", 25, 5), _target()
+: AForm("PresidentialPardonForm", 25, 5), _target("target")
 {
 	// std::cout << "PresidentialPardonForm object default constructor called." << std::endl;
 }
@@ -55,4 +55,9 @@ PresidentialPardonForm::PresidentialPardonForm(std::string target)
 std::string PresidentialPardonForm::getTarget() const
 {
 	return this->_target;
+}
+
+void PresidentialPardonForm::beExecuted() const
+{
+	std::cout << this->_target << " has been pardoned by Zaphod Beeblebrox." << std::endl;
 }

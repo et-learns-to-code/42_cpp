@@ -6,12 +6,12 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/03/31 19:18:50 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/01 12:35:38 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
 
 // default constructor
 Bureaucrat::Bureaucrat() : _name("Default Bureaucrat"), _grade(150)
@@ -81,7 +81,7 @@ void Bureaucrat::decrementGrade()
 	this->_grade++;
 }
 
-void Bureaucrat::signForm(Form &form)
+void Bureaucrat::signForm(AForm &form)
 {
 	try
 	{
@@ -91,7 +91,21 @@ void Bureaucrat::signForm(Form &form)
 	catch (std::exception & e)
 	{
 		std::cout << this->_name << " couldn't sign " << form.getName()
-			<< " because " << e.what() << std::endl;
+			<< " because: " << e.what() << std::endl;
+	}
+}
+
+void Bureaucrat::executeForm(AForm const & form)
+{
+	try
+	{
+		form.execute(*this);
+		std::cout << this->_name << " executed " << form.getName() << std::endl;
+	}
+	catch(std::exception& e)
+	{
+		std::cout << this->_name << " couldn't execute " << form.getName()
+			<< " because: " << e.what() << std::endl;
 	}
 }
 

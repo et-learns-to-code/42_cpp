@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:41:45 by etien             #+#    #+#             */
-/*   Updated: 2025/03/31 20:15:21 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/01 12:26:25 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ class PresidentialPardonForm : public AForm
 
 		// getter
 		std::string getTarget() const;
+
+		void beExecuted() const;
 };
 
 #endif
