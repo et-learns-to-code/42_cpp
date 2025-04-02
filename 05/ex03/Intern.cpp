@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 18:34:01 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 21:57:30 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/02 12:53:17 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ Intern::Intern(const Intern &src)
 Intern &Intern::operator=(const Intern &src)
 {
 	// std::cout << "Intern object copy assignment operator called." << std::endl;
+	(void) src;
 	return *this;
 }
 

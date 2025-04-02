@@ -1,4 +1,4 @@
-NAME = forms
+NAME = intern
 
 SRC = main.cpp Bureaucrat.cpp AForm.cpp Intern.cpp \
 	PresidentialPardonForm.cpp RobotomyRequestForm.cpp ShrubberyCreationForm.cpp

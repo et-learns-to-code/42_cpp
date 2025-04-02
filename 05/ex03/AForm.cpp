@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 21:42:18 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/02 11:20:03 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ const char *AForm::FormNotSignedException::what() const throw()
 
 const char *AForm::InvalidFormException::what() const throw()
 {
-	return "Invalid form type.";
+	return "Form does not exist.";
 }
 
 // insertion operator overload
