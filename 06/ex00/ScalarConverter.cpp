@@ -6,11 +6,13 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:44:56 by etien             #+#    #+#             */
-/*   Updated: 2025/04/03 14:53:26 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/03 18:23:53 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
+
+#include <cstdlib> // atoi
 
 // default constructor
 ScalarConverter::ScalarConverter()
@@ -80,17 +82,126 @@ bool detectPseudoLiterals(const std::string &input)
 	return true;
 }
 
+// This function checks that the string is only composed of
+// digits, '-', '.' and 'f' (for floats).
+bool validNumericCharacters(const std::string &input)
+{
+	for (std::size_t i = 0; i < input.size(); i++)
+	{
+		char c = input[i];
+		if (!isdigit(c) && c != '-' && c != '.' && c != 'f')
+			return false;
+	}
+	return true;
+}
 
-// ScalarType detectType(const std::string &input)
-// {
-// }
+// This function checks the syntax involving '-', '.' and 'f'.
+// '-': occur once and must be at the start of the string.
+// '.': occur once and must be sandwiched by digits.
+// 'f': occur once and must be at the end of the string.
+bool validNumericSyntax(const std::string &input)
+{
+	int negativeCount = 0;
+	int dotCount = 0;
+	int fCount = 0;
 
+	for (std::size_t i = 0; i < input.size(); i++)
+	{
+		char c = input[i];
+		if (c == '-')
+			negativeCount++;
+		if (c == '.')
+			dotCount++;
+		if (c == 'f')
+			fCount++;
+	}
+	if (negativeCount > 1 || dotCount > 1 || fCount > 1)
+		return false;
+	if (negativeCount == 1 && input.front() != '-')
+		return false;
+	if (fCount == 1 && input.back() != 'f')
+		return false;
+	if (dotCount == 1 && )
+
+	return true;
+}
+
+bool isInteger(const std::string &input)
+{
+	for (std::size_t i = 0; i < input.size(); i++)
+	{
+		char c = input[i];
+		if (!isdigit(c))
+			return false;
+	}
+	return true;
+}
+
+bool isDouble(const std::string &input)
+{
+	// for (std::size_t i = 0; i < input.size(); i++)
+	// {
+	// 	char c = input[i];
+	// 	if (!isdigit(c))
+	// 		return false;
+	// }
+	// return true;
+}
+
+bool isFloat(const std::string &input)
+{
+	// .back() accesses the last character
+	if (input.back() == 'f')
+		return false;
+	return true;
+}
+
+void printChar(int i)
+{
+	if (i < 0 || i > 127 || !std::isprint(i))
+		std::cout << "char: Non displayable";
+	else
+		std::cout << "char: '" << static_cast<char>(i) << "'" << std::endl;
+}
+
+ScalarType detectType(const std::string &input)
+{
+	// if input is an empty string
+	if (input.size() == 0)
+		return INVALID;
+	// std::string is a wrapper around a dynamic character array, which means
+	// you can access its characters using array-style indexing ([]).
+	else if (input.size() == 1 && !isdigit(input[0]))
+		return CHAR;
+	else if (!validNumericCharacters(input) || !validNumericSyntax(input))
+		return INVALID;
+	else if (isInteger(input))
+		return INT;
+	else if (isFloat(input))
+		return FLOAT;
+	return DOUBLE;
+}
+
+void printInvalidNumber()
+{
+	std::cout << "char: impossible" << std::endl;
+	std::cout << "int: impossible" << std::endl;
+	std::cout << "float: nanf" << std::endl;
+	std::cout << "double: nan" << std::endl;
+}
 
 void ScalarConverter::convert(std::string input)
 {
 	input = trim(input);
 	if (detectPseudoLiterals(input))
 		return;
-	// ScalarType type = detectType(input);
+ 	ScalarType type = detectType(input);
+	if (type == INVALID)
+	{
+		printInvalidNumber();
+		return;
+	}
+	printChar(atoi(input.c_str()));
+
 }
 
