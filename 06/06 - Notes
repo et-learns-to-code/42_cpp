@@ -1,0 +1,84 @@
+Detecting the Types
+
+1. Detecting char
+
+A char literal is a single ASCII character (0-127).
+
+It should be printable (32-126) for output; otherwise, print "Non displayable".
+
+To check if input is a char:
+
+The input must be a single character.
+
+If the input is a digit ('0' to '9'), it should not be treated as a char, since it could be an int.
+
+Use std::isprint() to determine if it's printable.
+
+2. Detecting int
+
+It must be a whole number with only digits (-?[0-9]+).
+
+No decimal points or f at the end.
+
+It may have a leading - for negative numbers.
+
+Use std::stoi() to check validity.
+
+Check for overflow using std::numeric_limits<int>::max() and min().
+
+3. Detecting float
+
+Must end with f (e.g., "42.0f").
+
+Can have a leading sign (+/-).
+
+Contains digits and exactly one decimal point.
+
+Use std::stof() to check validity.
+
+Floats are limited in precision, so beware of rounding.
+
+4. Detecting double
+
+Similar to float, but without f at the end (e.g., "42.0").
+
+Contains digits and one decimal point.
+
+Use std::stod() for validation.
+
+---
+
+Special Cases: nan, inf, and Their Variants
+
+These are floating-point special values used to represent exceptional conditions.
+
+1. NaN (Not a Number)
+Represents an undefined mathematical result (e.g., 0/0, sqrt(-1)).
+
+Variations:
+
+"nan" (double)
+
+"nanf" (float)
+
+2. Infinity (inf)
+Represents a value too large for floating-point representation.
+
+Variations:
+
+"inf" / "+inf" / "-inf" (double)
+
+"inff" / "+inff" / "-inff" (float)
+
+Can check using std::isinf().
+
+How to Detect These Special Cases
+Convert the string to lowercase and check:
+
+"nan" → double
+
+"nanf" → float
+
+"+inf", "-inf" → double
+
+"+inff", "-inff" → float
