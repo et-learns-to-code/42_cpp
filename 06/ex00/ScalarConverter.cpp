@@ -6,14 +6,11 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:44:56 by etien             #+#    #+#             */
-/*   Updated: 2025/04/04 16:47:19 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/04 17:29:31 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
-
-#include <cstdlib> // atoi
-#include <limits> // for numeric limits to check for overflow
 
 // default constructor
 ScalarConverter::ScalarConverter()
@@ -206,13 +203,13 @@ ScalarType detectType(const std::string &input)
 void printChar(double value)
 {
 	if (value < 0 || value > 127 || !std::isprint(value))
-		std::cout << "char: Non displayable";
+		std::cout << "char: Non displayable" << std::endl;
 	else
 		std::cout << "char: '" << static_cast<char>(value) << "'" << std::endl;
 }
 
-// std::numeric_limits<int>::min() ✅ → Smallest possible integer (e.g., -2147483648 for int)
-// std::numeric_limits<int>::max() ✅ → Largest possible integer (e.g., 2147483647 for int)
+// std::numeric_limits<int>::min() → Smallest possible integer (e.g., -2147483648 for int)
+// std::numeric_limits<int>::max() → Largest possible integer (e.g., 2147483647 for int)
 void printInt(double value)
 {
 	if (value < std::numeric_limits<int>::min() || value > std::numeric_limits<int>::max())
@@ -224,9 +221,10 @@ void printInt(double value)
 // std::numeric_limits<float>::min() → Smallest positive value (not the most negative!)
 // std::numeric_limits<float>::max() → Largest positive value
 // std::numeric_limits<float>::lowest() → Most negative floating-point number
+// but lowest() is unavailable in C++98, so use -max().
 void printFloat(double value)
 {
-	if (value < std::numeric_limits<float>::lowest() || value > std::numeric_limits<float>::max())
+	if (value < -std::numeric_limits<float>::max() || value > std::numeric_limits<float>::max())
 		std::cout << "float: impossible" << std::endl;
 	else
 		std::cout << "float: " << static_cast<float>(value) << std::endl;
@@ -264,25 +262,31 @@ void convertForType(ScalarType type, std::string input)
 		return;
 	}
 	// handle INT, FLOAT and DOUBLE together
+	// strip 'f' character at the end of the float so that it can be processed correctly by strtod().
 	if (type == FLOAT)
 		input = input.substr(0, input.size() - 1);
-	try
+	// reset global errno variable since the value may be left over from a previous operation
+	errno = 0;
+	// A pointer to the rest of the string after consuming non-whitespace characters is stored in the object pointed by endptr.
+	char *endPtr;
+	// convert string to a double
+	// On success, strtod() returns the converted floating point number as a value of type double.
+	// A valid floating point number for strtod using the "C" locale is formed by an optional sign character (+ or -),
+	// followed by a sequence of digits, optionally containing a decimal-point character (.), optionally followed by
+	// an exponent part (an e or E character followed by an optional sign and a sequence of digits).
+	// If no valid conversion could be performed, strtod() returns zero (0.0).
+	// If the correct value is out of the range of representable values for the type,
+	// a positive or negative HUGE_VAL is returned, and errno is set to ERANGE.
+	double value = strtod(input.c_str(), &endPtr);
+	if (errno == ERANGE || *endPtr != '\0')
 	{
-		// convert string to a double
-		double value = std::stod(input);
-		printChar(value);
-		printInt(value);
-		printFloat(value);
-		printDouble(value);
-	}
-	// If no conversion could be performed, an 1) invalid_argument exception is thrown.
-	// If the value read is out of the range of representable values by a double (in some library implementations,
-	// this includes underflows), an 2) out_of_range exception is thrown.
-	catch (const std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
 		printInvalidNumber();
+		return;
 	}
+	printChar(value);
+	printInt(value);
+	printFloat(value);
+	printDouble(value);
 }
 
 void ScalarConverter::convert(std::string input)
@@ -294,15 +298,5 @@ void ScalarConverter::convert(std::string input)
 		return;
  	ScalarType type = detectType(input);
 	convertForType(type, input);
-	// if (type == INVALID)
-	// 	std::cout << "Invalid" << std::endl;
-	// else if (type == CHAR)
-	// 	std::cout << "Char" << std::endl;
-	// else if (type == INT)
-	// 	std::cout << "Integer" << std::endl;
-	// else if (type == FLOAT)
-	// 	std::cout << "Float" << std::endl;
-	// else if (type == DOUBLE)
-	// 	std::cout << "Double" << std::endl;
 }
 

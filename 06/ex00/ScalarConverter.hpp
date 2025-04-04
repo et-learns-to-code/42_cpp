@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 11:59:59 by etien             #+#    #+#             */
-/*   Updated: 2025/04/03 14:52:23 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/04 17:27:35 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 #include <string>
 #include <iostream>
+#include <cstdlib> // atoi, strtod
+#include <limits> // for numeric limits to check for overflow
+#include <cerrno> // errno, ERANGE
 
 enum ScalarType
 {
