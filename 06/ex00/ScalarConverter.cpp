@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:44:56 by etien             #+#    #+#             */
-/*   Updated: 2025/04/04 17:29:31 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/04 18:25:35 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ void printFloat(double value)
 // double overflow is already checked in try-catch block
 void printDouble(double value)
 {
-	std::cout << "double: " << value << std::endl;
+	std::cout << "double: " << static_cast<double>(value) << std::endl;
 }
 
 // safe conversion to all types because a displayable character in the terminal
@@ -252,15 +252,9 @@ void convertForChar(const std::string &input)
 void convertForType(ScalarType type, std::string input)
 {
 	if (type == INVALID)
-	{
-		printInvalidNumber();
-		return;
-	}
+		return printInvalidNumber();
 	else if (type == CHAR)
-	{
-		convertForChar(input);
-		return;
-	}
+		return convertForChar(input);
 	// handle INT, FLOAT and DOUBLE together
 	// strip 'f' character at the end of the float so that it can be processed correctly by strtod().
 	if (type == FLOAT)
@@ -283,10 +277,12 @@ void convertForType(ScalarType type, std::string input)
 		printInvalidNumber();
 		return;
 	}
-	printChar(value);
-	printInt(value);
-	printFloat(value);
-	printDouble(value);
+	if (type == INT)
+		return convertForInt(input, value);
+	else if (type == FLOAT)
+		return convertForFloat(input, value);
+	else if (type == DOUBLE)
+		return convertForDouble(input, value);
 }
 
 void ScalarConverter::convert(std::string input)
