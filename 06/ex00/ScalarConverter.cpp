@@ -6,13 +6,14 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:44:56 by etien             #+#    #+#             */
-/*   Updated: 2025/04/04 12:04:07 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/04 16:47:19 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
 
 #include <cstdlib> // atoi
+#include <limits> // for numeric limits to check for overflow
 
 // default constructor
 ScalarConverter::ScalarConverter()
@@ -54,6 +55,14 @@ std::string trim(const std::string& input)
 	return input.substr(start, end - start + 1);
 }
 
+void printInvalidNumber()
+{
+	std::cout << "char: impossible" << std::endl;
+	std::cout << "int: impossible" << std::endl;
+	std::cout << "float: nanf" << std::endl;
+	std::cout << "double: nan" << std::endl;
+}
+
 // This function will print out the conversion results for pseudo literals:
 // -inff, +inff, nanf
 // -inf, +inf, nan
@@ -62,23 +71,19 @@ bool detectPseudoLiterals(const std::string &input)
 	if (input != "-inff" && input != "+inff" && input != "nanf" &&
 		input != "-inf" && input != "+inf" && input != "nan")
 		return false;
+	if (input == "nanf" || input == "nan")
+	{
+		printInvalidNumber();
+		return true;
+	}
+	// -inff, -inf, +inff, +inf
+	bool isNegative = (input[0] == '-');
+	std::string infFloat = isNegative ? "-inff" : " +inff";
+	std::string infDouble = isNegative ? "-inf" : " +inf";
 	std::cout << "char: impossible" << std::endl;
 	std::cout << "int: impossible" << std::endl;
-	if (input == "-inff" || input == "-inf")
-	{
-		std::cout << "float: -inff" << std::endl;
-		std::cout << "double: -inf" << std::endl;
-	}
-	else if (input == "+inff" || input == "+inf")
-	{
-		std::cout << "float: +inff" << std::endl;
-		std::cout << "double: +inf" << std::endl;
-	}
-	else if (input == "nanf" || input == "nan")
-	{
-		std::cout << "float: nanf" << std::endl;
-		std::cout << "double: nan" << std::endl;
-	}
+	std::cout << "float: " << infFloat << std::endl;
+	std::cout << "double: " << infDouble << std::endl;
 	return true;
 }
 
@@ -119,6 +124,7 @@ bool validNumericSyntax(const std::string &input)
 	// all special characters should only occur once
 	if (negativeCount > 1 || dotCount > 1 || fCount > 1)
 		return false;
+
 	// basic negative number format: -d (min 2 characters)
 	if (negativeCount == 1 && input.size() < 2)
 		return false;
@@ -128,6 +134,7 @@ bool validNumericSyntax(const std::string &input)
 	// basic float number format: d.df (min 4 characters)
 	if (fCount == 1 && input.size() < 4)
 		return false;
+
 	// floats must always have a decimal point
 	if (fCount == 1 && dotCount == 0)
 		return false;
@@ -179,19 +186,15 @@ bool isFloat(const std::string &input)
 	return true;
 }
 
-void printChar(int i)
-{
-	if (i < 0 || i > 127 || !std::isprint(i))
-		std::cout << "char: Non displayable";
-	else
-		std::cout << "char: '" << static_cast<char>(i) << "'" << std::endl;
-}
-
+// Returns the type of the input: INVALID, CHAR, INT, FLOAT or DOUBLE.
 ScalarType detectType(const std::string &input)
 {
 	// if input is an empty string
-	if (input.size() == 0 ||
-		!validNumericCharacters(input) || !validNumericSyntax(input))
+	if (input.size() == 0)
+		return INVALID;
+	else if (input.size() == 1 && !isdigit(input[0]))
+ 		return CHAR;
+	else if (!validNumericCharacters(input) || !validNumericSyntax(input))
 		return INVALID;
 	else if (isInteger(input))
 		return INT;
@@ -200,34 +203,106 @@ ScalarType detectType(const std::string &input)
 	return DOUBLE;
 }
 
-void printInvalidNumber()
+void printChar(double value)
 {
-	std::cout << "char: impossible" << std::endl;
-	std::cout << "int: impossible" << std::endl;
-	std::cout << "float: nanf" << std::endl;
-	std::cout << "double: nan" << std::endl;
+	if (value < 0 || value > 127 || !std::isprint(value))
+		std::cout << "char: Non displayable";
+	else
+		std::cout << "char: '" << static_cast<char>(value) << "'" << std::endl;
+}
+
+// std::numeric_limits<int>::min() ✅ → Smallest possible integer (e.g., -2147483648 for int)
+// std::numeric_limits<int>::max() ✅ → Largest possible integer (e.g., 2147483647 for int)
+void printInt(double value)
+{
+	if (value < std::numeric_limits<int>::min() || value > std::numeric_limits<int>::max())
+		std::cout << "int: impossible" << std::endl;
+	else
+		std::cout << "int: " << static_cast<int>(value) << std::endl;
+}
+
+// std::numeric_limits<float>::min() → Smallest positive value (not the most negative!)
+// std::numeric_limits<float>::max() → Largest positive value
+// std::numeric_limits<float>::lowest() → Most negative floating-point number
+void printFloat(double value)
+{
+	if (value < std::numeric_limits<float>::lowest() || value > std::numeric_limits<float>::max())
+		std::cout << "float: impossible" << std::endl;
+	else
+		std::cout << "float: " << static_cast<float>(value) << std::endl;
+}
+
+// double overflow is already checked in try-catch block
+void printDouble(double value)
+{
+	std::cout << "double: " << value << std::endl;
+}
+
+// safe conversion to all types because a displayable character in the terminal
+// should be between 32 and 126.
+void convertForChar(const std::string &input)
+{
+	// conversion necessary because static_cast expects a numeric type, not a pointer.
+	int asciiValue = static_cast<int>(input[0]);
+
+	std::cout << "char: '" << input[0] << "'" << std::endl;
+	std::cout << "int: " << asciiValue << std::endl;
+	std::cout << "float: " << static_cast<float>(asciiValue) << ".0f" << std::endl;
+	std::cout << "double: " << static_cast<double>(asciiValue) << ".0" << std::endl;
+}
+
+void convertForType(ScalarType type, std::string input)
+{
+	if (type == INVALID)
+	{
+		printInvalidNumber();
+		return;
+	}
+	else if (type == CHAR)
+	{
+		convertForChar(input);
+		return;
+	}
+	// handle INT, FLOAT and DOUBLE together
+	if (type == FLOAT)
+		input = input.substr(0, input.size() - 1);
+	try
+	{
+		// convert string to a double
+		double value = std::stod(input);
+		printChar(value);
+		printInt(value);
+		printFloat(value);
+		printDouble(value);
+	}
+	// If no conversion could be performed, an 1) invalid_argument exception is thrown.
+	// If the value read is out of the range of representable values by a double (in some library implementations,
+	// this includes underflows), an 2) out_of_range exception is thrown.
+	catch (const std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+		printInvalidNumber();
+	}
 }
 
 void ScalarConverter::convert(std::string input)
 {
-	input = trim(input);
+	// if condition to allow single spaces
+	if (input.size() > 1)
+		input = trim(input);
 	if (detectPseudoLiterals(input))
 		return;
  	ScalarType type = detectType(input);
-	if (type == INVALID)
-		std::cout << "Invalid" << std::endl;
-	else if (type == INT)
-		std::cout << "Integer" << std::endl;
-	else if (type == FLOAT)
-		std::cout << "Float" << std::endl;
-	else if (type == DOUBLE)
-		std::cout << "Double" << std::endl;
+	convertForType(type, input);
 	// if (type == INVALID)
-	// {
-	// 	printInvalidNumber();
-	// 	return;
-	// }
-	// printChar(atoi(input.c_str()));
-
+	// 	std::cout << "Invalid" << std::endl;
+	// else if (type == CHAR)
+	// 	std::cout << "Char" << std::endl;
+	// else if (type == INT)
+	// 	std::cout << "Integer" << std::endl;
+	// else if (type == FLOAT)
+	// 	std::cout << "Float" << std::endl;
+	// else if (type == DOUBLE)
+	// 	std::cout << "Double" << std::endl;
 }
 

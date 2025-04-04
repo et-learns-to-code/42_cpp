@@ -82,3 +82,55 @@ Convert the string to lowercase and check:
 "+inf", "-inf" → double
 
 "+inff", "-inff" → float
+
+--------------------------------------------------------------------------------------
+
+Typecasting hierarchy
+
+Widening conversions (e.g., char → int → float → double) are safe in terms of data preservation.
+
+Narrowing conversions (e.g., double → float → int → char) can result in:
+- Precision loss, truncation, overflow/underflow, undefined behavior (especially with char)
+
+--------------------------------------------------------------------------------------
+
+static_cast<T>(value) converts value into the specified type T, ensuring it follows the rules of type conversion.
+When you static_cast a value, it gets stored in memory using the size and representation of the target type.
+
+What actually happens during static_cast?
+
+Memory Representation Changes:
+
+When converting from double to float, the precision is truncated to fit within float's 32-bit representation.
+
+When converting from int to char, only the least significant byte (LSB) is retained.
+
+Data Loss & Overflow Risks:
+
+double → int: The decimal part is dropped (not rounded).
+
+int → char: If the integer is outside char's range (0-255 for unsigned char, -128 to 127 for signed char), it overflows.
+
+
+Example:
+
+double d = 42.99;
+int i = static_cast<int>(d);
+std::cout << "int: " << i << std::endl; // Output: int: 42 (truncation happens)
+
+float f = static_cast<float>(d);
+std::cout << "float: " << f << "f" << std::endl; // Output: float: 42.99f (if precision allows)
+
+
+Does static_cast change the actual memory?
+Yes! When casting, the value is reinterpreted in the memory layout of the new type. This is why:
+
+char takes 1 byte (8 bits).
+
+int takes 4 bytes (32 bits).
+
+float takes 4 bytes, but follows IEEE 754 floating-point representation.
+
+double takes 8 bytes (64 bits).
+
+
