@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:44:56 by etien             #+#    #+#             */
-/*   Updated: 2025/04/03 18:23:53 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/04 12:04:07 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ bool detectPseudoLiterals(const std::string &input)
 // digits, '-', '.' and 'f' (for floats).
 bool validNumericCharacters(const std::string &input)
 {
-	for (std::size_t i = 0; i < input.size(); i++)
+	for (size_t i = 0; i < input.size(); i++)
 	{
 		char c = input[i];
 		if (!isdigit(c) && c != '-' && c != '.' && c != 'f')
@@ -98,14 +98,15 @@ bool validNumericCharacters(const std::string &input)
 // This function checks the syntax involving '-', '.' and 'f'.
 // '-': occur once and must be at the start of the string.
 // '.': occur once and must be sandwiched by digits.
-// 'f': occur once and must be at the end of the string.
+// 'f': occur once and must be at the end of the string and
+//      string must also have a decimal point.
 bool validNumericSyntax(const std::string &input)
 {
 	int negativeCount = 0;
 	int dotCount = 0;
 	int fCount = 0;
 
-	for (std::size_t i = 0; i < input.size(); i++)
+	for (size_t i = 0; i < input.size(); i++)
 	{
 		char c = input[i];
 		if (c == '-')
@@ -115,43 +116,65 @@ bool validNumericSyntax(const std::string &input)
 		if (c == 'f')
 			fCount++;
 	}
+	// all special characters should only occur once
 	if (negativeCount > 1 || dotCount > 1 || fCount > 1)
 		return false;
-	if (negativeCount == 1 && input.front() != '-')
+	// basic negative number format: -d (min 2 characters)
+	if (negativeCount == 1 && input.size() < 2)
 		return false;
-	if (fCount == 1 && input.back() != 'f')
+	// basic double format: d.d (min 3 characters)
+	if (dotCount == 1 && input.size() < 3)
 		return false;
-	if (dotCount == 1 && )
+	// basic float number format: d.df (min 4 characters)
+	if (fCount == 1 && input.size() < 4)
+		return false;
+	// floats must always have a decimal point
+	if (fCount == 1 && dotCount == 0)
+		return false;
 
-	return true;
-}
+	size_t inputFront = input[0];
+	size_t inputBack = input[input.size() - 1];
 
-bool isInteger(const std::string &input)
-{
-	for (std::size_t i = 0; i < input.size(); i++)
+	// negative sign must be at the start of the string
+	if (negativeCount == 1 && inputFront != '-')
+		return false;
+	// 'f' must be at the end of the string
+	if (fCount == 1 && inputBack != 'f')
+		return false;
+	// decimal point cannot be at the start or end of the string.
+	if (dotCount == 1 && (inputFront == '.' || inputBack == '.'))
+		return false;
+	// decimal point must be sandwiched by digits
+	if (dotCount == 1)
 	{
-		char c = input[i];
-		if (!isdigit(c))
+		size_t dotPos = input.find('.');
+		char prev = input[dotPos - 1];
+		char next = input[dotPos + 1];
+		if (!isdigit(prev) || !isdigit(next))
 			return false;
 	}
 	return true;
 }
 
-bool isDouble(const std::string &input)
+bool isInteger(const std::string &input)
 {
-	// for (std::size_t i = 0; i < input.size(); i++)
-	// {
-	// 	char c = input[i];
-	// 	if (!isdigit(c))
-	// 		return false;
-	// }
-	// return true;
+	for (size_t i = 0; i < input.size(); i++)
+	{
+		// std::string is a wrapper around a dynamic character array, which means
+		// you can access its characters using array-style indexing ([]).
+		char c = input[i];
+		// an integer should only be composed of digits and an optional sign
+		if (!isdigit(c) && c != '-')
+			return false;
+	}
+	return true;
 }
 
+// after passing the preliminary checks, the only difference between a
+// float and a double is the 'f' character behind.
 bool isFloat(const std::string &input)
 {
-	// .back() accesses the last character
-	if (input.back() == 'f')
+	if (input[input.size() - 1] != 'f')
 		return false;
 	return true;
 }
@@ -167,13 +190,8 @@ void printChar(int i)
 ScalarType detectType(const std::string &input)
 {
 	// if input is an empty string
-	if (input.size() == 0)
-		return INVALID;
-	// std::string is a wrapper around a dynamic character array, which means
-	// you can access its characters using array-style indexing ([]).
-	else if (input.size() == 1 && !isdigit(input[0]))
-		return CHAR;
-	else if (!validNumericCharacters(input) || !validNumericSyntax(input))
+	if (input.size() == 0 ||
+		!validNumericCharacters(input) || !validNumericSyntax(input))
 		return INVALID;
 	else if (isInteger(input))
 		return INT;
@@ -197,11 +215,19 @@ void ScalarConverter::convert(std::string input)
 		return;
  	ScalarType type = detectType(input);
 	if (type == INVALID)
-	{
-		printInvalidNumber();
-		return;
-	}
-	printChar(atoi(input.c_str()));
+		std::cout << "Invalid" << std::endl;
+	else if (type == INT)
+		std::cout << "Integer" << std::endl;
+	else if (type == FLOAT)
+		std::cout << "Float" << std::endl;
+	else if (type == DOUBLE)
+		std::cout << "Double" << std::endl;
+	// if (type == INVALID)
+	// {
+	// 	printInvalidNumber();
+	// 	return;
+	// }
+	// printChar(atoi(input.c_str()));
 
 }
 
