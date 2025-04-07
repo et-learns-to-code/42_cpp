@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 11:59:59 by etien             #+#    #+#             */
-/*   Updated: 2025/04/07 13:46:51 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/07 16:14:09 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 #include <iostream>
 #include <cstdlib> // atoi, strtol, strtof, strtod
 #include <limits> // for numeric limits to check for overflow
+#include <climits> // LONG_MAX, LONG_MIN, HUGE_VALF, HUGE_VAL
 #include <cerrno> // errno, ERANGE
+#include <cmath> // floor
 
 #define GREEN "\033[32m"
 #define RESET "\033[0m"
