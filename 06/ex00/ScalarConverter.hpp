@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 11:59:59 by etien             #+#    #+#             */
-/*   Updated: 2025/04/04 17:27:35 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/07 13:46:51 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 
 #include <string>
 #include <iostream>
-#include <cstdlib> // atoi, strtod
+#include <cstdlib> // atoi, strtol, strtof, strtod
 #include <limits> // for numeric limits to check for overflow
 #include <cerrno> // errno, ERANGE
+
+#define GREEN "\033[32m"
+#define RESET "\033[0m"
 
 enum ScalarType
 {

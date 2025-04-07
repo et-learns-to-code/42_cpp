@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:44:56 by etien             #+#    #+#             */
-/*   Updated: 2025/04/04 18:25:35 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/07 14:18:27 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,14 @@ void printInvalidNumber()
 // This function will print out the conversion results for pseudo literals:
 // -inff, +inff, nanf
 // -inf, +inf, nan
-bool detectPseudoLiterals(const std::string &input)
+bool isPseudoLiteral(const std::string &input)
 {
 	if (input != "-inff" && input != "+inff" && input != "nanf" &&
 		input != "-inf" && input != "+inf" && input != "nan")
 		return false;
+	std::cout << GREEN << "PSEUDO LITERAL" << RESET << std::endl;
 	if (input == "nanf" || input == "nan")
-	{
-		printInvalidNumber();
-		return true;
-	}
+		return printInvalidNumber(), true;
 	// -inff, -inf, +inff, +inf
 	bool isNegative = (input[0] == '-');
 	std::string infFloat = isNegative ? "-inff" : " +inff";
@@ -200,53 +198,97 @@ ScalarType detectType(const std::string &input)
 	return DOUBLE;
 }
 
-void printChar(double value)
+void printChar(double value, char charValue)
 {
-	if (value < 0 || value > 127 || !std::isprint(value))
+	if (value < 0 || value > 127)
+		std::cout << "char: impossible" << std::endl;
+	else if (!std::isprint(value))
 		std::cout << "char: Non displayable" << std::endl;
 	else
-		std::cout << "char: '" << static_cast<char>(value) << "'" << std::endl;
+		std::cout << "char: '" << charValue << "'" << std::endl;
 }
 
 // std::numeric_limits<int>::min() → Smallest possible integer (e.g., -2147483648 for int)
 // std::numeric_limits<int>::max() → Largest possible integer (e.g., 2147483647 for int)
-void printInt(double value)
+void printInt(double value, int intValue)
 {
 	if (value < std::numeric_limits<int>::min() || value > std::numeric_limits<int>::max())
 		std::cout << "int: impossible" << std::endl;
 	else
-		std::cout << "int: " << static_cast<int>(value) << std::endl;
+		std::cout << "int: " << intValue << std::endl;
 }
 
 // std::numeric_limits<float>::min() → Smallest positive value (not the most negative!)
 // std::numeric_limits<float>::max() → Largest positive value
 // std::numeric_limits<float>::lowest() → Most negative floating-point number
 // but lowest() is unavailable in C++98, so use -max().
-void printFloat(double value)
+void printFloat(double value, float floatValue)
 {
 	if (value < -std::numeric_limits<float>::max() || value > std::numeric_limits<float>::max())
 		std::cout << "float: impossible" << std::endl;
+	// if floatValue == intValue, add ".0f" for formatting
+	else if (floatValue == static_cast<int>(floatValue))
+		std::cout << "float: " << floatValue << ".0f" << std::endl;
 	else
-		std::cout << "float: " << static_cast<float>(value) << std::endl;
+		std::cout << "float: " << floatValue << "f" << std::endl;
 }
 
-// double overflow is already checked in try-catch block
-void printDouble(double value)
+// overflow of doubleValue is already checked in try-catch block
+void printDouble(double doubleValue)
 {
-	std::cout << "double: " << static_cast<double>(value) << std::endl;
+	// if doubleValue == intValue, add ".0f" for formatting
+	if (doubleValue == static_cast<int>(doubleValue))
+		std::cout << "double: " << doubleValue << ".0" << std::endl;
+	else
+		std::cout << "double: " << doubleValue << std::endl;
 }
 
 // safe conversion to all types because a displayable character in the terminal
 // should be between 32 and 126.
 void convertForChar(const std::string &input)
 {
-	// conversion necessary because static_cast expects a numeric type, not a pointer.
+	// convert to int first because static_cast expects a numeric type, not a pointer.
 	int asciiValue = static_cast<int>(input[0]);
 
+	std::cout << GREEN << "CHAR" << RESET << std::endl;
 	std::cout << "char: '" << input[0] << "'" << std::endl;
 	std::cout << "int: " << asciiValue << std::endl;
 	std::cout << "float: " << static_cast<float>(asciiValue) << ".0f" << std::endl;
 	std::cout << "double: " << static_cast<double>(asciiValue) << ".0" << std::endl;
+}
+
+void convertForInt(const std::string &input, double value)
+{
+	// The third parameter is the number base.
+	// '10' indicates decimal.
+	int intValue = strtol(input.c_str(), NULL, 10);
+
+	std::cout << GREEN << "INT" << RESET << std::endl;
+	printChar(value, static_cast<char>(intValue));
+	printInt(value, intValue);
+	printFloat(value, static_cast<float>(intValue));
+	printDouble(static_cast<double>(intValue));
+}
+
+void convertForFloat(const std::string &input, double value)
+{
+	float floatValue = strtof(input.c_str(), NULL);
+
+	std::cout << GREEN << "FLOAT" << RESET << std::endl;
+	printChar(value, static_cast<char>(floatValue));
+	printInt(value, static_cast<int>(floatValue));
+	printFloat(value, floatValue);
+	printDouble(static_cast<double>(floatValue));
+}
+
+// strtod() was already called in convertForType and passed in as the value parameter
+void convertForDouble(double value)
+{
+	std::cout << GREEN << "DOUBLE" << RESET << std::endl;
+	printChar(value, static_cast<char>(value));
+	printInt(value, static_cast<int>(value));
+	printFloat(value, static_cast<float>(value));
+	printDouble(value);
 }
 
 void convertForType(ScalarType type, std::string input)
@@ -261,9 +303,9 @@ void convertForType(ScalarType type, std::string input)
 		input = input.substr(0, input.size() - 1);
 	// reset global errno variable since the value may be left over from a previous operation
 	errno = 0;
-	// A pointer to the rest of the string after consuming non-whitespace characters is stored in the object pointed by endptr.
+	// endptr: A pointer to a char* that will point to the character after the parsed number.
 	char *endPtr;
-	// convert string to a double
+	// convert string to a double with strtod()
 	// On success, strtod() returns the converted floating point number as a value of type double.
 	// A valid floating point number for strtod using the "C" locale is formed by an optional sign character (+ or -),
 	// followed by a sequence of digits, optionally containing a decimal-point character (.), optionally followed by
@@ -272,17 +314,15 @@ void convertForType(ScalarType type, std::string input)
 	// If the correct value is out of the range of representable values for the type,
 	// a positive or negative HUGE_VAL is returned, and errno is set to ERANGE.
 	double value = strtod(input.c_str(), &endPtr);
+	// If endptr does not reach the null terminator, that means there are still unconverted characters in the numeric string.
 	if (errno == ERANGE || *endPtr != '\0')
-	{
-		printInvalidNumber();
-		return;
-	}
+		return printInvalidNumber();
 	if (type == INT)
 		return convertForInt(input, value);
 	else if (type == FLOAT)
 		return convertForFloat(input, value);
 	else if (type == DOUBLE)
-		return convertForDouble(input, value);
+		return convertForDouble(value);
 }
 
 void ScalarConverter::convert(std::string input)
@@ -290,7 +330,7 @@ void ScalarConverter::convert(std::string input)
 	// if condition to allow single spaces
 	if (input.size() > 1)
 		input = trim(input);
-	if (detectPseudoLiterals(input))
+	if (isPseudoLiteral(input))
 		return;
  	ScalarType type = detectType(input);
 	convertForType(type, input);
