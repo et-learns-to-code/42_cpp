@@ -95,6 +95,7 @@ Narrowing conversions (e.g., double → float → int → char) can result in:
 --------------------------------------------------------------------------------------
 
 static_cast<T>(value) converts value into the specified type T, ensuring it follows the rules of type conversion.
+
 When you static_cast a value, it gets stored in memory using the size and representation of the target type.
 
 What actually happens during static_cast?
@@ -133,4 +134,10 @@ float takes 4 bytes, but follows IEEE 754 floating-point representation.
 
 double takes 8 bytes (64 bits).
 
+--------------------------------------------------------------------------------------
 
+Summary of Overflow Handling:
+Function	Overflow Value				Underflow Value		Error Setting
+strtol		LONG_MAX / LONG_MIN			None				ERANGE
+strtod		HUGE_VAL / -HUGE_VAL		0.0					ERANGE
+strtof		HUGE_VALF / -HUGE_VALF		0.0					ERANGE
