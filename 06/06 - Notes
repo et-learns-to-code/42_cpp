@@ -1,3 +1,5 @@
+EX00
+
 Detecting the Types
 
 1. Detecting char
@@ -132,7 +134,7 @@ int takes 4 bytes (32 bits).
 
 float takes 4 bytes, but follows IEEE 754 floating-point representation.
 
-double takes 8 bytes (64 bits).
+double takes 8 bytes (64 bits). Also follows IEEE 754 floating-point representation.
 
 --------------------------------------------------------------------------------------
 
@@ -141,3 +143,151 @@ Function	Overflow Value				Underflow Value		Error Setting
 strtol		LONG_MAX / LONG_MIN			None				ERANGE
 strtod		HUGE_VAL / -HUGE_VAL		0.0					ERANGE
 strtof		HUGE_VALF / -HUGE_VALF		0.0					ERANGE
+
+--------------------------------------------------------------------------------------
+
+The concept of casting between different data types, especially between floating-point numbers and integers,
+involves several interesting aspects of how data is represented in memory.
+
+1. Casting double to float
+
+Memory Layout for double: A double in most systems (using IEEE 754 standard) takes 8 bytes. It has:
+
+1 bit for the sign
+
+11 bits for the exponent
+
+52 bits for the fraction (also known as the mantissa)
+
+Memory Layout for float: A float also follows the IEEE 754 standard but is smaller, taking 4 bytes:
+
+1 bit for the sign
+
+8 bits for the exponent
+
+23 bits for the fraction (mantissa)
+
+When a double is cast to a float:
+
+Truncation occurs in the sense that the double value is rounded to fit within the 4-byte space of the float. This involves:
+
+The fractional part of the number is truncated, so the least significant digits are lost.
+
+The exponent is adjusted to fit the 8-bit exponent of the float (which may result in a loss of precision or even an overflow/underflow depending on the size of the number).
+
+If the value of the double is too large or too small to fit in a float, it may result in infinity or zero.
+
+2. Casting double to int
+
+Memory Layout for int: An int typically uses 4 bytes. It represents whole numbers, without any fractional part.
+
+When a double is cast to an int:
+
+Truncation happens by discarding the fractional part of the double (e.g., 5.7 becomes 5). However, the rounding behavior may vary:
+
+Flooring: This is usually what happens when casting from a floating-point number to an integer. For example, casting 5.7 to int results in 5, while casting -5.7 results in -5.
+
+The fractional part is discarded, not rounded, so it can lose precision.
+
+Additionally:
+
+The value is clamped within the range of the int type. If the double exceeds the int range (i.e., between INT_MIN and INT_MAX), it will typically either overflow or underflow, potentially resulting in undefined behavior or extreme values (like the largest or smallest int).
+
+3. Casting double to char
+
+Memory Layout for char: A char typically uses 1 byte (8 bits), which limits the range of values it can store:
+
+Signed char: -128 to 127
+
+Unsigned char: 0 to 255
+
+When a double is cast to a char:
+
+Truncation occurs in two ways:
+
+The fractional part is discarded, just like when casting to int (so 5.7 becomes 5).
+
+The resulting integer value (after truncation) is fitted into the 1-byte space. If the result is too large or too small to fit in a char, it will wrap around (i.e., overflow or underflow).
+
+For example, if you try to cast 130 to char, it will overflow and result in -126 if the char is signed. If it’s unsigned, it will wrap around and result in 130.
+
+Summary of Memory Layout and Truncation Process:
+
+- Casting double to float:
+
+The double is rounded/truncated to fit into the 4-byte float. The fractional part is truncated, and the exponent is adjusted to fit within the 8 bits.
+
+- Casting double to int:
+
+The fractional part is truncated, leaving only the whole number portion. The value is then checked against the int range. If it’s too large, overflow may occur, or if it’s too small, it might underflow.
+
+- Casting double to char:
+
+The fractional part is discarded, and the remaining integer value is cast to fit within the 1-byte range of char. If the value doesn’t fit, it wraps around.
+
+Additional Details:
+
+- Precision Loss: When casting between these types, the more "precise" format (such as double) loses information when downcasting to a more limited type (such as float, int, or char).
+
+- Overflow and Wrapping: If the value exceeds the allowable range of the destination type, overflow or underflow may occur, often leading to unexpected results.
+
+--------------------------------------------------------------------------------------
+
+EX01
+
+Targeted exercise about understanding how pointers and raw memory work, with a bit of C++ casting mechanics.
+
+Learning objectives:
+
+1. How to reinterpret a pointer as a raw number (serialization).
+
+2. How to get back the pointer from that number (deserialization).
+
+3. The use of reinterpret_cast and uintptr_t, which are core to low-level, type-safe reinterpretation of data.
+
+serialize() → converts a Data* into a number (uintptr_t)
+
+deserialize() → converts a uintptr_t back into a Data*
+
+uintptr_t is an unsigned integer type that is guaranteed to be large enough to store a pointer.
+
+The main function should verify that serialize and deserialize preserve the pointer identity.
+
+This exercise mimics how pointers are serialized into raw memory or disk and then reconstructed later. It’s low-level, but forms the basis of:
+
+- Memory manipulation
+
+- Networking / serialization libraries
+
+- Object lifecycles and persistence
+
+- Safe reinterpretation in modern C++
+
+uintptr_t is an unsigned integer type specifically designed to be able to hold a pointer without losing any information.
+uintptr_t is useful when you want to treat a pointer as a number — for things like:
+
+- Serialization
+
+- Hashing
+
+- Low-level memory operations
+
+- Comparing or storing raw addresses
+
+- Doing pointer arithmetic (in some cases)
+
+Serialization means taking an object in memory (which exists in a complex, structured format) and converting it into a flat format — typically a sequence of bytes — that can be:
+
+- stored (e.g. in a file or database)
+
+- sent over a network
+
+- reconstructed later (deserialization)
+
+This exercise is mainly to familiarize us with the concept of reinterpreting data types.
+
+Exercise Here						Real-World Serialization
+Reinterprets a pointer as an int	Encodes actual object data into bytes
+Stays in memory						Works across memory, disk, network
+No transformation					Complex transformation logic
+Just reinterpretation				Requires encoding + decoding
