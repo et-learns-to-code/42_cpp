@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:44:56 by etien             #+#    #+#             */
-/*   Updated: 2025/04/07 14:18:27 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/07 14:32:30 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ bool isPseudoLiteral(const std::string &input)
 		return printInvalidNumber(), true;
 	// -inff, -inf, +inff, +inf
 	bool isNegative = (input[0] == '-');
-	std::string infFloat = isNegative ? "-inff" : " +inff";
-	std::string infDouble = isNegative ? "-inf" : " +inf";
+	std::string infFloat = isNegative ? "-inff" : "+inff";
+	std::string infDouble = isNegative ? "-inf" : "+inf";
 	std::cout << "char: impossible" << std::endl;
 	std::cout << "int: impossible" << std::endl;
 	std::cout << "float: " << infFloat << std::endl;
