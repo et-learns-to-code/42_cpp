@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:44:56 by etien             #+#    #+#             */
-/*   Updated: 2025/04/07 16:41:04 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/08 15:46:29 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ void printFloat(double value, double convertedValue, bool overflow)
 		std::cout << "float: " << floatValue << "f" << std::endl;
 }
 
-// overflow of doubleValue is already checked in try-catch block
+// overflow of doubleValue is already checked in convertForType
 void printDouble(double value, double convertedValue, bool overflow)
 {
 	double doubleValue;
