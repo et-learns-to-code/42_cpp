@@ -6,18 +6,18 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 19:22:30 by etien             #+#    #+#             */
-/*   Updated: 2025/04/07 21:01:58 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/08 13:48:58 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Serializer.hpp"
 
-#include <string>
 #include <iostream>
 #include <stdint.h> // uintptr_t
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"
+#define YELLOW "\033[33m"
 #define RESET "\033[0m"
 
 // Serialization is the process of converting a data object — a combination of code and
@@ -46,8 +46,9 @@ int main()
 	std::cout << std::endl;
 
 	if (&data == deserialized)
-		std::cout << "Deserialization has returned a pointer to the original Data."
-				 	<< std::endl << std::endl;
+		std::cout << YELLOW
+					<< "Deserialization has returned a pointer to the original Data."
+				 	<< RESET <<std::endl << std::endl;
 
 	return 0;
 }
