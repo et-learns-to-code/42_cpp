@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:17:30 by etien             #+#    #+#             */
-/*   Updated: 2025/04/02 13:01:52 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/08 13:38:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 #include "ShrubberyCreationForm.hpp"
 
 #include <iostream>
-#include <cstdlib> // srand()
-#include <ctime> // time()
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"

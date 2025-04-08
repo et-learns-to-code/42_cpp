@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:42:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 12:26:35 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/08 13:37:33 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib> // rand()
 
 #include "AForm.hpp"
 

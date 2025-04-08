@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:42:37 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 12:26:51 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/08 13:37:55 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 #include "AForm.hpp"
 

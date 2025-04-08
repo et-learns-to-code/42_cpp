@@ -6,13 +6,11 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:42:29 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 18:07:52 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/08 13:35:30 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RobotomyRequestForm.hpp"
-
-#include <cstdlib> // rand()
 
 // default constructor
 // _target() will implicitly initialize _target to an empty string
