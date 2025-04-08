@@ -4,49 +4,49 @@ Detecting the Types
 
 1. Detecting char
 
-A char literal is a single ASCII character (0-127).
+	A char literal is a single ASCII character (0-127).
 
-It should be printable (32-126) for output; otherwise, print "Non displayable".
+	It should be printable (32-126) for output; otherwise, print "Non displayable".
 
-To check if input is a char:
+	To check if input is a char:
 
-The input must be a single character.
+	The input must be a single character.
 
-If the input is a digit ('0' to '9'), it should not be treated as a char, since it could be an int.
+	If the input is a digit ('0' to '9'), it should not be treated as a char, since it could be an int.
 
-Use std::isprint() to determine if it's printable.
+	Use std::isprint() to determine if it's printable.
 
 2. Detecting int
 
-It must be a whole number with only digits (-?[0-9]+).
+	It must be a whole number with only digits (-?[0-9]+).
 
-No decimal points or f at the end.
+	No decimal points or f at the end.
 
-It may have a leading - for negative numbers.
+	It may have a leading - for negative numbers.
 
-Use std::stoi() to check validity.
+	Use std::stoi() to check validity.
 
-Check for overflow using std::numeric_limits<int>::max() and min().
+	Check for overflow using std::numeric_limits<int>::max() and min().
 
 3. Detecting float
 
-Must end with f (e.g., "42.0f").
+	Must end with f (e.g., "42.0f").
 
-Can have a leading sign (+/-).
+	Can have a leading sign (+/-).
 
-Contains digits and exactly one decimal point.
+	Contains digits and exactly one decimal point.
 
-Use std::stof() to check validity.
+	Use std::stof() to check validity.
 
-Floats are limited in precision, so beware of rounding.
+	Floats are limited in precision, so beware of rounding.
 
 4. Detecting double
 
-Similar to float, but without f at the end (e.g., "42.0").
+	Similar to float, but without f at the end (e.g., "42.0").
 
-Contains digits and one decimal point.
+	Contains digits and one decimal point.
 
-Use std::stod() for validation.
+	Use std::stod() for validation.
 
 ---
 
@@ -55,35 +55,38 @@ Special Cases: nan, inf, and Their Variants
 These are floating-point special values used to represent exceptional conditions.
 
 1. NaN (Not a Number)
-Represents an undefined mathematical result (e.g., 0/0, sqrt(-1)).
 
-Variations:
+	Represents an undefined mathematical result (e.g., 0/0, sqrt(-1)).
 
-"nan" (double)
+	Variations:
 
-"nanf" (float)
+	"nan" (double)
+
+	"nanf" (float)
 
 2. Infinity (inf)
-Represents a value too large for floating-point representation.
 
-Variations:
+	Represents a value too large for floating-point representation.
 
-"inf" / "+inf" / "-inf" (double)
+	Variations:
 
-"inff" / "+inff" / "-inff" (float)
+	"inf" / "+inf" / "-inf" (double)
 
-Can check using std::isinf().
+	"inff" / "+inff" / "-inff" (float)
+
+	Can check using std::isinf().
 
 How to Detect These Special Cases
-Convert the string to lowercase and check:
 
-"nan" → double
+	Convert the string to lowercase and check:
 
-"nanf" → float
+	"nan" → double
 
-"+inf", "-inf" → double
+	"nanf" → float
 
-"+inff", "-inff" → float
+	"+inf", "-inf" → double
+
+	"+inff", "-inff" → float
 
 --------------------------------------------------------------------------------------
 
@@ -126,15 +129,16 @@ std::cout << "float: " << f << "f" << std::endl; // Output: float: 42.99f (if pr
 
 
 Does static_cast change the actual memory?
+
 Yes! When casting, the value is reinterpreted in the memory layout of the new type. This is why:
 
-char takes 1 byte (8 bits).
+	char takes 1 byte (8 bits).
 
-int takes 4 bytes (32 bits).
+	int takes 4 bytes (32 bits).
 
-float takes 4 bytes, but follows IEEE 754 floating-point representation.
+	float takes 4 bytes, but follows IEEE 754 floating-point representation.
 
-double takes 8 bytes (64 bits). Also follows IEEE 754 floating-point representation.
+	double takes 8 bytes (64 bits). Also follows IEEE 754 floating-point representation.
 
 --------------------------------------------------------------------------------------
 
@@ -153,29 +157,29 @@ involves several interesting aspects of how data is represented in memory.
 
 Memory Layout for double: A double in most systems (using IEEE 754 standard) takes 8 bytes. It has:
 
-1 bit for the sign
+- 1 bit for the sign
 
-11 bits for the exponent
+- 11 bits for the exponent
 
-52 bits for the fraction (also known as the mantissa)
+- 52 bits for the fraction (also known as the mantissa)
 
 Memory Layout for float: A float also follows the IEEE 754 standard but is smaller, taking 4 bytes:
 
-1 bit for the sign
+- 1 bit for the sign
 
-8 bits for the exponent
+- 8 bits for the exponent
 
-23 bits for the fraction (mantissa)
+- 23 bits for the fraction (mantissa)
 
 When a double is cast to a float:
 
-Truncation occurs in the sense that the double value is rounded to fit within the 4-byte space of the float. This involves:
+	Truncation occurs in the sense that the double value is rounded to fit within the 4-byte space of the float. This involves:
 
-The fractional part of the number is truncated, so the least significant digits are lost.
+	The fractional part of the number is truncated, so the least significant digits are lost.
 
-The exponent is adjusted to fit the 8-bit exponent of the float (which may result in a loss of precision or even an overflow/underflow depending on the size of the number).
+	The exponent is adjusted to fit the 8-bit exponent of the float (which may result in a loss of precision or even an overflow/underflow depending on the size of the number).
 
-If the value of the double is too large or too small to fit in a float, it may result in infinity or zero.
+	If the value of the double is too large or too small to fit in a float, it may result in infinity or zero.
 
 2. Casting double to int
 
@@ -183,33 +187,33 @@ Memory Layout for int: An int typically uses 4 bytes. It represents whole number
 
 When a double is cast to an int:
 
-Truncation happens by discarding the fractional part of the double (e.g., 5.7 becomes 5). However, the rounding behavior may vary:
+	Truncation happens by discarding the fractional part of the double (e.g., 5.7 becomes 5). However, the rounding behavior may vary:
 
-Flooring: This is usually what happens when casting from a floating-point number to an integer. For example, casting 5.7 to int results in 5, while casting -5.7 results in -5.
+	Flooring: This is usually what happens when casting from a floating-point number to an integer. For example, casting 5.7 to int results in 5, while casting -5.7 results in -5.
 
-The fractional part is discarded, not rounded, so it can lose precision.
+	The fractional part is discarded, not rounded, so it can lose precision.
 
-Additionally:
+	Additionally:
 
-The value is clamped within the range of the int type. If the double exceeds the int range (i.e., between INT_MIN and INT_MAX), it will typically either overflow or underflow, potentially resulting in undefined behavior or extreme values (like the largest or smallest int).
+	The value is clamped within the range of the int type. If the double exceeds the int range (i.e., between INT_MIN and INT_MAX), it will typically either overflow or underflow, potentially resulting in undefined behavior or extreme values (like the largest or smallest int).
 
 3. Casting double to char
 
 Memory Layout for char: A char typically uses 1 byte (8 bits), which limits the range of values it can store:
 
-Signed char: -128 to 127
+- Signed char: -128 to 127
 
-Unsigned char: 0 to 255
+- Unsigned char: 0 to 255
 
 When a double is cast to a char:
 
-Truncation occurs in two ways:
+	Truncation occurs in two ways:
 
-The fractional part is discarded, just like when casting to int (so 5.7 becomes 5).
+	The fractional part is discarded, just like when casting to int (so 5.7 becomes 5).
 
-The resulting integer value (after truncation) is fitted into the 1-byte space. If the result is too large or too small to fit in a char, it will wrap around (i.e., overflow or underflow).
+	The resulting integer value (after truncation) is fitted into the 1-byte space. If the result is too large or too small to fit in a char, it will wrap around (i.e., overflow or underflow).
 
-For example, if you try to cast 130 to char, it will overflow and result in -126 if the char is signed. If it’s unsigned, it will wrap around and result in 130.
+	For example, if you try to cast 130 to char, it will overflow and result in -126 if the char is signed. If it’s unsigned, it will wrap around and result in 130.
 
 Summary of Memory Layout and Truncation Process:
 
@@ -302,9 +306,9 @@ How dynamic_cast works:
 
 Derived* ptr = dynamic_cast<Derived*>(basePtr);
 
-If basePtr actually points to a Derived object, the cast works and ptr is non-null.
+- If basePtr actually points to a Derived object, the cast works and ptr is non-null.
 
-If not, ptr will be nullptr.
+- If not, ptr will be nullptr.
 
 ✅ Safe — You can check if the cast succeeded using a simple if (ptr).
 
@@ -312,8 +316,95 @@ If not, ptr will be nullptr.
 
 Derived& ref = dynamic_cast<Derived&>(baseRef);
 
-If baseRef actually refers to a Derived object, the cast works.
+- If baseRef actually refers to a Derived object, the cast works.
 
-If not, it throws a std::bad_cast exception.
+- If not, it throws a std::bad_cast exception.
 
 ✅ Use try/catch blocks to handle this safely.
+
+--------------------------------------------------------------------------------------
+
+COMPARING STATIC_CAST, DYNAMIC_CAST AND REINTERPRET_CAST
+
+🔹 static_cast
+
+✅ Purpose:
+
+- Used for well-defined conversions at compile time.
+
+- Used when you are sure about the type relationships.
+
+🔄 Examples:
+
+- Converting between numeric types (double → int)
+
+- Upcasting in class hierarchies (Derived* → Base*)
+
+- Explicit constructor or conversion operator calls
+
+⚠️ Caveats:
+
+- No runtime type check → If you downcast incorrectly (Base* → Derived*), it compiles, but may crash later.
+
+🔧 Example:
+
+Base* b = new Derived();
+Derived* d = static_cast<Derived*>(b);  // Compiles, but unsafe if b is not actually a Derived*
+
+🔹 dynamic_cast
+
+✅ Purpose:
+
+- Used only with polymorphic types (i.e., classes with at least one virtual function).
+
+- Does runtime type checking, and:
+
+- Returns nullptr for invalid pointer casts.
+
+- Throws std::bad_cast for invalid reference casts.
+
+🔄 Examples:
+
+- Safe downcasting in an inheritance hierarchy
+
+- Used when you’re not sure of the actual object type
+
+⚠️ Caveats:
+
+- Slight performance cost due to RTTI (Run-Time Type Information)
+
+- Requires a virtual function in the base class (usually a destructor)
+
+🔧 Example:
+
+Base* b = new Derived();
+Derived* d = dynamic_cast<Derived*>(b);  // Safe: returns nullptr if b is not a Derived*
+
+🔹 reinterpret_cast
+
+✅ Purpose:
+
+- Used for low-level, dangerous conversions.
+
+- Reinterprets raw bits of one type as another.
+
+🔄 Examples:
+
+- Converting between pointer types unrelated by inheritance
+
+- Turning a pointer into an integer (e.g., uintptr_t) and back
+
+- Casting function pointers
+
+⚠️ Caveats:
+
+- No type safety: you're telling the compiler "trust me, I know what I'm doing"
+
+- Often non-portable and platform-dependent
+
+- Should be avoided unless doing very low-level stuff (like serialization, bit-level hacks, or interfacing with hardware)
+
+🔧 Example:
+
+void* raw = malloc(sizeof(int));
+int* num = reinterpret_cast<int*>(raw);  // You're promising this void* actually points to an int
