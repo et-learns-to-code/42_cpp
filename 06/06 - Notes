@@ -291,3 +291,29 @@ Reinterprets a pointer as an int	Encodes actual object data into bytes
 Stays in memory						Works across memory, disk, network
 No transformation					Complex transformation logic
 Just reinterpretation				Requires encoding + decoding
+
+--------------------------------------------------------------------------------------
+
+EX02
+
+How dynamic_cast works:
+
+1. When using with pointers:
+
+Derived* ptr = dynamic_cast<Derived*>(basePtr);
+
+If basePtr actually points to a Derived object, the cast works and ptr is non-null.
+
+If not, ptr will be nullptr.
+
+✅ Safe — You can check if the cast succeeded using a simple if (ptr).
+
+2. When using with references:
+
+Derived& ref = dynamic_cast<Derived&>(baseRef);
+
+If baseRef actually refers to a Derived object, the cast works.
+
+If not, it throws a std::bad_cast exception.
+
+✅ Use try/catch blocks to handle this safely.
