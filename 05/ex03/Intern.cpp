@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 18:34:01 by etien             #+#    #+#             */
-/*   Updated: 2025/04/02 12:53:17 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/09 15:17:51 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ Intern::~Intern()
 AForm *Intern::makeForm(const std::string &name, const std::string &target)
 {
 	// array of form names
-	std::string forms[] = {"shrubbery creation", "robotomy request", "presidential pardon"};
+	std::string forms[] = {"ShrubberyCreationForm", "RobotomyRequestForm", "PresidentialPardonForm"};
 
 	// array of function pointers to static functions
 	// Non-static member function pointers (Intern::*form_ptrs[]) require an object.

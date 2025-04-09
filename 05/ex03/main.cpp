@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:17:30 by etien             #+#    #+#             */
-/*   Updated: 2025/04/08 13:38:55 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/09 15:18:51 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,19 @@ int main()
 		std::cout << GREEN << "TEST - INTERN MAKEFORM()" << RESET << std::endl;
 		std::cout << std::endl;
 		std::cout << GREEN << "- ShrubberyCreationForm" << RESET << std::endl;
-		scf = someRandomIntern.makeForm("shrubbery creation", "Bender");
+		scf = someRandomIntern.makeForm("ShrubberyCreationForm", "Bender");
 		std::cout << *scf << std::endl;
 
 		std::cout << GREEN << "- RobotomyRequestForm" << RESET << std::endl;
-		rrf = someRandomIntern.makeForm("robotomy request", "Bender");
+		rrf = someRandomIntern.makeForm("RobotomyRequestForm", "Bender");
 		std::cout << *rrf << std::endl;
 
 		std::cout << GREEN << "- PresidentialPardonForm" << RESET << std::endl;
-		ppf = someRandomIntern.makeForm("presidential pardon", "Bender");
+		ppf = someRandomIntern.makeForm("PresidentialPardonForm", "Bender");
 		std::cout << *ppf << std::endl;
 
-		std::cout << GREEN << "- invalid form" << RESET << std::endl;
-		invalid = someRandomIntern.makeForm("invalid form", "Bender");
+		std::cout << GREEN << "- InvalidForm" << RESET << std::endl;
+		invalid = someRandomIntern.makeForm("InvalidForm", "Bender");
 		std::cout << *invalid << std::endl;
 	}
 	catch (std::exception & e)
