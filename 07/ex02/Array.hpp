@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:47:44 by etien             #+#    #+#             */
-/*   Updated: 2025/04/10 14:29:26 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/10 15:38:18 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ class Array
 		// OCF
 		// Constructor - creates an empty array
 		Array() : _arr(NULL), _size(0) {}
-		Array(const Array &src)
+		// array must be initialized to NULL otherwise delete[] in assignment operator
+		// overload will cause "free(): invalid pointer" error
+		Array(const Array &src) : _arr(NULL)
 		{
 			*this = src;
 		}
