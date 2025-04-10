@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:47:44 by etien             #+#    #+#             */
-/*   Updated: 2025/04/10 15:38:18 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/10 17:28:26 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class Array
 		// Subscript operator overload
 		// - elements can be accessed with the subscript operator: [ ]
 		// - compiler understands that the index value is between the brackets
+		// - non-const overload so that element can be read and modified.
 		T& operator[](unsigned int index)
 		{
 			// unnecessary to check for index < 0 since unsigned int is used
