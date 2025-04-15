@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:45:29 by etien             #+#    #+#             */
-/*   Updated: 2025/04/15 16:43:20 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/15 18:20:06 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"
+#define BLUE "\033[34m"
 #define RESET "\033[0m"
 
 // Assuming T is a container of integers, this function has to find the first
@@ -25,7 +26,7 @@
 template <typename T>
 typename T::iterator easyfind(T &container, int value)
 {
-	// std::find
+	// std::find (an STL algorithm)
 	// - parameters
 	//   1) first, 2) last - input iterators
 	//   3) value - value to search for in the range
@@ -36,6 +37,7 @@ typename T::iterator easyfind(T &container, int value)
 	return (std::find(container.begin(), container.end(), value));
 }
 
+// wrapper for easyfind function that will print messages on the success of the search.
 template <typename T>
 void testEasyfind(T &container, int value)
 {
@@ -45,7 +47,7 @@ void testEasyfind(T &container, int value)
 		std::cout
 			<< RED
 			<< "Value (" << value << ") could not be found in the container."
-			<< RESET;
+			<< RESET << std::endl;
 
 	else
 		// ✅ std::distance() gives you the zero-based index for containers that support
@@ -55,21 +57,22 @@ void testEasyfind(T &container, int value)
 			<< "Value (" << value << ") found at position "
 			<< std::distance(container.begin(), it)
 			<< " of the container."
-			<< RESET;
+			<< RESET << std::endl;
 }
 
+// helper function to print out container contents.
 template <typename T>
-void printContainer(const T &container)
+void printContainerContents(T &container)
 {
-	std::cout << "Container contents: ";
+	std::cout << BLUE << "Container contents: ";
 	for (typename T::iterator it = container.begin(); it != container.end(); it++)
 	{
 		std::cout << *it;
-		// std::next(it) gives you the iterator after it.
-		if (std::next(it) != container.end())
+		// --container.end() gives you an iterator to the last element of the container.
+		if (it != --container.end())
 			std::cout << ", ";
 	}
-	std::cout << std::endl;
+	std::cout << RESET << std::endl;
 }
 
 #endif
