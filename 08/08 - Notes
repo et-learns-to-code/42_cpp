@@ -30,6 +30,8 @@
 
 EX00
 
+--------------------------------------------------------------------------------------
+
 🔍 How Do Standard Containers Behave with Find?
 
 	In the STL, the algorithm to find an element is:
@@ -99,3 +101,42 @@ EX00
 	Supports fast insertion/removal at both ends
 
 	Like a hybrid between vector and list
+
+--------------------------------------------------------------------------------------
+
+EX01
+
+--------------------------------------------------------------------------------------
+
+❓ What does “span” mean here?
+
+	In the context of this exercise:
+
+	Longest span = the largest difference between any two numbers in the container.
+
+	Shortest span = the smallest difference between any two distinct numbers.
+
+✅ So what are they, concretely?
+
+	Given a container like:
+
+	[3, 8, 15, 1, 10]
+	Longest span = 15 - 1 = 14
+	(i.e., max - min)
+
+	Shortest span = 8 - 3 = 5
+	(actually, it would be 10 - 8 = 2 in this case, depending on how the numbers are sorted)
+
+So:
+
+	The shortest span is the minimum difference between any pair of adjacent numbers once the container is sorted.
+
+--------------------------------------------------------------------------------------
+
+🔄 std::set vs std::multiset:
+
+Feature						std::set							std::multiset
+Stores only unique values	✅ Yes								❌ No (allows duplicates)
+Automatically sorted		✅ Yes								✅ Yes
+Use for shortest span		✅ Better (enforces distinctness)	⚠️ Must manually skip duplicates
+Use for longest span		✅ Works								✅ Works
