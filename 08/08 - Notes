@@ -1,0 +1,101 @@
+✅ "Containers store, Iterators traverse, Algorithms operate."
+
+📦 Containers — Store the data
+
+	Examples: std::vector, std::list, std::deque, std::map, std::set
+
+	They manage memory, store elements, and expose member functions
+
+	Each container defines its own iterator type and how it behaves
+
+🧭 Iterators — Traverse the data
+
+	They act like generalized pointers
+
+	Can be incremented, dereferenced, compared
+
+	Let you write code that doesn’t care what kind of container it’s using
+
+	Come in different categories: input, output, forward, bidirectional, random-access
+
+⚙️ Algorithms — Operate on the data
+
+	Examples: std::find, std::sort, std::for_each, std::count
+
+	Take iterators as input (not containers), making them generic and reusable
+
+	Work with any container that provides compatible iterators
+
+--------------------------------------------------------------------------------------
+
+EX00
+
+🔍 How Do Standard Containers Behave with Find?
+
+	In the STL, the algorithm to find an element is:
+
+	std::find(container.begin(), container.end(), value);
+	✅ If the value is found:
+	Returns an iterator pointing to the first occurrence of the value.
+
+	❌ If the value is not found:
+	Returns the end() iterator, which is a special iterator that marks the "one past the last element" position.
+
+	It's not dereferenceable — if you try to access *container.end(), it’s undefined behavior.
+
+🧠 What Can You Learn from This?
+
+	Here’s how you can apply this behavior to easyfind:
+
+	Use std::find inside your function — no need to reimplement it.
+
+	If std::find returns .end(), you should handle that case.
+
+	Depending on your design:
+
+	Either throw an exception (like std::runtime_error("Not found"))
+
+	Or return .end() and let the caller decide
+
+	🔧 The exercise suggests throwing an exception or returning a value of your choice.
+
+	So yes, this is where you mirror standard STL behavior but also make it your own.
+
+📝 Bonus: Behavior by Container Type
+
+	All standard sequential containers (vector, deque, list) support std::find.
+
+	Associative containers like std::set or std::map use member functions:
+
+	set.find(value); // Faster, since it's ordered/balanced tree
+	But your exercise says:
+
+	"You don’t have to handle associative containers."
+
+	So you’re safe to focus on containers that support iterators and std::find.
+
+--------------------------------------------------------------------------------------
+
+🟩 1. std::vector<int>
+
+	Dynamic array (contiguous memory)
+
+	Fast random access
+
+	Common and widely used
+
+🟦 2. std::list<int>
+
+	Doubly linked list
+
+	Fast insertion/removal anywhere
+
+	Slower random access
+
+🟨 3. std::deque<int>
+
+	Double-ended queue
+
+	Supports fast insertion/removal at both ends
+
+	Like a hybrid between vector and list
