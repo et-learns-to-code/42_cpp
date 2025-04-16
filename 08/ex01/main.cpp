@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:54:41 by etien             #+#    #+#             */
-/*   Updated: 2025/04/16 16:29:38 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/16 17:43:18 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 #include <iostream>
 #include <limits>
+#include <vector>
+#include <list>
+#include <deque>
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -63,26 +66,25 @@ int main()
 	testSubject();
 	{
 		std::cout << YELLOW << "\nTEST: CONSTRUCTORS" << RESET << std::endl;
+		std::cout << YELLOW << "\n- PARAMETERIZED CONSTRUCTOR" << RESET << std::endl;
 
-		std::cout << YELLOW << "\nPARAMETERIZED CONSTRUCTOR" << RESET << std::endl;
-		Span sp = Span(3);
-		std::cout << "Span sp = Span(3);" << std::endl;
-		std::cout << "Original container size: " << sp.getN() << std::endl;
-		sp.addNumber(1);
-		sp.addNumber(2);
-		sp.addNumber(3);
-		std::cout << "Original ";
-		printContainerContents(sp);
+		Span original = Span(3);
+		std::cout << "Span original = Span(3);" << std::endl;
+		std::cout << "Original container size: " << original.getN() << std::endl;
+		original.addNumber(1);
+		original.addNumber(2);
+		original.addNumber(3);
+		printContainerContents(original);
 
-		std::cout << YELLOW << "\nCOPY CONSTRUCTOR" << RESET << std::endl;
-		Span copy(sp);
-		std::cout << "Span copy(sp);" << std::endl;
+		std::cout << YELLOW << "\n- COPY CONSTRUCTOR" << RESET << std::endl;
+
+		Span copy(original);
+		std::cout << "Span copy(original);" << std::endl;
 		std::cout << "Copy container size: " << copy.getN() << std::endl;
-		std::cout << "Copy ";
-		printContainerContents(sp);
+		printContainerContents(copy);
 	}
 	{
-		std::cout << YELLOW << "\nTEST: REPEATED NUMBERS (IGNORED)" << RESET << std::endl;
+		std::cout << YELLOW << "\nTEST: REPEATED NUMBERS" << RESET << std::endl;
 
 		Span sp = Span(2);
 		std::cout << "Container size: " << sp.getN() << std::endl;
@@ -169,6 +171,34 @@ int main()
 		printContainerContents(sp);
 		std::cout << RED << "Shortest span: " << sp.shortestSpan() << RESET << std::endl;
 		std::cout << GREEN << "Longest span: " << sp.longestSpan() << RESET << std::endl;
+	}
+	{
+		std::cout << YELLOW << "\nTEST: ADD MANY NUMBERS" << RESET << std::endl;
+
+		int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+
+		Span sp = Span(20);
+		std::cout << "Container size: " << sp.getN() << std::endl;
+		printContainerContents(sp);
+		std::cout << YELLOW << "\n- ADDING NUMBERS FROM SET" << RESET << std::endl;
+		// constructing a set from a range
+		std::set<int> intSet(arr, arr + 5);
+		sp.addNumbers(intSet.begin(), intSet.end());
+		printContainerContents(sp);
+		std::cout << YELLOW << "\n- ADDING NUMBERS FROM VECTOR" << RESET << std::endl;
+		std::vector<int> intVector(arr + 5, arr + 10);
+		sp.addNumbers(intVector.begin(), intVector.end());
+		printContainerContents(sp);
+		std::cout << YELLOW << "\n- ADDING NUMBERS FROM LIST" << RESET << std::endl;
+		std::list<int> intList(arr + 10, arr + 15);
+		sp.addNumbers(intList.begin(), intList.end());
+		printContainerContents(sp);
+		std::cout << YELLOW << "\n- ADDING NUMBERS FROM DEQUE" << RESET << std::endl;
+		std::deque<int> intDeque(arr + 15, arr + 20);
+		sp.addNumbers(intDeque.begin(), intDeque.end());
+		printContainerContents(sp);
+		std::cout << RED << "\nShortest span: " << sp.shortestSpan() << RESET << std::endl;
+		std::cout << GREEN << "Longest span: " << sp.longestSpan() << "\n" << RESET << std::endl;
 	}
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:30:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/16 15:54:40 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/16 17:45:09 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ Span::Span(unsigned int n) : _N(n)
 	// std::cout << "Span object parameterized constructor called." << std::endl;
 }
 
+// getters
 const std::set<int> &Span::getIntSet() const
 {
 	return this->_intSet;

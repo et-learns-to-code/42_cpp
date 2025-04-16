@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:30:37 by etien             #+#    #+#             */
-/*   Updated: 2025/04/16 15:40:26 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/16 17:29:46 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,18 @@ class Span
 		const unsigned int &getN() const;
 
 		void addNumber(int number);
+
+		// using a template function for addNumbers will allow numbers in any kind of
+		// integer container to be added to the set
+		template <typename iterator>
+		void addNumbers(iterator begin, iterator end)
+		{
+			while (begin != end)
+			{
+				addNumber(*begin);
+				begin++;
+			}
+		}
 
 		long shortestSpan();
 		long longestSpan();
