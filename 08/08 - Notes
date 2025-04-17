@@ -1,3 +1,9 @@
+--------------------------------------------------------------------------------------
+
+GENERAL
+
+--------------------------------------------------------------------------------------
+
 ✅ "Containers store, Iterators traverse, Algorithms operate."
 
 📦 Containers — Store the data
@@ -140,3 +146,132 @@ Stores only unique values	✅ Yes								❌ No (allows duplicates)
 Automatically sorted		✅ Yes								✅ Yes
 Use for shortest span		✅ Better (enforces distinctness)	⚠️ Must manually skip duplicates
 Use for longest span		✅ Works								✅ Works
+
+--------------------------------------------------------------------------------------
+
+EX02
+
+--------------------------------------------------------------------------------------
+
+🧱 Why Isn’t std::stack Iterable?
+
+	std::stack is a container adapter, not a container itself.
+
+	It wraps another container (like a deque or vector) and only exposes a limited interface (e.g., push, pop, top, size).
+
+	This is by design — it's meant to provide a strict LIFO (Last In, First Out) abstraction. So it hides its underlying container
+	deliberately to prevent misuse that might violate that behavior.
+
+	Hence:
+
+	std::stack<int> s;
+	for (auto it = s.begin(); it != s.end(); ++it) // ❌ Compile error!
+
+	No iterators allowed. The interface doesn't expose them.
+
+🧪 But... Why Not Expose the Underlying Container?
+
+	Here’s the thing: std::stack has a protected member called c — the actual container it uses underneath.
+
+	template <class T, class Container = std::deque<T>>
+	class stack {
+	protected:
+		Container c; // this is the actual container
+	public:
+		// member functions: push, pop, etc.
+	};
+
+	That means:
+	✅ You can subclass std::stack and expose c.begin() and c.end() yourself.
+
+--------------------------------------------------------------------------------------
+
+typedef typename std::stack<T>::container_type::iterator iterator;
+
+🔹 std::stack<T>
+
+	This is your base class — the standard stack container from the STL. But std::stack is a container adaptor, not a container itself.
+
+	That means it uses another container underneath, usually a std::deque, to store the actual data.
+
+🔹 container_type
+
+	This is the underlying container type that std::stack uses internally to hold its elements.
+
+	It's defined like this inside <stack>:
+
+	template<
+		class T,
+		class Container = std::deque<T>
+	> class stack {
+	public:
+		typedef Container container_type;
+		...
+	protected:
+		container_type c;
+	};
+
+	So:
+
+	std::stack<T>::container_type gives you access to the internal container type (e.g., std::deque<T>)
+
+	That type has iterators, unlike std::stack itself!
+
+🔹 ::iterator
+
+	You’re now reaching into that internal container (e.g., std::deque<T>) and grabbing its iterator type.
+
+	So the full type is:
+
+	std::deque<T>::iterator
+
+	But since you're going through the std::stack<T> interface, you write:
+
+	std::stack<T>::container_type::iterator
+
+--------------------------------------------------------------------------------------
+
+What is a std::stack? (Taken from cplusplus.com)
+
+std::stack		template <class T, class Container = deque<T> > class stack;
+
+LIFO stack
+Stacks are a type of container adaptor, specifically designed to operate in a LIFO context (last-in first-out),
+where elements are inserted and extracted only from one end of the container.
+
+stacks are implemented as container adaptors, which are classes that use an encapsulated object of a specific container class as
+its underlying container, providing a specific set of member functions to access its elements. Elements are pushed/popped from the
+"back" of the specific container, which is known as the top of the stack.
+
+The underlying container may be any of the standard container class templates or some other specifically designed container class.
+The container shall support the following operations:
+empty
+size
+back
+push_back
+pop_back
+
+The standard container classes vector, deque and list fulfill these requirements. By default, if no container class is specified
+for a particular stack class instantiation, the standard container deque is used.
+
+--------------------------------------------------------------------------------------
+
+🔁 Iterator Types Summary
+
+	Type					Name			Direction		Mutable?	Typical Use
+	iterator				Default			Begin → End		✅ Yes		Regular forward traversal
+	const_iterator			Const			Begin → End		❌ No		Read-only forward traversal
+	reverse_iterator		Reverse			End → Begin		✅ Yes		Reverse traversal, modifiable
+	const_reverse_iterator	Const Reverse	End → Begin		❌ No		Read-only reverse traversal
+
+💡 Key Notes
+
+	const_iterator prevents modification of the element the iterator points to, but you can still increment/decrement it like a normal iterator.
+
+	reverse_iterator behaves like you'd expect: rbegin() gives the last element, and it traverses backwards.
+
+	You can call .base() on a reverse iterator to get the corresponding forward iterator.
+
+🚨 Subtle Gotcha with Reverse Iterators
+
+	In reverse iterators, .rbegin() points to the last element, but .rend() is one before the first. So be cautious when mixing reverse and regular iterators — their boundaries behave oppositely.
