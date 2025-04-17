@@ -6,13 +6,14 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:54:41 by etien             #+#    #+#             */
-/*   Updated: 2025/04/17 13:03:50 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/17 18:04:42 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MutantStack.hpp"
 
 #include <iostream>
+#include <list>
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -36,36 +37,80 @@
 
 void testSubject()
 {
-	std::cout << YELLOW << "\nTEST: SUBJECT" << RESET << std::endl;
-
-	MutantStack<int> mstack;
-
-	mstack.push(5);
-	mstack.push(17);
-
-	std::cout << mstack.top() << std::endl;
-
-	mstack.pop();
-
-	std::cout << mstack.size() << std::endl;
-
-	mstack.push(3);
-	mstack.push(5);
-	mstack.push(737);
-	//[...]
-	mstack.push(0);
-
-	MutantStack<int>::iterator it = mstack.begin();
-	MutantStack<int>::iterator ite = mstack.end();
-
-	++it;
-	--it;
-	while (it != ite)
 	{
-		std::cout << *it << std::endl;
+		std::cout << YELLOW << "\nTEST: SUBJECT (MUTANTSTACK)" << RESET << std::endl;
+
+		MutantStack<int> mstack;
+
+		// push() - insert element to top of stack.
+		mstack.push(5);
+		mstack.push(17);
+
+		// top() - access next element.
+		std::cout << mstack.top() << std::endl;
+
+		// pop() - remove top element.
+		mstack.pop();
+
+		std::cout << mstack.size() << std::endl;
+
+		mstack.push(3);
+		mstack.push(5);
+		mstack.push(737);
+		//[...]
+		mstack.push(0);
+
+		MutantStack<int>::iterator it = mstack.begin();
+		MutantStack<int>::iterator ite = mstack.end();
+
 		++it;
+		--it;
+		while (it != ite)
+		{
+			// print out stack contents
+			// 5, 3, 5, 737, 0
+			std::cout << *it << std::endl;
+			++it;
+		}
+		std::stack<int> s(mstack);
 	}
-	std::stack<int> s(mstack);
+		{
+		std::cout << YELLOW << "\nTEST: SUBJECT (LIST)" << RESET << std::endl;
+
+		MutantStack<int> mstack;
+
+		// push() - insert element to top of stack.
+		mstack.push(5);
+		mstack.push(17);
+
+		// top() - access next element.
+		std::cout << mstack.top() << std::endl;
+
+		// pop() - remove top element.
+		mstack.pop();
+
+		std::cout << mstack.size() << std::endl;
+
+		mstack.push(3);
+		mstack.push(5);
+		mstack.push(737);
+		//[...]
+		mstack.push(0);
+
+		MutantStack<int>::iterator it = mstack.begin();
+		MutantStack<int>::iterator ite = mstack.end();
+
+		++it;
+		--it;
+		while (it != ite)
+		{
+			// print out stack contents
+			// 5, 3, 5, 737, 0
+			std::cout << *it << std::endl;
+			++it;
+		}
+		std::stack<int> s(mstack);
+	}
 }
 
 int main()
@@ -74,9 +119,6 @@ int main()
 	{
 		std::cout << YELLOW << "\nTEST: CONSTRUCTORS" << RESET << std::endl;
 		std::cout << YELLOW << "\n- PARAMETERIZED CONSTRUCTOR" << RESET << std::endl;
-	}
-	{
-		std::cout << YELLOW << "\nTEST: REPEATED NUMBERS" << RESET << std::endl;
 	}
 	return 0;
 }
