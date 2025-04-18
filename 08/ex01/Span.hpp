@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:30:37 by etien             #+#    #+#             */
-/*   Updated: 2025/04/16 17:29:46 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/18 15:20:09 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 #define SPAN_HPP
 
 #include <iostream>
-#include <set> // set container (containing distinct elements)
+#include <vector>
 #include <stdexcept> // std::overflow_error
 #include <cstdlib> // std::abs
+#include <algorithm> // std::sort, std::unique
 
 class Span
 {
 	private:
-		std::set<int> _intSet;
+		std::vector<int> _intVector;
 		unsigned int _N;
 
 		// OCF - prohibit default constructor
@@ -37,13 +38,13 @@ class Span
 		Span(unsigned int n);
 
 		// getter
-		const std::set<int> &getIntSet() const;
+		const std::vector<int> &getIntVector() const;
 		const unsigned int &getN() const;
 
 		void addNumber(int number);
 
 		// using a template function for addNumbers will allow numbers in any kind of
-		// integer container to be added to the set
+		// integer container to be added to the vector
 		template <typename iterator>
 		void addNumbers(iterator begin, iterator end)
 		{
@@ -53,6 +54,8 @@ class Span
 				begin++;
 			}
 		}
+
+		void sortVector();
 
 		long shortestSpan();
 		long longestSpan();

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:54:41 by etien             #+#    #+#             */
-/*   Updated: 2025/04/16 17:43:18 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/18 14:39:49 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include <iostream>
 #include <limits>
-#include <vector>
+#include <set>
 #include <list>
 #include <deque>
 
@@ -27,12 +27,12 @@
 void printContainerContents(Span span)
 {
 	std::cout << BLUE << "Container contents: ";
-	const std::set<int> set = span.getIntSet();
-	for (std::set<int>::iterator it = set.begin(); it != set.end(); it++)
+	const std::vector<int> vector = span.getIntVector();
+	for (std::vector<int>::const_iterator it = vector.begin(); it != vector.end(); it++)
 	{
 		std::cout << *it;
-		// --set.end() gives you an iterator to the last element of the set.
-		if (it != --set.end())
+		// --vector.end() gives you an iterator to the last element of the vector.
+		if (it != --vector.end())
 			std::cout << ", ";
 	}
 	std::cout << RESET << std::endl;
@@ -82,21 +82,6 @@ int main()
 		std::cout << "Span copy(original);" << std::endl;
 		std::cout << "Copy container size: " << copy.getN() << std::endl;
 		printContainerContents(copy);
-	}
-	{
-		std::cout << YELLOW << "\nTEST: REPEATED NUMBERS" << RESET << std::endl;
-
-		Span sp = Span(2);
-		std::cout << "Container size: " << sp.getN() << std::endl;
-		int n1 = 42;
-		int n2 = 420;
-		std::cout << "Adding " << n1 << std::endl;
-		sp.addNumber(n1);
-		std::cout << "Adding " << n1 << std::endl;
-		sp.addNumber(n1);
-		std::cout << "Adding " << n2 << std::endl;
-		sp.addNumber(n2);
-		printContainerContents(sp);
 	}
 	{
 		try
@@ -180,22 +165,22 @@ int main()
 		Span sp = Span(20);
 		std::cout << "Container size: " << sp.getN() << std::endl;
 		printContainerContents(sp);
-		std::cout << YELLOW << "\n- ADDING NUMBERS FROM SET" << RESET << std::endl;
-		// constructing a set from a range
-		std::set<int> intSet(arr, arr + 5);
-		sp.addNumbers(intSet.begin(), intSet.end());
-		printContainerContents(sp);
 		std::cout << YELLOW << "\n- ADDING NUMBERS FROM VECTOR" << RESET << std::endl;
-		std::vector<int> intVector(arr + 5, arr + 10);
+		// constructing a vector from a range
+		std::vector<int> intVector(arr, arr + 5);
 		sp.addNumbers(intVector.begin(), intVector.end());
 		printContainerContents(sp);
 		std::cout << YELLOW << "\n- ADDING NUMBERS FROM LIST" << RESET << std::endl;
-		std::list<int> intList(arr + 10, arr + 15);
+		std::list<int> intList(arr + 5, arr + 10);
 		sp.addNumbers(intList.begin(), intList.end());
 		printContainerContents(sp);
 		std::cout << YELLOW << "\n- ADDING NUMBERS FROM DEQUE" << RESET << std::endl;
-		std::deque<int> intDeque(arr + 15, arr + 20);
+		std::deque<int> intDeque(arr + 10, arr + 15);
 		sp.addNumbers(intDeque.begin(), intDeque.end());
+		printContainerContents(sp);
+		std::cout << YELLOW << "\n- ADDING NUMBERS FROM SET" << RESET << std::endl;
+		std::set<int> intSet(arr + 15, arr + 20);
+		sp.addNumbers(intSet.begin(), intSet.end());
 		printContainerContents(sp);
 		std::cout << RED << "\nShortest span: " << sp.shortestSpan() << RESET << std::endl;
 		std::cout << GREEN << "Longest span: " << sp.longestSpan() << "\n" << RESET << std::endl;
