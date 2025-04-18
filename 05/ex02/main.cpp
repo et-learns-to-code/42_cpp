@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:17:30 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 18:25:52 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/18 17:25:32 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ void testShrubberyCreationForm()
 	Bureaucrat senior("Senior", 137);
 	std::cout << senior << std::endl;
 	Bureaucrat junior("Junior", 138);
-	std::cout << junior << std::endl;
-	std::cout << std::endl;
+	std::cout << junior << "\n" << std::endl;
 
 	std::cout << GREEN << "- form execution failure (unsigned form)" << RESET << std::endl;
 	senior.executeForm(shrubbery);
@@ -79,8 +78,7 @@ void testRobotomyRequestForm()
 	Bureaucrat senior("Senior", 45);
 	std::cout << senior << std::endl;
 	Bureaucrat junior("Junior", 46);
-	std::cout << junior << std::endl;
-	std::cout << std::endl;
+	std::cout << junior << "\n" << std::endl;
 
 	std::cout << GREEN << "- form execution failure (unsigned form)" << RESET << std::endl;
 	senior.executeForm(robotomy);
@@ -96,7 +94,7 @@ void testRobotomyRequestForm()
 	{
 		std::cout << BLUE <<  "Robotomy attempt " << i + 1 << ":" << RESET << std::endl;
 		senior.executeForm(robotomy);
-		std::cout << std::endl;
+		std::cout << "\n";
 	}
 	std::cout << robotomy << std::endl;
 }
@@ -120,8 +118,7 @@ void testPresidentialPardonForm()
 	Bureaucrat senior("Senior", 5);
 	std::cout << senior << std::endl;
 	Bureaucrat junior("Junior", 6);
-	std::cout << junior << std::endl;
-	std::cout << std::endl;
+	std::cout << junior << "\n" << std::endl;
 
 	std::cout << GREEN << "- form execution failure (unsigned form)" << RESET << std::endl;
 	senior.executeForm(pardon);

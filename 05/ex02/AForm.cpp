@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/01 17:31:20 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/18 17:22:03 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,11 @@ const char *AForm::FormNotSignedException::what() const throw()
 // insertion operator overload
 std::ostream &operator<<(std::ostream &out, const AForm &form)
 {
-	return (out << YELLOW
-		<< "_name: " << form.getName() << ";" << std::endl
-		<< "_isSigned: " << form.getIsSigned() << ";" << std::endl
-		<< "_gradeToSign: " << form.getGradeToSign() << ";" << std::endl
-		<< "_gradeToExecute: " << form.getGradeToExecute() << ";" << std::endl
+	return (out << YELLOW << std::boolalpha
+		<< "_name: " << form.getName() << ";\n"
+		<< "_isSigned: " << form.getIsSigned() << ";\n"
+		<< "_gradeToSign: " << form.getGradeToSign() << ";\n"
+		<< "_gradeToExecute: " << form.getGradeToExecute() << ";\n"
 		<< "_target: " << form.getTarget()
-		<< "." << std::endl << RESET);
+		<< ".\n" << RESET);
 }
