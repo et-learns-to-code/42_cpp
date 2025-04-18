@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/03/31 19:59:17 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/18 17:04:39 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,12 @@ const char *Form::GradeTooLowException::what() const throw()
 // insertion operator overload
 std::ostream &operator<<(std::ostream &out, const Form &form)
 {
-	return (out << YELLOW
-		<< "_name: " << form.getName()
-		<< "; _isSigned: " << form.getIsSigned() << ";" << std::endl
-		<< "_gradeToSign: " << form.getGradeToSign() << ";" << std::endl
+	// std::boolalpha will allow true/false to be printed instead
+	// of the default 1/0.
+	return (out << YELLOW << std::boolalpha
+		<< "_name: " << form.getName() << ";\n"
+		<< "_isSigned: " << form.getIsSigned() << ";\n"
+		<< "_gradeToSign: " << form.getGradeToSign() << ";\n"
 		<< "_gradeToExecute: " << form.getGradeToExecute()
-		<< "." << RESET);
+		<< ".\n" << RESET);
 }
