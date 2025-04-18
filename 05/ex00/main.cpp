@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:17:30 by etien             #+#    #+#             */
-/*   Updated: 2025/03/28 16:29:11 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/18 17:13:53 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@
 
 void testDefaultBureaucrat()
 {
-	std::cout << GREEN << "TEST: DEFAULT BUREAUCRAT" << RESET << std::endl;
+	std::cout << GREEN << "\nTEST: DEFAULT BUREAUCRAT" << RESET << std::endl;
 	Bureaucrat bureaucrat;
 	std::cout << bureaucrat << std::endl;
 }
 
 void testCopiedBureaucrat()
 {
-	std::cout << GREEN << "TEST: COPIED BUREAUCRAT" << RESET << std::endl;
+	std::cout << GREEN << "\nTEST: COPIED BUREAUCRAT" << RESET << std::endl;
 	Bureaucrat original("Original", 75);
 	std::cout << original << std::endl;
 	Bureaucrat copycat(original);
@@ -38,7 +38,7 @@ void testConstructorGradeTooHigh()
 {
 	try
 	{
-		std::cout << GREEN << "TEST: CONSTRUCTOR - GRADE TOO HIGH" << RESET << std::endl;
+		std::cout << GREEN << "\nTEST: CONSTRUCTOR - GRADE TOO HIGH" << RESET << std::endl;
 		Bureaucrat alpha("Alpha", 0);
 		std::cout << alpha << std::endl;
 	}
@@ -52,7 +52,7 @@ void testConstructorGradeTooLow()
 {
 	try
 	{
-		std::cout << GREEN << "TEST: CONSTRUCTOR - GRADE TOO LOW" << RESET << std::endl;
+		std::cout << GREEN << "\nTEST: CONSTRUCTOR - GRADE TOO LOW" << RESET << std::endl;
 		Bureaucrat beta("Beta", 151);
 		std::cout << beta << std::endl;
 	}
@@ -66,7 +66,7 @@ void testIncrementGrade()
 {
 	try
 	{
-		std::cout << GREEN << "TEST: INCREMENT GRADE" << RESET << std::endl;
+		std::cout << GREEN << "\nTEST: INCREMENT GRADE" << RESET << std::endl;
 		Bureaucrat promoted("Promoted", 3);
 		std::cout << promoted << std::endl;
 		for (int i = 0; i < 3; i++)
@@ -85,7 +85,7 @@ void testDecrementGrade()
 {
 	try
 	{
-		std::cout << GREEN << "TEST: DECREMENT GRADE" << RESET << std::endl;
+		std::cout << GREEN << "\nTEST: DECREMENT GRADE" << RESET << std::endl;
 		Bureaucrat demoted("Demoted", 148);
 		std::cout << demoted << std::endl;
 		for (int i = 0; i < 3; i++)
@@ -96,24 +96,17 @@ void testDecrementGrade()
 	}
 	catch (std::exception & e)
 	{
-		std::cout << RED << e.what() << RESET << std::endl;
+		std::cout << RED << e.what() << "\n" << RESET << std::endl;
 	}
 }
 
 int main()
 {
-	std::cout << std::endl;
 	testDefaultBureaucrat();
-	std::cout << std::endl;
 	testCopiedBureaucrat();
-	std::cout << std::endl;
 	testConstructorGradeTooHigh();
-	std::cout << std::endl;
 	testConstructorGradeTooLow();
-	std::cout << std::endl;
 	testIncrementGrade();
-	std::cout << std::endl;
 	testDecrementGrade();
-	std::cout << std::endl;
 	return 0;
 }
