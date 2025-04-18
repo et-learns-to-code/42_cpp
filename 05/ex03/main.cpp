@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:17:30 by etien             #+#    #+#             */
-/*   Updated: 2025/04/09 15:18:51 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/18 18:04:10 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ int main()
 
 	try
 	{
-		std::cout << GREEN << "TEST - INTERN MAKEFORM()" << RESET << std::endl;
-		std::cout << std::endl;
+		std::cout << GREEN << "\nTEST - INTERN MAKEFORM()\n" << RESET << std::endl;
 		std::cout << GREEN << "- ShrubberyCreationForm" << RESET << std::endl;
 		scf = someRandomIntern.makeForm("ShrubberyCreationForm", "Bender");
 		std::cout << *scf << std::endl;
@@ -53,7 +52,7 @@ int main()
 	}
 	catch (std::exception & e)
 	{
-		std::cout << RED << e.what() << RESET << std::endl;
+		std::cout << RED << e.what() << "\n" << RESET << std::endl;
 	}
 
 	delete scf;
