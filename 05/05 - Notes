@@ -1,12 +1,14 @@
 Where to Declare the Exceptions?
-The exceptions are usually nested classes inside Bureaucrat, following this pattern:
+
+	The exceptions are usually nested classes inside Bureaucrat, following this pattern:
 
 Why Nested Classes?
-They are tightly coupled with Bureaucrat, so it makes sense to define them within the class.
 
-It keeps the global namespace clean.
+	They are tightly coupled with Bureaucrat, so it makes sense to define them within the class.
 
-Makes it clear that these exceptions are only relevant to Bureaucrat.
+	It keeps the global namespace clean.
+
+	Makes it clear that these exceptions are only relevant to Bureaucrat.
 
 ~~~
 
@@ -27,21 +29,21 @@ what() is declared as public so it can be called from outside when the exception
 
 const char* → The function returns a const char* (a pointer to a C-style string).
 
-- This is the error message describing the exception.
+	This is the error message describing the exception.
 
 what() → The function name.
 
-- This is an override of the what() function from std::exception.
+	This is an override of the what() function from std::exception.
 
 const (after the function name) → Indicates that the function does not modify the object it is called on.
 
 throw(); → (Legacy exception specification)
 
-- Older C++ versions allowed specifying what exceptions a function might throw.
+	Older C++ versions allowed specifying what exceptions a function might throw.
 
-- In modern C++ (C++11 onwards), you should use noexcept instead.
+	In modern C++ (C++11 onwards), you should use noexcept instead.
 
-- Modern version: const char* what() const noexcept;
+	Modern version: const char* what() const noexcept;
 
 
 Example usage:
@@ -56,9 +58,9 @@ try {
 
 Exception Handling Effect:
 
-If not caught, the program terminates.
+	If not caught, the program terminates.
 
-If caught, the program handles the error and continues.
+	If caught, the program handles the error and continues.
 
 ~~~
 
@@ -70,261 +72,301 @@ throw Bureaucrat::GradeTooLowException();
 
 The following happens:
 
-An instance of GradeTooLowException is created.
+	An instance of GradeTooLowException is created.
 
-Since GradeTooLowException is a class, calling GradeTooLowException() invokes its constructor.
+	Since GradeTooLowException is a class, calling GradeTooLowException() invokes its constructor.
 
-The program execution stops and "unwinds" the call stack.
+	The program execution stops and "unwinds" the call stack.
 
-The program starts looking for a catch block that can handle this specific exception.
+	The program starts looking for a catch block that can handle this specific exception.
 
-If no suitable catch block is found, the program terminates.
+	If no suitable catch block is found, the program terminates.
 
-If a matching catch block is found, execution jumps there.
+	If a matching catch block is found, execution jumps there.
 
 ~~~
 
 The what() method is not called automatically. Instead, it’s called explicitly inside the catch block if needed.
 
 How Does what() Get Called?
-The what() function is not called automatically when an exception is thrown. Instead, it is typically called inside a catch block.
 
-Example:
-try {
-    throw Bureaucrat::GradeTooLowException();
-}
-catch (std::exception &e) {
-    std::cout << e.what() << std::endl;  // `what()` is explicitly called here
+	The what() function is not called automatically when an exception is thrown. Instead, it is typically called inside a catch block.
+
+	Example:
+	try {
+		throw Bureaucrat::GradeTooLowException();
+	}
+	catch (std::exception &e) {
+		std::cout << e.what() << std::endl;  // `what()` is explicitly called here
 }
 
 What happens here?
 
-throw Bureaucrat::GradeTooLowException(); is executed.
+	throw Bureaucrat::GradeTooLowException(); is executed.
 
-The exception object is caught as a reference to std::exception &e.
+	The exception object is caught as a reference to std::exception &e.
 
-e.what() is explicitly called, which prints:
+	e.what() is explicitly called, which prints:
 
-Grade is too low!
+	Grade is too low!
 
 ~~~
+
+throw() at the end of the function signature is part of an old C++98 feature called dynamic exception specification. Here's what it means:
+
+🔍 what() const throw(); — what this means:
+
+	It’s saying that the what() function does not throw any exceptions. So:
+
+	virtual const char* what() const throw();
+	is an old way of writing:
+
+	“This function guarantees it will not throw any exceptions.”
+
+✅ Why it's used
+
+	In the context of exceptions, particularly with what() (which is part of std::exception), it's important that this function itself never throws,
+	because you're usually calling what() inside a catch block — and throwing another exception from there could crash your program.
+
+	So throw() is a promise to the compiler and other programmers:
+
+🗣️ "I swear this won’t throw anything."
+
+⚠️ Why it's outdated
+
+	In C++11 and newer, this has been replaced with the noexcept keyword:
+
+	virtual const char* what() const noexcept;
+	It's clearer, shorter, and gives the compiler more optimization opportunities.
+
+TL;DR
+
+	Syntax		Meaning
+	throw()		Old-style C++98 way of saying “does not throw exceptions”
+	noexcept	Modern C++ (C++11+) equivalent
+
+	So in C++98 (which is what the module uses), throw() is still valid and expected in the signature of what().
+
+~~~
+
 Deep Dive into Stack Unwinding
 
-Stack unwinding is the process of rolling back function calls when an exception is thrown. This ensures that resources (such as memory, files, or dynamically allocated objects) are properly cleaned up before transferring control to a catch block.
+Stack unwinding is the process of rolling back function calls when an exception is thrown.
+This ensures that resources (such as memory, files, or dynamically allocated objects) are properly cleaned up before transferring control to a catch block.
 
 1️⃣ What Happens When an Exception is Thrown?
 
-When a function throws an exception, C++ begins stack unwinding, which does the following:
+	When a function throws an exception, C++ begins stack unwinding, which does the following:
 
-The current function stops executing immediately.
+	The current function stops executing immediately.
 
-The stack starts "unwinding" — meaning:
+	The stack starts "unwinding" — meaning:
 
-The function where the exception was thrown returns without completing normally.
+	The function where the exception was thrown returns without completing normally.
 
-If that function was called by another function, that function also starts unwinding.
+	If that function was called by another function, that function also starts unwinding.
 
-This continues until a matching catch block is found.
+	This continues until a matching catch block is found.
 
-Local variables of each function are destroyed (going in reverse order of creation).
+	Local variables of each function are destroyed (going in reverse order of creation).
 
-If no matching catch block is found, the program terminates (std::terminate() is called).
+	If no matching catch block is found, the program terminates (std::terminate() is called).
 
 2️⃣ Example: Stack Unwinding in Action
 
-Let's consider a simple example.
+	Let's consider a simple example.
 
-Code Example
+	Code Example
 
-#include <iostream>
-#include <exception>
+	#include <iostream>
+	#include <exception>
 
-class Bureaucrat {
-public:
-    Bureaucrat(int grade) {
-        std::cout << "Bureaucrat Constructor" << std::endl;
-        if (grade > 150)
-            throw std::runtime_error("Grade too low!"); // Exception thrown here
-    }
-    ~Bureaucrat() {
-        std::cout << "Bureaucrat Destructor" << std::endl;
-    }
-};
+	class Bureaucrat {
+	public:
+		Bureaucrat(int grade) {
+			std::cout << "Bureaucrat Constructor" << std::endl;
+			if (grade > 150)
+				throw std::runtime_error("Grade too low!"); // Exception thrown here
+		}
+		~Bureaucrat() {
+			std::cout << "Bureaucrat Destructor" << std::endl;
+		}
+	};
 
-void functionC() {
-    std::cout << "Entering functionC" << std::endl;
-    Bureaucrat b(151); // Exception is thrown here
-    std::cout << "Leaving functionC" << std::endl; // ❌ This line is skipped
-}
+	void functionC() {
+		std::cout << "Entering functionC" << std::endl;
+		Bureaucrat b(151); // Exception is thrown here
+		std::cout << "Leaving functionC" << std::endl; // ❌ This line is skipped
+	}
 
-void functionB() {
-    std::cout << "Entering functionB" << std::endl;
-    functionC();
-    std::cout << "Leaving functionB" << std::endl; // ❌ Skipped
-}
+	void functionB() {
+		std::cout << "Entering functionB" << std::endl;
+		functionC();
+		std::cout << "Leaving functionB" << std::endl; // ❌ Skipped
+	}
 
-void functionA() {
-    try {
-        std::cout << "Entering functionA" << std::endl;
-        functionB();
-        std::cout << "Leaving functionA" << std::endl; // ❌ Skipped
-    } catch (const std::exception &e) {
-        std::cout << "Exception caught: " << e.what() << std::endl;
-    }
-}
+	void functionA() {
+		try {
+			std::cout << "Entering functionA" << std::endl;
+			functionB();
+			std::cout << "Leaving functionA" << std::endl; // ❌ Skipped
+		} catch (const std::exception &e) {
+			std::cout << "Exception caught: " << e.what() << std::endl;
+		}
+	}
 
-int main() {
-    functionA();
-    return 0;
-}
+	int main() {
+		functionA();
+		return 0;
+	}
 
 3️⃣ Understanding the Stack Unwinding Process
 
-When functionC() throws an exception, stack unwinding happens in reverse order of function calls:
+	When functionC() throws an exception, stack unwinding happens in reverse order of function calls:
 
-Call Stack Before Exception
-main() → functionA() → functionB() → functionC()
+	Call Stack Before Exception
+	main() → functionA() → functionB() → functionC()
 
-functionC() throws an exception.
+	functionC() throws an exception.
 
-functionC() does not complete.
+	functionC() does not complete.
 
-functionB() also does not complete.
+	functionB() also does not complete.
 
-functionA() catches the exception and resumes execution.
+	functionA() catches the exception and resumes execution.
 
-Output of the Program
-Entering functionA
-Entering functionB
-Entering functionC
-Bureaucrat Constructor
-Exception caught: Grade too low!
+	Output of the Program
+	Entering functionA
+	Entering functionB
+	Entering functionC
+	Bureaucrat Constructor
+	Exception caught: Grade too low!
 
-What happened?
+	What happened?
 
-The Bureaucrat constructor was called before the exception was thrown.
+	The Bureaucrat constructor was called before the exception was thrown.
 
-functionC() threw an exception.
+	functionC() threw an exception.
 
-functionC(), functionB(), and functionA() all stopped executing immediately.
+	functionC(), functionB(), and functionA() all stopped executing immediately.
 
-The catch block in functionA() handled the exception and printed the error message.
+	The catch block in functionA() handled the exception and printed the error message.
 
-The destructor for Bureaucrat was never called, meaning objects allocated before the throw statement were never destroyed.
+	The destructor for Bureaucrat was never called, meaning objects allocated before the throw statement were never destroyed.
 
 4️⃣ What Happens to Local Variables?
 
-When an exception is thrown, C++ destroys all local variables in each function as the stack unwinds.
+	When an exception is thrown, C++ destroys all local variables in each function as the stack unwinds.
 
-Example with Destructor Calls
+	Example with Destructor Calls
 
-#include <iostream>
-#include <exception>
+	#include <iostream>
+	#include <exception>
 
-class Test {
-public:
-    Test(std::string name) : _name(name) {
-        std::cout << _name << " constructor called" << std::endl;
-    }
-    ~Test() {
-        std::cout << _name << " destructor called" << std::endl;
-    }
-private:
-    std::string _name;
-};
+	class Test {
+	public:
+		Test(std::string name) : _name(name) {
+			std::cout << _name << " constructor called" << std::endl;
+		}
+		~Test() {
+			std::cout << _name << " destructor called" << std::endl;
+		}
+	private:
+		std::string _name;
+	};
 
-void functionC() {
-    Test objC("C");
-    throw std::runtime_error("Something went wrong in C!");
-}
+	void functionC() {
+		Test objC("C");
+		throw std::runtime_error("Something went wrong in C!");
+	}
 
-void functionB() {
-    Test objB("B");
-    functionC();
-}
+	void functionB() {
+		Test objB("B");
+		functionC();
+	}
 
-void functionA() {
-    try {
-        Test objA("A");
-        functionB();
-    } catch (const std::exception &e) {
-        std::cout << "Exception caught: " << e.what() << std::endl;
-    }
-}
+	void functionA() {
+		try {
+			Test objA("A");
+			functionB();
+		} catch (const std::exception &e) {
+			std::cout << "Exception caught: " << e.what() << std::endl;
+		}
+	}
 
-int main() {
-    functionA();
-    return 0;
-}
+	int main() {
+		functionA();
+		return 0;
+	}
 
-Output:
-A constructor called
-B constructor called
-C constructor called
-C destructor called
-B destructor called
-Exception caught: Something went wrong in C!
-A destructor called
+	Output:
+	A constructor called
+	B constructor called
+	C constructor called
+	C destructor called
+	B destructor called
+	Exception caught: Something went wrong in C!
+	A destructor called
 
-Key Observations:
+	Key Observations:
 
-When functionC() threw an exception, it destroyed objC first (last in, first out).
+	When functionC() threw an exception, it destroyed objC first (last in, first out).
 
-Then objB was destroyed as functionB() unwound.
+	Then objB was destroyed as functionB() unwound.
 
-Finally, objA was destroyed when functionA() unwound.
+	Finally, objA was destroyed when functionA() unwound.
 
-Why?
+	Why?
 
-Automatic objects (local variables) are destroyed in reverse order of their creation when stack unwinding happens.
+	Automatic objects (local variables) are destroyed in reverse order of their creation when stack unwinding happens.
 
-Only objects that were fully constructed get destroyed (so if a constructor throws an exception, its object is never fully created and doesn't get destroyed).
+	Only objects that were fully constructed get destroyed (so if a constructor throws an exception, its object is never fully created and doesn't get destroyed).
 
 5️⃣ When No Matching catch Block is Found
 
-If an exception is thrown and no catch block matches, the program terminates.
+	If an exception is thrown and no catch block matches, the program terminates.
 
-Example Without a Matching catch Block
+	Example Without a Matching catch Block
 
-void functionC() {
-    throw 42; // Throws an int, not an exception object
-}
+	void functionC() {
+		throw 42; // Throws an int, not an exception object
+	}
 
-void functionA() {
-    try {
-        functionC();
-    } catch (const std::exception &e) { // ❌ Won't catch because 42 is not a std::exception
-        std::cout << "Caught exception: " << e.what() << std::endl;
-    }
-}
+	void functionA() {
+		try {
+			functionC();
+		} catch (const std::exception &e) { // ❌ Won't catch because 42 is not a std::exception
+			std::cout << "Caught exception: " << e.what() << std::endl;
+		}
+	}
 
-int main() {
-    functionA();
-    return 0;
-}
+	int main() {
+		functionA();
+		return 0;
+	}
 
-Output:
-terminate called after throwing an instance of 'int'
-Aborted (core dumped)
+	Output:
+	terminate called after throwing an instance of 'int'
+	Aborted (core dumped)
 
-Since we threw an int, but catch (const std::exception &e) only catches std::exception-derived objects, there's no matching catch block, and the program aborts.
+	Since we threw an int, but catch (const std::exception &e) only catches std::exception-derived objects, there's no matching catch block, and the program aborts.
 
 6️⃣ How to Ensure Proper Cleanup?
 
-Since stack unwinding does not free heap-allocated memory automatically, you should:
+	Since stack unwinding does not free heap-allocated memory automatically, you should:
 
-- Use smart pointers (std::unique_ptr, std::shared_ptr) to manage dynamic memory.
+	- Use smart pointers (std::unique_ptr, std::shared_ptr) to manage dynamic memory.
 
-- Use RAII (Resource Acquisition Is Initialization) — wrap resources in classes with destructors.
+	- Use RAII (Resource Acquisition Is Initialization) — wrap resources in classes with destructors.
 
-- Always catch exceptions at an appropriate level to avoid program termination.
+	- Always catch exceptions at an appropriate level to avoid program termination.
 
 🔹 Summary
-✅ When an exception is thrown, the call stack starts unwinding — functions return one by one without completing.
-✅ Local objects are destroyed in reverse order of creation (LIFO order).
-✅ If no catch block is found, the program terminates (std::terminate()).
-✅ Heap-allocated memory is not automatically freed unless handled properly.
-✅ Using RAII and smart pointers ensures proper resource cleanup.
+	✅ When an exception is thrown, the call stack starts unwinding — functions return one by one without completing.
+	✅ Local objects are destroyed in reverse order of creation (LIFO order).
+	✅ If no catch block is found, the program terminates (std::terminate()).
+	✅ Heap-allocated memory is not automatically freed unless handled properly.
+	✅ Using RAII and smart pointers ensures proper resource cleanup.
 
 ~~~
 
@@ -333,78 +375,58 @@ to produce a sequence of pseudo-random numbers. Let’s break this down:
 
 🔹 How rand() Works Internally
 
-There is a hidden "global state" (a single random number generator) inside the C standard library.
+	There is a hidden "global state" (a single random number generator) inside the C standard library.
 
-This state holds the current value from which the next random number will be derived.
+	This state holds the current value from which the next random number will be derived.
 
-When you call rand(), it applies a mathematical algorithm (like a Linear Congruential Generator) to transform the current state into a new state and returns a "random" number.
+	When you call rand(), it applies a mathematical algorithm (like a Linear Congruential Generator) to transform the current state into a new state and returns a "random" number.
 
-This state persists for the entire lifetime of the program.
+	This state persists for the entire lifetime of the program.
 
 🔹 What srand(seed) Does
 
-srand(seed) replaces the hidden global state with a new starting value.
+	srand(seed) replaces the hidden global state with a new starting value.
 
-If you call srand(42), it sets the state to a predictable value, meaning rand() will always generate the same sequence of numbers every time you run the program.
+	If you call srand(42), it sets the state to a predictable value, meaning rand() will always generate the same sequence of numbers every time you run the program.
 
-If you call srand(time(NULL)), it seeds the generator with the current time (which changes every second), ensuring different sequences across runs.
+	If you call srand(time(NULL)), it seeds the generator with the current time (which changes every second), ensuring different sequences across runs.
 
 🔹 Why Does Seeding Once Work?
 
-When you seed rand() once in main(), the hidden global state is initialized and persists.
+	When you seed rand() once in main(), the hidden global state is initialized and persists.
 
-Every time you call rand(), it updates the global state and returns the next number in the sequence.
+	Every time you call rand(), it updates the global state and returns the next number in the sequence.
 
-The sequence is deterministic but can appear random because of how the numbers are generated.
+	The sequence is deterministic but can appear random because of how the numbers are generated.
 
 🔹 Does It Allocate and Deallocate Memory?
 
-No, the random state is typically a static/global variable, meaning it stays in memory for the entire duration of the program.
+	No, the random state is typically a static/global variable, meaning it stays in memory for the entire duration of the program.
 
-It’s not dynamically allocated, so you don’t have to worry about freeing it.
+	It’s not dynamically allocated, so you don’t have to worry about freeing it.
 
-If you reseed with srand(), it just resets the state—it doesn’t create a new allocation.
+	If you reseed with srand(), it just resets the state—it doesn’t create a new allocation.
 
 🔹 Analogy: A Deck of Cards
 
-Think of rand() like drawing cards from a shuffled deck:
+	Think of rand() like drawing cards from a shuffled deck:
 
-Seeding (srand()) is like shuffling the deck.
+	Seeding (srand()) is like shuffling the deck.
 
-If you shuffle the deck the same way (srand(42)), you’ll always draw the cards in the same order.
+	If you shuffle the deck the same way (srand(42)), you’ll always draw the cards in the same order.
 
-If you shuffle differently (srand(time(NULL))), you get a different order.
+	If you shuffle differently (srand(time(NULL))), you get a different order.
 
-Each rand() call is like drawing the next card from the deck.
+	Each rand() call is like drawing the next card from the deck.
 
-The state is the remaining deck of cards.
+	The state is the remaining deck of cards.
 
-If you call srand() again, it's like reshuffling the deck, ruining randomness.
+	If you call srand() again, it's like reshuffling the deck, ruining randomness.
 
 🔹 Key Takeaways
-✅ rand() generates numbers from an internal state that persists across function calls.
-✅ srand(seed) changes that state, affecting all future rand() calls.
-✅ If you re-seed every time, the sequence restarts, leading to non-random behavior.
-✅ The random state is not dynamically allocated, it just lives in the program’s memory space.
+	✅ rand() generates numbers from an internal state that persists across function calls.
+	✅ srand(seed) changes that state, affecting all future rand() calls.
+	✅ If you re-seed every time, the sequence restarts, leading to non-random behavior.
+	✅ The random state is not dynamically allocated, it just lives in the program’s memory space.
 
-~~~
 
-That’s a fantastic way to think about it! 🍵 Your kombucha analogy is actually closer to how most pseudorandom number generators (PRNGs) work.
-
-Most PRNGs (like rand()) use a formula where each number is generated based on the previous one. The algorithm starts with a seed,
-and each new number is derived from the previous one using some deterministic mathematical function.
-
-So, it's not like a deck of shuffled cards, where all numbers exist beforehand and are just being drawn in a random order.
-Instead, it’s like brewing kombucha, where each batch (random number) depends on the previous batch (previous number).
-
-Behind the scenes:
-When you call srand(seed), you're setting the initial state of the algorithm (like introducing the first scoby).
-
-Each call to rand() takes the current internal state, applies a mathematical transformation, and produces the next number in the sequence.
-
-The new number is then stored back as the new internal state, and the process repeats.
-
-This is why, if you use the same seed, you get the exact same sequence of numbers each time—the PRNG is completely deterministic.
-
-Real-world cryptographic random generators work differently, using unpredictable inputs (entropy sources like CPU timing, user input, etc.),
-but the basic PRNG model is kombucha, not a deck of cards. 😆
