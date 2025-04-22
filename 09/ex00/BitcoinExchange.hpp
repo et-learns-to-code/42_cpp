@@ -1,0 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
+/*   Updated: 2025/04/22 15:19:24 by etien            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef BITCOINEXCHANGE_HPP
+#define BITCOINEXCHANGE_HPP
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <map>
+
+class BitcoinExchange
+{
+	private:
+		// stores date, exchange rate pairs
+		std::map <std::string, float> csvDatabase;
+		// stores date, value pairs
+		std::map <std::string, float> txtDatabase;
+
+	public:
+		// OCF
+		BitcoinExchange();
+		BitcoinExchange(const BitcoinExchange &src);
+		BitcoinExchange &operator=(const BitcoinExchange &src);
+		~BitcoinExchange();
+
+		void evaluate(std::string txtFile);
+
+		// exception classes are typically nested classes
+		class CsvFileOpenException : public std::exception
+		{
+			public:
+				const char *what() const throw();
+		};
+
+		class InvalidDateException : public std::exception
+		{
+			public:
+				const char *what() const throw();
+		};
+};
+
+#endif
