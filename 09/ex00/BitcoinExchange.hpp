@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/22 15:19:24 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/22 17:29:48 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@
 #include <string>
 #include <fstream>
 #include <map>
+#include <cstdlib> // atoi
+#include <sstream> // stringstream
+#include <limits>
+
+#define RED "\033[31m"
+#define RESET "\033[0m"
 
 class BitcoinExchange
 {
