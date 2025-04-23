@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/22 17:44:11 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/23 13:58:21 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ bool convertToFloat(const std::string &exchangeRate, float &floatValue)
 	// handle float overflow
 	if (floatValue == std::numeric_limits<float>::infinity() || floatValue == -std::numeric_limits<float>::infinity())
 		return false;
+	return true;
 }
 
 // default constructor
@@ -128,17 +129,11 @@ BitcoinExchange::BitcoinExchange()
 			// If comma not found, there are two possibilities:
 			// 1) empty line
 			// 2) line was not formatted correctly
-			// In both cases, print a message and skip the line.
 			if (commaPosition == std::string::npos)
 			{
 				line = trim(line);
-				if (line == "")
-					std::cout << RED << "Empty line on line " << lineCount << RESET << std::endl;
-				else
-				{
-					std::cout << RED << "Missing comma on line " << lineCount << std::endl;
-					std::cout << ": " << line << RESET << std::endl;
-				}
+				if (line != "")
+					std::cout << RED << "Line " << lineCount << ": missing comma." << RESET << std::endl;
 			}
 			// clear contents of the string
 			line.clear();
@@ -148,21 +143,26 @@ BitcoinExchange::BitcoinExchange()
 		std::string date;
 		std::string exchangeRate;
 		date = trim(line.substr(0, commaPosition));
-		exchangeRate = trim(line.substr(commaPosition + 1, line.size() - commaPosition));
-		// converttoFloat will check for empty values
-		// if (date == "" || exchangeRate == "")
-		// 	std::cout << RED << "Empty field on line " << lineCount << RESET << std::endl;
-		if (!validateDate(date))
-			std::cout << RED << date << ": Invalid date format on line " << lineCount << RESET << std::endl;
+		// without specifying second parameter to substr, the function will grab everything
+		// up until the end of the string.
+		exchangeRate = trim(line.substr(commaPosition + 1));
 		float floatValue = 0;
-		if (!convertToFloat(exchangeRate, floatValue))
-			std::cout << RED << date << ": Invalid exchangeRate format on line " << lineCount << RESET << std::endl;
-
+		bool validDate = validateDate(date);
+		bool validFloat = convertToFloat(exchangeRate, floatValue);
+		if (!validDate || !validFloat)
+		{
+			if (!validDate)
+				std::cout << RED << "Line " << lineCount << ": invalid date format : " << date << RESET << std::endl;
+			if (!validFloat)
+				std::cout << RED << "Line " << lineCount << ": invalid exchangeRate format : " << exchangeRate << RESET << std::endl;
+			line.clear();
+			lineCount++;
+			continue;
+		}
+		csvDatabase[date] = floatValue;
 		std::cout << "date: " << date << ", exchangeRate: " << exchangeRate << std::endl;
 		lineCount++;
 	}
-
-
 }
 
 // copy constructor
@@ -180,10 +180,7 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
 	// std::cout << "BitcoinExchange object copy assignment operator called." << std::endl;
 	// check for self-assignment
 	if (this != &src)
-	{
 		this->csvDatabase = src.csvDatabase;
-		this->txtDatabase = src.txtDatabase;
-	}
 	return *this;
 }
 
@@ -193,14 +190,72 @@ BitcoinExchange::~BitcoinExchange()
 	// std::cout << "BitcoinExchange object destructor called." << std::endl;
 }
 
-void BitcoinExchange::evaluate(std::string txtFile)
+void BitcoinExchange::evaluate(std::string filename)
 {
-	(void) txtFile;
+	// opening inputFile
+	std::ifstream inputFile(filename.c_str());
+	if (!inputFile.is_open())
+		throw InputFileOpenException();
+
+	std::string line;
+	int lineCount = 1;
+	while (std::getline(inputFile, line))
+	{
+		// .find() returns the position of the first character of the first match.
+		// If no matches were found, the function returns string::npos.
+		size_t barPosition = line.find("|");
+
+		// skip over first line (header row)
+		if (lineCount == 1 || barPosition == std::string::npos)
+		{
+			// If bar not found, there are two possibilities:
+			// 1) empty line
+			// 2) line was not formatted correctly
+			if (barPosition == std::string::npos)
+			{
+				line = trim(line);
+				if (line != "")
+					std::cout << YELLOW << "Error: bad input => " << line << RESET << std::endl;
+			}
+			// clear contents of the string
+			line.clear();
+			lineCount++;
+			continue;
+		}
+		std::string date;
+		std::string value;
+		date = trim(line.substr(0, barPosition));
+		// without specifying second parameter to substr, the function will grab everything
+		// up until the end of the string.
+		value = trim(line.substr(barPosition + 1));
+		float floatValue = 0;
+		bool validDate = validateDate(date);
+		bool validFloat = convertToFloat(value, floatValue);
+		if (!validDate || !validFloat || floatValue < 0 || floatValue > 1000)
+		{
+			if (!validDate || !validFloat)
+				std::cout << YELLOW << "Error: bad input => " << line << RESET << std::endl;
+			if (floatValue < 0)
+				std::cout << YELLOW << "Error: not a positive number." << RESET << std::endl;
+			if (floatValue > 1000)
+				std::cout << YELLOW << "Error: too large a number." << RESET << std::endl;
+			line.clear();
+			lineCount++;
+			continue;
+		}
+		std::cout << "date: " << date << ", value: " << value << std::endl;
+		lineCount++;
+	}
 }
 
 const char *BitcoinExchange::CsvFileOpenException::what() const throw()
 {
 	return ".csv file could not be opened.";
+}
+
+const char *BitcoinExchange::InputFileOpenException::what() const throw()
+{
+	return "Input file could not be opened.";
 }
 
 const char *BitcoinExchange::InvalidDateException::what() const throw()
