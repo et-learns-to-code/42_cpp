@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:54:41 by etien             #+#    #+#             */
-/*   Updated: 2025/04/23 13:24:51 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/23 15:35:46 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int main(int ac, char **av)
 {
 	if (ac != 2)
 	{
-		std::cout << "Usage: ./btc <input file>" << std::endl;
+		std::cout << YELLOW << "Error: could not open file." << RESET << std::endl;
 		return 1;
 	}
 	try
@@ -36,6 +36,5 @@ int main(int ac, char **av)
 	{
 		std::cerr << e.what() << '\n';
 	}
-
 	return 0;
 }

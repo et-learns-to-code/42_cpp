@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/23 13:58:21 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/23 18:05:12 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ std::string trim(const std::string& input)
 	return input.substr(start, end - start + 1);
 }
 
-// returns a boolean to indicate conversion success.
+// Returns a boolean to indicate conversion success.
 bool convertToFloat(const std::string &exchangeRate, float &floatValue)
 {
 	// put the string into a stringstream and then extract it as a float
@@ -111,7 +111,7 @@ BitcoinExchange::BitcoinExchange()
 	// std::cout << "BitcoinExchange object default constructor called." << std::endl;
 
 	// opening csvFile
-	std::ifstream csvFile("test.csv");
+	std::ifstream csvFile("data.csv");
 	if (!csvFile.is_open())
 		throw CsvFileOpenException();
 
@@ -146,9 +146,9 @@ BitcoinExchange::BitcoinExchange()
 		// without specifying second parameter to substr, the function will grab everything
 		// up until the end of the string.
 		exchangeRate = trim(line.substr(commaPosition + 1));
-		float floatValue = 0;
+		float exchangeRateFloat = 0;
 		bool validDate = validateDate(date);
-		bool validFloat = convertToFloat(exchangeRate, floatValue);
+		bool validFloat = convertToFloat(exchangeRate, exchangeRateFloat);
 		if (!validDate || !validFloat)
 		{
 			if (!validDate)
@@ -159,14 +159,13 @@ BitcoinExchange::BitcoinExchange()
 			lineCount++;
 			continue;
 		}
-		csvDatabase[date] = floatValue;
-		std::cout << "date: " << date << ", exchangeRate: " << exchangeRate << std::endl;
+		csvDatabase[date] = exchangeRateFloat;
+		std::cout << "date: " << date << ", exchangeRateFloat: " << exchangeRateFloat << std::endl;
 		lineCount++;
 	}
 }
 
 // copy constructor
-// _name variable is const so it must be initialized in initialization list
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &src)
 {
 	// std::cout << "BitcoinExchange object copy constructor called." << std::endl;
@@ -174,7 +173,6 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange &src)
 }
 
 // assignment operator
-// _name variable is const so it cannot be reassigned
 BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
 {
 	// std::cout << "BitcoinExchange object copy assignment operator called." << std::endl;
@@ -188,6 +186,28 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
 BitcoinExchange::~BitcoinExchange()
 {
 	// std::cout << "BitcoinExchange object destructor called." << std::endl;
+}
+
+float getExchangeRate(std::string date, std::map<std::string, float> csvDatabase)
+{
+	// std::lower_bound returns an iterator pointing to the first element in the range [first,last)
+	// which does not compare less than val (i.e. element is >= val).
+	// Subject: If the date used in the input does not exist in your DB then you
+	// 			must use the closest date contained in your DB. Be careful to use the
+	// 			lower date and not the upper one.
+	std::map<std::string, float>::iterator it = csvDatabase.lower_bound(date);
+	// it->first (key - date); it->second (value - exchange rate)
+	if (it == csvDatabase.end() || it->first != date)
+	{
+		// this means the date precedes the first entry in the csv file.
+		if (it == csvDatabase.begin())
+			return 0;
+		// these conditions indicate we have the upper date so we move the iterator backwards
+		// to get the lower date.
+		--it;
+	}
+	// if iterator has not been shifted, that means we get the rate for the exact date.
+	return it->second;
 }
 
 void BitcoinExchange::evaluate(std::string filename)
@@ -228,22 +248,24 @@ void BitcoinExchange::evaluate(std::string filename)
 		// without specifying second parameter to substr, the function will grab everything
 		// up until the end of the string.
 		value = trim(line.substr(barPosition + 1));
-		float floatValue = 0;
+		float valueFloat = 0;
 		bool validDate = validateDate(date);
-		bool validFloat = convertToFloat(value, floatValue);
-		if (!validDate || !validFloat || floatValue < 0 || floatValue > 1000)
+		bool validFloat = convertToFloat(value, valueFloat);
+		if (!validDate || !validFloat || valueFloat < 0 || valueFloat > 1000)
 		{
 			if (!validDate || !validFloat)
 				std::cout << YELLOW << "Error: bad input => " << line << RESET << std::endl;
-			if (floatValue < 0)
+			if (valueFloat < 0)
 				std::cout << YELLOW << "Error: not a positive number." << RESET << std::endl;
-			if (floatValue > 1000)
+			if (valueFloat > 1000)
 				std::cout << YELLOW << "Error: too large a number." << RESET << std::endl;
 			line.clear();
 			lineCount++;
 			continue;
 		}
-		std::cout << "date: " << date << ", value: " << value << std::endl;
+		// using a double to prevent overflow
+		double product = getExchangeRate(date, csvDatabase) * valueFloat;
+		std::cout << date << " => " << valueFloat << " = " << product << std::endl;
 		lineCount++;
 	}
 }
