@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:54:41 by etien             #+#    #+#             */
-/*   Updated: 2025/04/23 15:35:46 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/23 20:53:53 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int main(int ac, char **av)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << YELLOW << e.what() << RESET << std::endl;
 	}
 	return 0;
 }

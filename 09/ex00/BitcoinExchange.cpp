@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/23 20:04:14 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/23 20:54:14 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,8 +262,7 @@ void BitcoinExchange::evaluate(std::string filename)
 			lineCount++;
 			continue;
 		}
-		// using a double to prevent overflow
-		double result = getExchangeRate(date, csvDatabase) * valueFloat;
+		float result = getExchangeRate(date, csvDatabase) * valueFloat;
 		std::cout << date << " => " << valueFloat << " = " << result << std::endl;
 		lineCount++;
 	}
@@ -271,11 +270,11 @@ void BitcoinExchange::evaluate(std::string filename)
 
 const char *BitcoinExchange::CsvFileOpenException::what() const throw()
 {
-	return ".csv file could not be opened.";
+	return "Error: .csv file could not be opened.";
 }
 
 const char *BitcoinExchange::InputFileOpenException::what() const throw()
 {
-	return "Input file could not be opened.";
+	return "Error: input file could not be opened.";
 }
 
