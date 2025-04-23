@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/23 13:28:31 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/23 19:53:30 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,6 @@ class BitcoinExchange
 		};
 
 		class InputFileOpenException : public std::exception
-		{
-			public:
-				const char *what() const throw();
-		};
-
-		class InvalidDateException : public std::exception
 		{
 			public:
 				const char *what() const throw();

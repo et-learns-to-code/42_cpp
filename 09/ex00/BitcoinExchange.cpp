@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/23 18:05:12 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/23 20:04:14 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ bool validateDate(const std::string &date)
 // This helper function trims leading and trailing whitespaces from the input.
 std::string trim(const std::string& input)
 {
-	// Find the first non-whitespace character
+	// find the first non-whitespace character
 	size_t start = input.find_first_not_of(" \t");
 	// npos (no-position) means no matches
 	if (start == std::string::npos)
 		return ""; // If only whitespace characters, return empty string.
-	 // Find the last non-whitespace character
+	 // find the last non-whitespace character
 	size_t end = input.find_last_not_of(" \t");
 	return input.substr(start, end - start + 1);
 }
@@ -93,7 +93,7 @@ bool convertToFloat(const std::string &exchangeRate, float &floatValue)
 	// put the string into a stringstream and then extract it as a float
 	std::stringstream ss(exchangeRate);
 	ss >> floatValue;
-	// check that no characters remain in the stringstream
+	// check that no characters remain in the stringstream.
 	// .fail() occurs when exchangeRate is empty/whitespace/non-digits.
 	// if there is partial extraction, it is still considered a success,
 	// so we must also check for eof.
@@ -133,7 +133,7 @@ BitcoinExchange::BitcoinExchange()
 			{
 				line = trim(line);
 				if (line != "")
-					std::cout << RED << "Line " << lineCount << ": missing comma." << RESET << std::endl;
+					std::cout << YELLOW << "Line " << lineCount << ": missing comma." << RESET << std::endl;
 			}
 			// clear contents of the string
 			line.clear();
@@ -152,15 +152,14 @@ BitcoinExchange::BitcoinExchange()
 		if (!validDate || !validFloat)
 		{
 			if (!validDate)
-				std::cout << RED << "Line " << lineCount << ": invalid date format : " << date << RESET << std::endl;
+				std::cout << YELLOW << "Line " << lineCount << ": invalid date format : " << date << RESET << std::endl;
 			if (!validFloat)
-				std::cout << RED << "Line " << lineCount << ": invalid exchangeRate format : " << exchangeRate << RESET << std::endl;
+				std::cout << YELLOW << "Line " << lineCount << ": invalid exchangeRate format : " << exchangeRate << RESET << std::endl;
 			line.clear();
 			lineCount++;
 			continue;
 		}
 		csvDatabase[date] = exchangeRateFloat;
-		std::cout << "date: " << date << ", exchangeRateFloat: " << exchangeRateFloat << std::endl;
 		lineCount++;
 	}
 }
@@ -264,8 +263,8 @@ void BitcoinExchange::evaluate(std::string filename)
 			continue;
 		}
 		// using a double to prevent overflow
-		double product = getExchangeRate(date, csvDatabase) * valueFloat;
-		std::cout << date << " => " << valueFloat << " = " << product << std::endl;
+		double result = getExchangeRate(date, csvDatabase) * valueFloat;
+		std::cout << date << " => " << valueFloat << " = " << result << std::endl;
 		lineCount++;
 	}
 }
@@ -278,10 +277,5 @@ const char *BitcoinExchange::CsvFileOpenException::what() const throw()
 const char *BitcoinExchange::InputFileOpenException::what() const throw()
 {
 	return "Input file could not be opened.";
-}
-
-const char *BitcoinExchange::InvalidDateException::what() const throw()
-{
-	return "Grade is too high.";
 }
 
