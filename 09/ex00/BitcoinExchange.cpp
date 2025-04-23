@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/23 20:54:14 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/23 21:09:50 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,13 @@ std::string trim(const std::string& input)
 }
 
 // Returns a boolean to indicate conversion success.
-bool convertToFloat(const std::string &exchangeRate, float &floatValue)
+bool convertToFloat(const std::string &floatString, float &floatValue)
 {
 	// put the string into a stringstream and then extract it as a float
-	std::stringstream ss(exchangeRate);
+	std::stringstream ss(floatString);
 	ss >> floatValue;
 	// check that no characters remain in the stringstream.
-	// .fail() occurs when exchangeRate is empty/whitespace/non-digits.
+	// .fail() occurs when floatString is empty/whitespace/non-digits.
 	// if there is partial extraction, it is still considered a success,
 	// so we must also check for eof.
 	if (ss.fail() || !ss.eof())
