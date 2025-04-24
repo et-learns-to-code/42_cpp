@@ -5,3 +5,44 @@ std::istringstream 	| Input‑only (read from the string) | Treat a string as a 
 std::stringstream 	| Bidirectional (read and write) 	| A single object that can both insert into an internal string buffer and later extract from it. 	| Same constructors as istringstream, but you can also insert with <<.
 std::ostringstream 	| Output‑only (write to the string) | Build a string with the << operator, then call .str() to get the accumulated text. 				| Similar to ostringstream.
 
+
+EX02
+
+What the command does — step by step
+./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "`
+
+1. Command substitution
+	Everything inside the back-quotes ` … ` is executed first.
+	The shell then replaces the whole back-quoted part with the text that command prints.
+
+2. shuf -i 1-100000 -n 3000
+
+	shuf produces a random permutation of its input.
+
+	-i 1-100000 tells it to generate the numbers 1 through 100,000.
+
+	-n 3000 keeps only 3000 of those numbers (unique, random order).
+	Output: 3000 numbers, each on its own line.
+
+3. | tr "\n" " "
+
+	The pipe sends shuf’s output to tr.
+	tr "\n" " " converts every newline to a space, so the 3000 numbers appear on one line separated by spaces.
+
+4. Back‑substitution result
+
+	After tr, you get something like:
+
+	73428 2 99577 501 ...  (3000 numbers) ...
+
+	That entire string replaces the back‑quoted part in the original command.
+
+5. Word splitting
+
+	The shell then splits that string on whitespace into separate arguments.
+
+Final effect on ./PmergeMe
+
+	./PmergeMe is launched with 3000 separate command‑line arguments (plus argv[0] which is the program name).
+
+	So, each number is an individual argument, not one big string.

@@ -1,52 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
+/*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/24 17:00:10 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/24 17:04:34 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BITCOINEXCHANGE_HPP
-#define BITCOINEXCHANGE_HPP
+#ifndef PMERGEME_HPP
+#define PMERGEME_HPP
 
 #include <iostream>
 #include <string>
-#include <fstream>
-#include <map>
-#include <cstdlib> // atoi
-#include <sstream> // stringstream
-#include <limits>
+#include <vector>
+#include <deque>
 
+#define RED "\033[31m"
 #define YELLOW "\033[33m"
 #define RESET "\033[0m"
 
-class BitcoinExchange
+class PmergeMe
 {
 	private:
-		// stores date, exchange rate pairs
-		std::map <std::string, float> _csvDatabase;
+		std::vector <int> _intVector;
+		std::deque <int> _intDeque;
 
 	public:
 		// OCF
-		BitcoinExchange();
-		BitcoinExchange(const BitcoinExchange &src);
-		BitcoinExchange &operator=(const BitcoinExchange &src);
-		~BitcoinExchange();
+		PmergeMe();
+		PmergeMe(const PmergeMe &src);
+		PmergeMe &operator=(const PmergeMe &src);
+		~PmergeMe();
 
-		void evaluate(std::string txtFile);
+		void sort(char **av);
 
 		// exception classes are typically nested classes
-		class CsvFileOpenException : public std::exception
-		{
-			public:
-				const char *what() const throw();
-		};
-
-		class InputFileOpenException : public std::exception
+		class InvalidOperandException : public std::exception
 		{
 			public:
 				const char *what() const throw();
