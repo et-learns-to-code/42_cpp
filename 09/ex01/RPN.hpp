@@ -1,53 +1,63 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
+/*   RPN.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/24 12:56:01 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/24 14:01:24 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BITCOINEXCHANGE_HPP
-#define BITCOINEXCHANGE_HPP
+#ifndef RPN_HPP
+#define RPN_HPP
 
 #include <iostream>
 #include <string>
-#include <fstream>
-#include <map>
-#include <cstdlib> // atoi
-#include <sstream> // stringstream
-#include <limits>
+#include <sstream> // istringstream
+#include <stack>
 
 #define RED "\033[31m"
 #define YELLOW "\033[33m"
 #define RESET "\033[0m"
 
-class BitcoinExchange
+class RPN
 {
 	private:
-		// stores date, exchange rate pairs
-		std::map <std::string, float> _csvDatabase;
+		std::stack <int> _intStack;
+
+		void performOperation(char c);
 
 	public:
 		// OCF
-		BitcoinExchange();
-		BitcoinExchange(const BitcoinExchange &src);
-		BitcoinExchange &operator=(const BitcoinExchange &src);
-		~BitcoinExchange();
+		RPN();
+		RPN(const RPN &src);
+		RPN &operator=(const RPN &src);
+		~RPN();
 
-		void evaluate(std::string txtFile);
+		void calculate(std::string expression);
 
 		// exception classes are typically nested classes
-		class CsvFileOpenException : public std::exception
+		class InvalidOperandException : public std::exception
 		{
 			public:
 				const char *what() const throw();
 		};
 
-		class InputFileOpenException : public std::exception
+		class IncompleteExpressionException : public std::exception
+		{
+			public:
+				const char *what() const throw();
+		};
+
+		class InsufficientOperandsException : public std::exception
+		{
+			public:
+				const char *what() const throw();
+		};
+
+		class DivisionByZeroException : public std::exception
 		{
 			public:
 				const char *what() const throw();

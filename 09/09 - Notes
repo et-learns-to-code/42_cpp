@@ -1,0 +1,7 @@
+EX01
+
+Type 				| Direction 						| Typical Use 																						| Constructors
+std::istringstream 	| Input‑only (read from the string) | Treat a string as a source you can extract formatted data from (just like reading from std::cin). | Takes an optional initial std::string.
+std::stringstream 	| Bidirectional (read and write) 	| A single object that can both insert into an internal string buffer and later extract from it. 	| Same constructors as istringstream, but you can also insert with <<.
+std::ostringstream 	| Output‑only (write to the string) | Build a string with the << operator, then call .str() to get the accumulated text. 				| Similar to ostringstream.
+

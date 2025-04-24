@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/23 21:09:50 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/24 12:56:53 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ BitcoinExchange::BitcoinExchange()
 			lineCount++;
 			continue;
 		}
-		csvDatabase[date] = exchangeRateFloat;
+		_csvDatabase[date] = exchangeRateFloat;
 		lineCount++;
 	}
 }
@@ -177,7 +177,7 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
 	// std::cout << "BitcoinExchange object copy assignment operator called." << std::endl;
 	// check for self-assignment
 	if (this != &src)
-		this->csvDatabase = src.csvDatabase;
+		this->_csvDatabase = src._csvDatabase;
 	return *this;
 }
 
@@ -187,19 +187,19 @@ BitcoinExchange::~BitcoinExchange()
 	// std::cout << "BitcoinExchange object destructor called." << std::endl;
 }
 
-float getExchangeRate(std::string date, std::map<std::string, float> csvDatabase)
+float getExchangeRate(std::string date, std::map<std::string, float> _csvDatabase)
 {
 	// std::lower_bound returns an iterator pointing to the first element in the range [first,last)
 	// which does not compare less than val (i.e. element is >= val).
 	// Subject: If the date used in the input does not exist in your DB then you
 	// 			must use the closest date contained in your DB. Be careful to use the
 	// 			lower date and not the upper one.
-	std::map<std::string, float>::iterator it = csvDatabase.lower_bound(date);
+	std::map<std::string, float>::iterator it = _csvDatabase.lower_bound(date);
 	// it->first (key - date); it->second (value - exchange rate)
-	if (it == csvDatabase.end() || it->first != date)
+	if (it == _csvDatabase.end() || it->first != date)
 	{
 		// this means the date precedes the first entry in the csv file.
-		if (it == csvDatabase.begin())
+		if (it == _csvDatabase.begin())
 			return 0;
 		// these conditions indicate we have the upper date so we move the iterator backwards
 		// to get the lower date.
@@ -262,7 +262,7 @@ void BitcoinExchange::evaluate(std::string filename)
 			lineCount++;
 			continue;
 		}
-		float result = getExchangeRate(date, csvDatabase) * valueFloat;
+		float result = getExchangeRate(date, _csvDatabase) * valueFloat;
 		std::cout << date << " => " << valueFloat << " = " << result << std::endl;
 		lineCount++;
 	}
