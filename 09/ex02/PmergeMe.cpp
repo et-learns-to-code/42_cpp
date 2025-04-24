@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/24 17:06:31 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/24 17:17:31 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ PmergeMe::~PmergeMe()
 	// std::cout << "PmergeMe object destructor called." << std::endl;
 }
 
-void PmergeMe::sort(char **av)
+void PmergeMe::compare(char **av)
 {
+
+
 
 }
 

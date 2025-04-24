@@ -46,3 +46,196 @@ Final effect on ./PmergeMe
 	./PmergeMe is launched with 3000 separate command‑line arguments (plus argv[0] which is the program name).
 
 	So, each number is an individual argument, not one big string.
+
+
+FORD JOHNSON ALGORITHM
+
+Binary search is the “open a phone‑book in the middle, see which half your target is in, discard the other half, repeat” technique.
+
+1⟩ What is the Jacobsthal sequence?
+
+	It’s an integer sequence defined by
+
+	J0 = 0, J1 ​= 1, Jn ​= J(n−1) ​+ 2J(n−2)  ​(n≥2)
+	First terms:
+	n : 0 1 2 3 4 5  6   7    8    …
+	J : 0 1 1 3 5 11 21  43   85   …
+
+	Properties:
+
+	Each term is ⌈⅔ · (2ⁿ – 1)⌉, so it grows a bit slower than 2ⁿ.
+
+	Closely linked to minimal‑comparison insertion schedules.
+
+2 ⟩ How Ford‑Johnson uses it
+
+	Ford‑Johnson / Merge‑Insertion needs to re‑insert the “small” partners of the pairs into the already‑sorted “big” list while minimising comparisons.
+	To do that it chooses an insertion order so that every binary‑search interval is of length 2ᵏ – 1 (where all outcomes take exactly k comparisons).
+
+	Knuth showed that the indices of the small elements should be visited in the order
+
+	4, 3,   6, 5,   11,10,9,8,7,   22,21,…      ← indexes in x_i / y_i notation
+	The group boundaries 2, 4, 10, 22, … are exactly the Jacobsthal numbers shifted:
+
+	group sizes : 2, 2, 6, 10, 22, 42, …   (size_i = J_{i+3} – 1)
+
+	Because the cumulative sizes hit 2, 4, 8, 16, 32, … = 2^k,
+	each insertion gets a binary‑search window of (2ᵏ – 1) elements, the sweet spot where every path through the search tree is the same length.
+
+
+~~~
+
+### Why bother with that strange Jacobsthal‑style order?
+
+Short answer:
+	It is not about probability; it is a deterministic trick to guarantee the absolute minimum possible number of comparisons for every possible input.
+
+## 1. The core dilemma
+
+	You already spent one comparison inside each pair (big vs small).
+
+	Now you must insert the small elements back into the sorted big list.
+
+	A naïve “insert them in the original left‑to‑right order” forces some of the insertions to search windows of many different sizes, and the worst insertions may cost ⌈log₂ m⌉ comparisons where m varies widely.
+
+	That inflates the global “worst‑case comparison count.”
+
+## 2. Why 2ᵏ − 1 windows are special
+
+	If a binary search window has length exactly 2ᵏ − 1, every path through the search tree uses k comparisons, no matter where the item lands.
+	For window lengths that are not of this form, at least one insertion path uses k + 1 comparisons.
+
+	<img alt="binary search tree lengths" src="https://i.imgur.com/p0dSb4L.png" width="320">
+	Left: 7 = 2³ − 1 → all leaves depth = 3.
+	Right: 6 elements → some leaves depth 3, one leaf depth 2.
+
+	So, to minimise the overall worst‑case total, Ford‑Johnson wants each insertion window to be 1 less than a power of two.
+
+## 3. How Jacobsthal groups achieve that
+
+	The cumulative sizes of the groups are 2, 4, 8, 16, … = 2ᵏ.
+
+	After inserting all smalls from the previous groups, the current big prefix you’re extending is length 2ᵏ − 1.
+
+	Each new insertion from the next group is restricted to that prefix (up to its partner element), so its search cost is exactly k comparisons.
+
+	The Jacobsthal formula 0, 1, 1, 3, 5, 11, … produces the group‑size sequence
+	2, 2, 6, 10, 22, … which is precisely what makes those prefix lengths line up with the sequence 2ᵏ − 1 at every stage.
+
+## 4. Deterministic optimality, not probability
+
+	Nothing is random or probabilistic:
+
+	For every permutation of n distinct keys, following this order yields the minimal worst‑case comparison count
+	C(n) ≈ n log₂ n − 1.44 n
+	proven optimal by Knuth.
+
+	If you insert in any other fixed order, some input will take at least one extra comparison.
+
+~~~
+
+Ford-Johnson Sorting: Group Insertion and Comparisons
+
+The maximum number of comparisons does indeed follow a structured pattern, but let's be careful to properly explain how the groupings and comparisons work in Ford-Johnson.
+
+Groupings: The smalls array is split into smaller subarrays (called groups), and these groups are inserted into the already sorted bigs array. The key idea here is that each group corresponds to powers of 2 (2, 4, 8, 16, ...), and the groups are inserted in such a way that the cost for insertion within each group is minimized.
+
+Insertion Order: The Ford-Johnson algorithm uses a specific order for inserting the elements within each group. This order is designed to balance the number of comparisons needed to insert each element into its correct position within the already sorted portion of the array (bigs). The idea is that each element, when inserted, will require fewer comparisons, which is achieved by the reverse order of insertion within each group.
+
+Comparisons: The maximum number of comparisons within a group is typically the number of comparisons needed for the longest binary search within the group. In Ford-Johnson, when you're inserting an element from the smalls array into the bigs array, the maximum number of comparisons is related to the length of the current "prefix" of the bigs array that you're working with, which is always a power of 2 minus 1 (i.e., 2^k - 1).
+
+Now, let's carefully walk through an example of Ford-Johnson sorting again, with the correct approach:
+We'll use the same sequence of numbers:
+
+[9, 6, 4, 3, 8, 1, 7, 2, 5]
+We’ll split the sequence into smalls and bigs:
+
+bigs :  9  4  8  7          → [9 4 8 7]
+smalls: 6  3  1  2          → [6 3 1 2]
+
+Step-by-step explanation:
+
+Step 1: Insert pairs of smalls into bigs
+
+	The first insertion step starts by pairing the smalls elements. In this case, the first group has pairs like (9, 6), (4, 3), (8, 1), (7, 2), and we will be inserting these in a specific order (using the reverse order within each group). We'll work with the Ford-Johnson method where the insertions are done in a way that minimizes comparisons.
+
+	After sorting each pair of elements ((9,6), (4,3), (8,1), (7,2)), we get a partially sorted list.
+
+Step 2: Reverse order of insertion within each group
+
+	Once we split and reverse the groups of numbers, the insertion order becomes something like:
+
+	y4  y3      → values 2 then 1
+
+Step 3: Binary search insertion
+
+	As elements from the smalls array are inserted into the sorted portion of the array (bigs), the binary search ensures that each element is inserted with the minimal number of comparisons. The insertion window corresponds to a prefix of bigs whose length is a power of 2 minus 1 (i.e., 2^k - 1).
+
+	Key insight:
+	The maximum number of comparisons within a group corresponds to the length of the largest prefix being considered at each step. This is fixed for each group, and for each group, the binary search requires at most k comparisons where the window size is 2^k - 1.
+
+	Clarification: Are the maximum comparisons the same within each group or across the entire array?
+	Within each group: The maximum number of comparisons required for inserting a single element within a group is based on the group size. For a group of size 2^k, the binary search will require at most k comparisons, as the prefix length is 2^k - 1.
+
+	Across the entire smalls array: The maximum comparisons across all elements in the smalls array would vary depending on how many elements are in each group and how the groups are processed. However, the goal of the Ford-Johnson algorithm is to ensure that the cost of insertion remains minimal by controlling the window size during each binary search, which leads to fewer comparisons as elements are inserted.
+
+Conclusion:
+
+	To answer your question about whether the maximum number of comparisons is the same within each group or across the entire array:
+
+	The maximum comparisons within each group follow the pattern of 2^k - 1 elements, with the binary search requiring k comparisons for each element inserted.
+
+	Across the entire array, Ford-Johnson aims to keep the total number of comparisons minimal by structuring the insertions in a way that balances the number of comparisons for each group.
+
+~~~
+
+MY UNDERSTANDING
+
+BINARY TREE TO VISUALIZE BINARY SEARCH
+
+	I have some intuition for what we've discussed.
+
+	I'm imagining a binary tree that contains the sorted sequence, and the smalls integer is waiting to be inserted into the tree. A binary tree here because binary search is performed, which always halves the target range.
+
+	Each time a small number is inserted, the tree grows, but it tries to grow symmetrically.
+
+	2, 4, 8 ,16 are the numbers because that is how a binary tree would be shaped.
+	Each node would sprout two children.
+
+	So each group can be thought of as filling another layer of the tree.
+
+	Ignore the tree rearrangement each time a number is added. We always just imagine the balanced  tree that has already rearranged itself.
+
+	There is a maximum depth of the tree and that is the maximum possible number of comparisons for the small to be inserted to its correct position. This is why each group has the same maximum possible comparisons because they are reaching that same depth of the tree in the worst case.
+
+WHY INDEXES NEED TO BE REVERSED IN EACH GROUP
+
+	Each time a new number is sorted, the window size (search space) + 1.
+	The window size is all the numbers up until before the index.
+	If we go through the index in ascending order, index + 1 each time, so the window size also +1.
+	If we go through the index in reverse order, index - 1, so the window size - 1.
+
+	In reverse order, the increase in window size from adding a number is countered by the decreasing of window size caused by reducing the index. This balances the number of comparisons by making the window size consistent in a group.
+
+	k is the depth of the tree. The reason groups follow the increment of 2^k, is because the window size will always increase (cannot be countered by reversal of index) if we are to add a new layer to the tree.
+
+JACOBTHAL SEQUENCE
+
+	The sequence starts with 0 and 1, then each following number is found by adding the number before it to twice the number before that. The first Jacobsthal numbers are:
+
+	0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461, 10923, 21845, 43691, 87381, 174763, 349525, …
+
+	Our group size for the smalls segmentation is the double of that:
+
+	0, 2, 2, 6, 10, 22, 42
+
+	If you pair up adjacent groups, their sums follow the sequence:
+
+	2, 4, 8, 16, 32, 64 which is 2^x with x++ each time.
+
+(There are no elements y1 or y2 because x1 and x2 were paired with each other.)
+
+	This means once bigs is sorted. Add the small of the smallest big to the start of the bigs sequence.
+	Then only start indexing bigs.
+	Since x1 and x2 were originally a pair and already in their right positions, so the binary insertion rightfully
+	starts from index 3.
