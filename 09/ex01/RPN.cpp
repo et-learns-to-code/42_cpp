@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/24 14:05:04 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/24 16:32:14 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ void RPN::performOperation(char c)
 	if (_intStack.size() < 2)
 		throw InsufficientOperandsException();
 	// read the value
-	int rhs = _intStack.top();
+	long rhs = _intStack.top();
 	// remove it from the stack
 	_intStack.pop();
-	int lhs = _intStack.top();
+	long lhs = _intStack.top();
 	_intStack.pop();
-	int result = 0;
+	long result = 0;
 	if (c == '+')
 		result = lhs + rhs;
 	else if (c == '-')
@@ -64,6 +64,8 @@ void RPN::performOperation(char c)
 			throw DivisionByZeroException();
 		result = lhs / rhs;
 	}
+	if (result < std::numeric_limits<int>::min() || result > std::numeric_limits<int>::max())
+		throw IntegerOverflowException();
 	_intStack.push(result);
 	// std::cout << lhs << " " << c << " " << rhs << " = " << result << std::endl;
 }
@@ -109,4 +111,9 @@ const char *RPN::InsufficientOperandsException::what() const throw()
 const char *RPN::DivisionByZeroException::what() const throw()
 {
 	return "Error: Division by zero.";
+}
+
+const char *RPN::IntegerOverflowException::what() const throw()
+{
+	return "Error: Integer overflow.";
 }

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/24 14:01:24 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/24 16:29:11 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <string>
 #include <sstream> // istringstream
 #include <stack>
+#include <limits>
 
 #define RED "\033[31m"
 #define YELLOW "\033[33m"
@@ -58,6 +59,12 @@ class RPN
 		};
 
 		class DivisionByZeroException : public std::exception
+		{
+			public:
+				const char *what() const throw();
+		};
+
+		class IntegerOverflowException : public std::exception
 		{
 			public:
 				const char *what() const throw();
