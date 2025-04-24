@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:30:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/18 15:25:10 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/25 06:57:19 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void Span::addNumber(int number)
 void Span::sortVector()
 {
 	// std::sort sorts the elements in the range [first, last) in non-descending order
-	// std::unique moves duplicates to the end and returns an iterator to the new logical end.
+	// std::unique moves consecutive duplicates to the end and returns an iterator to the new logical end.
 	// erase(...) trims the vector so it only keeps unique values.
 	// erase([first,last)) will trim a range of elements.
 	// begin() and end() are always updated after a std::vector::erase().

@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/24 17:04:34 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/25 07:46:06 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <deque>
+#include <climits> // INT_MAX, INT_MIN
 
 #define RED "\033[31m"
 #define YELLOW "\033[33m"
@@ -28,6 +29,8 @@ class PmergeMe
 		std::vector <int> _intVector;
 		std::deque <int> _intDeque;
 
+		void createVector(char **av);;
+
 	public:
 		// OCF
 		PmergeMe();
@@ -35,13 +38,41 @@ class PmergeMe
 		PmergeMe &operator=(const PmergeMe &src);
 		~PmergeMe();
 
-		void sort(char **av);
+		void compare(char **av);
 
 		// exception classes are typically nested classes
-		class InvalidOperandException : public std::exception
+		class ParsingException : public std::exception
+		{
+			protected:
+				std::string _message;
+
+			public:
+				ParsingException(std::string err);
+				const char *what() const throw();
+		};
+		
+		class InvalidNumberException : public ParsingException
 		{
 			public:
-				const char *what() const throw();
+				InvalidNumberException(std::string number);
+		};
+		
+		class IntegerOverflowException : public ParsingException
+		{
+			public:
+				IntegerOverflowException(std::string number);
+		};
+		
+		class NegativeNumberException : public ParsingException
+		{
+			public:
+				NegativeNumberException(std::string number);
+		};
+		
+		class DuplicateNumberException : public ParsingException
+		{
+			public:
+				DuplicateNumberException(std::string number);
 		};
 };
 
