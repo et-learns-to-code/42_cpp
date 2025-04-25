@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/25 13:34:44 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/25 15:12:08 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,46 +199,17 @@ void createFinalVector(const std::vector< std::pair<int, int> > &pairVector, std
 	std::cout << "\n";
 }
 
-	//DELETE
-	std::vector<int> generateOrderedSequence(int n) {
-    std::vector<int> result;
-    std::vector<int> groupSizes = {2}; // Start with the initial group size
-
-    // Generate group sizes
-    while (result.size() < n) {
-        int lastSize = groupSizes.back();
-        if (groupSizes.size() == 1) {
-            groupSizes.push_back(lastSize); // Second group is also 2
-        } else {
-            int secondLastSize = groupSizes[groupSizes.size() - 2];
-            groupSizes.push_back(lastSize + secondLastSize);
-        }
-    }
-
-    int currentIndex = 1;
-    for (size_t i = 0; i < groupSizes.size() && result.size() < n; ++i) {
-        int groupSize = groupSizes[i];
-        int groupEndIndex = currentIndex + groupSize - 1;
-
-        // Add elements to the result in reverse order within the group
-        for (int j = groupEndIndex; j >= currentIndex && result.size() < n; --j) {
-            result.push_back(j);
-        }
-        currentIndex = groupEndIndex + 1;
-    }
-
-    return result;
-}
-
 // n is the size of the paired vector.
 void generateIndexSequence(int n, std::vector<int> &index)
 {
 	std::vector<int> groupSize;
 	groupSize.push_back(2);
+	// first two indexes ignored
+	int indexesNeeded = n - 2;
 	int totalGroupSize = 2;
 	int power = 2;
 	
-	while (totalGroupSize < n)
+	while (totalGroupSize < indexesNeeded)
 	{
 		// Adjacent group sizes are a rising power of 2 sequence.
 		// 2, 2, 6, 10
@@ -246,20 +217,29 @@ void generateIndexSequence(int n, std::vector<int> &index)
 		// 2 + 6 = 8 = 2^3
 		// 6 + 10 = 16 = 2^4
 		int nextGroupSize = std::pow(2, power) - groupSize.back();
-		if (totalGroupSize + nextGroupSize < n - 1)
+		if (totalGroupSize + nextGroupSize < indexesNeeded)
 			groupSize.push_back(nextGroupSize);
-		// if nextGroupSize will exceed the number of indexes needed, just truncate the last group.
+		// truncate last group to fit wihin n indexing
 		else
-		{
-			groupSize.push_back((n - 1) - totalGroupSize);
-			break;
-		}
+			groupSize.push_back(indexesNeeded - totalGroupSize);
 		totalGroupSize += nextGroupSize;
 		power++;
 	}
+	std::vector<int>::iterator it;
+	// first two indexes are ignored; size will be >= 1;
+	int i = 2;
+	for (it = groupSize.begin(); it != groupSize.end(); it++)
+	{
+		for (int size = *it; size > 0; size--)
+			index.push_back(i + size);
+		i += *it;
+	}
 	
-	
-
+	// DEBUG PRINT
+	std::cout << "Index sequence: ";
+	for (std::vector<int>::iterator testIt = index.begin(); testIt != index.end(); testIt++)
+		std::cout << *testIt << " ";
+	std::cout << "\n";
 }
 
 
@@ -267,6 +247,8 @@ void generateIndexSequence(int n, std::vector<int> &index)
 void insertSmallerIntegers(const std::vector< std::pair<int, int> > &pairVector, std::vector<int> &finalVector)
 {
 	std::vector<int> index;
+
+	(void) finalVector;
 	
 	generateIndexSequence(pairVector.size(), index);
 	
@@ -309,8 +291,8 @@ void PmergeMe::sortVector()
 	createFinalVector(pairVector, finalVector);
 	insertSmallerIntegers(pairVector, finalVector);
 
-	if (straggler > 0)
-		binaryInsert(straggler, finalVector);
+	// if (straggler > 0)
+	// 	binaryInsert(straggler, finalVector);
 }
 
 void PmergeMe::compare(char **av)
