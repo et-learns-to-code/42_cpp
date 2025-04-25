@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/25 08:12:07 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/25 10:31:54 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <vector>
 #include <deque>
 #include <climits> // INT_MAX, INT_MIN
-#include <algorithm> // std::find()
+#include <algorithm> // std::find(), std::swap()
 
 #define RED "\033[31m"
 #define YELLOW "\033[33m"
@@ -31,6 +31,7 @@ class PmergeMe
 		std::deque <int> _intDeque;
 
 		void createVector(char **av);
+		void sortVector();
 
 	public:
 		// OCF
@@ -63,12 +64,6 @@ class PmergeMe
 		{
 			public:
 				IntegerOverflowException(std::string number);
-		};
-		
-		class NegativeNumberException : public ParsingException
-		{
-			public:
-				NegativeNumberException(std::string number);
 		};
 		
 		class DuplicateNumberException : public ParsingException
