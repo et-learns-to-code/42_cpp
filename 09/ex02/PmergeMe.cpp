@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/25 15:12:08 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/25 17:20:37 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ void PmergeMe::createVector(char **av)
 		av++;
 	}
 	
-	// DEBUG PRINT	
-	for (std::vector<int>::iterator it = _intVector.begin(); it != _intVector.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	// // DEBUG PRINT	
+	// for (std::vector<int>::iterator it = _intVector.begin(); it != _intVector.end(); it++)
+	// 	std::cout << *it << " ";
+	// std::cout << "\n";
 }
 
 // Create the paired vector from the original vector and swap the numbers in each pair so that the
@@ -131,11 +131,11 @@ void createPairVector(const std::vector<int> &_intVector, std::vector< std::pair
 			std::swap(pairIt->first, pairIt->second);
 	}
 
-	// DEBUG PRINT
-	std::cout << "Pair vector (big-sorted): ";
-	for (std::vector< std::pair<int, int> >::iterator testIt = pairVector.begin(); testIt != pairVector.end(); testIt++)
-		std::cout << testIt->first << " " << testIt-> second << " ";
-	std::cout << "\n";
+	// // DEBUG PRINT
+	// std::cout << "Pair vector (big-sorted): ";
+	// for (std::vector< std::pair<int, int> >::iterator testIt = pairVector.begin(); testIt != pairVector.end(); testIt++)
+	// 	std::cout << testIt->first << " " << testIt-> second << " ";
+	// std::cout << "\n";
 }
 
 void merge(std::vector< std::pair<int, int> > &pairVector, int left, int mid, int right)
@@ -192,24 +192,24 @@ void createFinalVector(const std::vector< std::pair<int, int> > &pairVector, std
 		// copying over the bigger integer of all the other pairs
 		finalVector.push_back(pairIt->first);
 	
-	// DEBUG PRINT
-	std::cout << "Final vector (before insertion): ";
-	for (std::vector<int>::iterator testIt = finalVector.begin(); testIt != finalVector.end(); testIt++)
-		std::cout << *testIt << " ";
-	std::cout << "\n";
+	// // DEBUG PRINT
+	// std::cout << "Final vector (before insertion): ";
+	// for (std::vector<int>::iterator testIt = finalVector.begin(); testIt != finalVector.end(); testIt++)
+	// 	std::cout << *testIt << " ";
+	// std::cout << "\n";
 }
 
+// The index generated here is an array index. The value will be between 1 and (n - 1).
+// We don't need index 0 because pair[0] has already been sorted.
 // n is the size of the paired vector.
 void generateIndexSequence(int n, std::vector<int> &index)
 {
 	std::vector<int> groupSize;
 	groupSize.push_back(2);
-	// first two indexes ignored
-	int indexesNeeded = n - 2;
 	int totalGroupSize = 2;
 	int power = 2;
-	
-	while (totalGroupSize < indexesNeeded)
+
+	while (totalGroupSize < n)
 	{
 		// Adjacent group sizes are a rising power of 2 sequence.
 		// 2, 2, 6, 10
@@ -217,41 +217,61 @@ void generateIndexSequence(int n, std::vector<int> &index)
 		// 2 + 6 = 8 = 2^3
 		// 6 + 10 = 16 = 2^4
 		int nextGroupSize = std::pow(2, power) - groupSize.back();
-		if (totalGroupSize + nextGroupSize < indexesNeeded)
+		if (totalGroupSize + nextGroupSize < n)
 			groupSize.push_back(nextGroupSize);
 		// truncate last group to fit wihin n indexing
 		else
-			groupSize.push_back(indexesNeeded - totalGroupSize);
+			// -1 because of array indexing
+			groupSize.push_back(n - 1 - totalGroupSize);
 		totalGroupSize += nextGroupSize;
 		power++;
 	}
-	std::vector<int>::iterator it;
-	// first two indexes are ignored; size will be >= 1;
-	int i = 2;
-	for (it = groupSize.begin(); it != groupSize.end(); it++)
+	int baseIndex = 0;
+	for (size_t sizeIt = 0; sizeIt < groupSize.size(); sizeIt++)
 	{
-		for (int size = *it; size > 0; size--)
-			index.push_back(i + size);
-		i += *it;
+		for (int size = groupSize[sizeIt]; size > 0; size--)
+			// size will be >= 1 so index will also be >=1;
+			index.push_back(baseIndex + size);
+		baseIndex += groupSize[sizeIt];
 	}
 	
-	// DEBUG PRINT
-	std::cout << "Index sequence: ";
-	for (std::vector<int>::iterator testIt = index.begin(); testIt != index.end(); testIt++)
-		std::cout << *testIt << " ";
-	std::cout << "\n";
+	// should generate 1-99 sequence for n = 100: 
+	// 2 1 4 3 10 9 8 7 6 5 20 19 18 17 16 15 14 13 12 11 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 
+	// 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 
+	// 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85
+	
+	// // DEBUG PRINT
+	// std::cout << "Index sequence: ";
+	// for (std::vector<int>::iterator testIt = index.begin(); testIt != index.end(); testIt++)
+	// 	std::cout << *testIt << " ";
+	// std::cout << "\n";
 }
 
-
-// Binary insetion of the smaller integers to the final sorted vector in the index order of the reversed Jacobsthal sequence.
+// Binary search insertion of the smaller integers to the final sorted vector in the index order of the reversed and shifted Jacobsthal sequence.
 void insertSmallerIntegers(const std::vector< std::pair<int, int> > &pairVector, std::vector<int> &finalVector)
 {
 	std::vector<int> index;
-
-	(void) finalVector;
 	
 	generateIndexSequence(pairVector.size(), index);
-	
+
+	for (size_t i = 0 ; i < index.size(); i++)
+	{
+		int integer =  pairVector[index[i]].second;
+		int integerPair = pairVector[index[i]].first;
+		// Since the smaller integer will definitely be smaller than its pair, the search space is narrowed 
+		// to right before its pair's position in the final vector.
+		std::vector<int>::iterator pairPos = std::find(finalVector.begin(), finalVector.end(), integerPair);
+		// binary search for the insertion point with std::lower_bound()
+		std::vector<int>::iterator insertPos = std::lower_bound(finalVector.begin(), pairPos, integer);
+		finalVector.insert(insertPos, integer);
+		
+		// DEBUG PRINT
+		std::cout << "Integer added: " << integer << " from index " << index[i] << "\n";
+		std::cout << "Final vector (after insertion): ";
+		for (std::vector<int>::iterator testIt = finalVector.begin(); testIt != finalVector.end(); testIt++)
+			std::cout << *testIt << " ";
+		std::cout << "\n";
+	}
 }
 
 // Ford Johnson Algorithm
@@ -262,8 +282,8 @@ void insertSmallerIntegers(const std::vector< std::pair<int, int> > &pairVector,
 // 4) Copy over the first pair to the final vector and swap their places so that they are in ascending order. 
 //    The final vector will contain the sorted sequence.
 // 5) Copy over the bigger number of the remaining pairs to fill out the sorted sequence in the final vector.
-// 6) The smaller number of each pair will now be binary inserted to the final vector following the index sequence
-//    of the shifted and reversed Jacobsthal numbers (for index 3 onwards: 4, 3, 6, 5, 11, 10 ....).
+// 6) The smaller number of each pair will now be binary search inserted to the final vector following the index 
+//    sequence of the shifted and reversed Jacobsthal numbers.
 // 7) Insert the straggler.
 // Containers needed: Original vector (single) -> Paired vector (single) -> Final vector (single)
 // Merge-insertion because:
@@ -280,19 +300,30 @@ void PmergeMe::sortVector()
 	// handles 3)
 	mergeSortPairVector(pairVector, 0, pairVector.size());
 
-	// DEBUG PRINT
-	std::cout << "Pair vector (ascending and big-sorted): ";
-	for (std::vector< std::pair<int, int> >::iterator testIt = pairVector.begin(); testIt != pairVector.end(); testIt++)
-		std::cout << testIt->first << " " << testIt-> second << " ";
-	std::cout << "\n";	 
+	// // DEBUG PRINT
+	// std::cout << "Pair vector (ascending and big-sorted): ";
+	// for (std::vector< std::pair<int, int> >::iterator testIt = pairVector.begin(); testIt != pairVector.end(); testIt++)
+	// 	std::cout << testIt->first << " " << testIt-> second << " ";
+	// std::cout << "\n";	 
 	
 	std::vector<int> finalVector;
 	// handles 4) and 5)
 	createFinalVector(pairVector, finalVector);
+	// handles 6)
 	insertSmallerIntegers(pairVector, finalVector);
-
-	// if (straggler > 0)
-	// 	binaryInsert(straggler, finalVector);
+	
+	// handles 7)
+	if (straggler >= 0)
+	{
+		std::vector<int>::iterator stragglerPos = std::lower_bound(finalVector.begin(), finalVector.end(), straggler);
+		finalVector.insert(stragglerPos, straggler);
+		
+		// DEBUG PRINT
+		std::cout << "Final vector (after inserting straggler): ";
+		for (std::vector<int>::iterator testIt = finalVector.begin(); testIt != finalVector.end(); testIt++)
+			std::cout << *testIt << " ";
+		std::cout << "\n";
+	}
 }
 
 void PmergeMe::compare(char **av)
