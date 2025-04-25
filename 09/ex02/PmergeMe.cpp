@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/25 07:52:44 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/25 08:24:44 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,34 +69,45 @@ std::string trim(const std::string& input)
 	return input.substr(start, end - start + 1);
 }
 
+
+// 1) trim the string
+// 2) check that it only contains digits and is a positive integer (no '-' allowed)
+// 3) convert to long and test that the integer does not overflow
+// 4) check for existing duplicates in the vector
+// 5) add the number (as an integer) to the vector
 void PmergeMe::createVector(char **av)
 {
-	while (av)
+	while (*av)
 	{
 		std::string str(*av);
 		str = trim(str);
+		// hasOnlyDigits() will flag negative numbers too because of their negative sign
 		if (!hasOnlyDigits(str))
 			throw InvalidNumberException(str);
-		// The third parameter is the number base.
-		// '10' indicates decimal.
+		// The third parameter is the number base. '10' indicates decimal.
 		// strtol is called to check overflow before static_cast to int.
 		long testInt = strtol(str.c_str(), NULL, 10);
 		if (testInt > INT_MAX || testInt < INT_MIN)
 			throw IntegerOverflowException(str);
-
-
+		// std::find() returns an iterator to the found element or vec.end() if not found.
+		if (std::find(_intVector.begin(), _intVector.end(), testInt) != _intVector.end())
+			throw DuplicateNumberException(str);
+		_intVector.push_back(static_cast<int>(testInt));		
 		av++;
 	}	
+	for (std::vector<int>::iterator it = _intVector.begin(); it != _intVector.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
 }
 
 void PmergeMe::compare(char **av)
 {	
-	createVector();
-
-
+	createVector(av);
 }
 
 PmergeMe::ParsingException::ParsingException(std::string err) : _message(err) {}
+
+PmergeMe::ParsingException::~ParsingException() throw() {}
 
 const char *PmergeMe::ParsingException::what() const throw()
 {
