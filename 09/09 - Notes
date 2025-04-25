@@ -237,5 +237,19 @@ JACOBTHAL SEQUENCE
 
 	This means once bigs is sorted. Add the small of the smallest big to the start of the bigs sequence.
 	Then only start indexing bigs.
-	Since x1 and x2 were originally a pair and already in their right positions, so the binary insertion rightfully
+	Since x1 and x2 were originally a pair and already in their right positions, so the binary search insertion rightfully
 	starts from index 3.
+
+~~~
+
+🔍 What is the baseline for Ford-Johnson?
+The Ford-Johnson algorithm's claim to fame is not its raw runtime speed in practice, but this:
+
+💡 It performs the minimal number of comparisons required to sort n elements — or very close to it.
+
+So:
+
+✅ Theoretical focus: Number of comparisons.
+
+❌ Not the goal: Being faster in practice than standard sort algorithms (like std::sort), which are optimized for real-world usage, cache locality, and low overhead.
+
