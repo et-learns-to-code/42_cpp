@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/25 12:05:08 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/25 13:34:44 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void PmergeMe::createVector(char **av)
 
 // Create the paired vector from the original vector and swap the numbers in each pair so that the
 // bigger number occupies pair.first.
-void createPairVector(std::vector<int> &_intVector, std::vector< std::pair<int, int> > &pairVector, int &straggler)
+void createPairVector(const std::vector<int> &_intVector, std::vector< std::pair<int, int> > &pairVector, int &straggler)
 {
 	std::vector<int>::const_iterator it = _intVector.begin();
 	// add integer pair to pair vector
@@ -131,7 +131,7 @@ void createPairVector(std::vector<int> &_intVector, std::vector< std::pair<int, 
 			std::swap(pairIt->first, pairIt->second);
 	}
 
-	//DEBUG PRINT
+	// DEBUG PRINT
 	std::cout << "Pair vector (big-sorted): ";
 	for (std::vector< std::pair<int, int> >::iterator testIt = pairVector.begin(); testIt != pairVector.end(); testIt++)
 		std::cout << testIt->first << " " << testIt-> second << " ";
@@ -164,7 +164,7 @@ void merge(std::vector< std::pair<int, int> > &pairVector, int left, int mid, in
 		pairVector[left + k] = temp[k];
 }
 
-// Performs recursive merge sort on the paired vector.
+// Performs recursive merge sort on the paired vector to sort the bigger integers in ascending order.
 // Paired vector is recursively split into half until each segment has only one pair.
 // Merge function will reassemble the segments in ascending order of pair.first.
 void mergeSortPairVector(std::vector< std::pair<int, int> > &pairVector, int left, int right)
@@ -177,6 +177,99 @@ void mergeSortPairVector(std::vector< std::pair<int, int> > &pairVector, int lef
 	mergeSortPairVector(pairVector, left, mid);
 	mergeSortPairVector(pairVector, mid, right);
 	merge(pairVector, left, mid, right);
+}
+
+// Adds the first pair and copies over all the sorted bigger integers to the final sorted vector.
+void createFinalVector(const std::vector< std::pair<int, int> > &pairVector, std::vector<int> &finalVector)
+{
+	// adding the smaller integer of the first pair in the paired vector sequence
+	finalVector.push_back(pairVector[0].second);
+	// adding the bigger integer of the first pair in the paired vector sequence
+	finalVector.push_back(pairVector[0].first);
+	std::vector< std::pair<int, int> >::const_iterator pairIt;
+	// ++begin() to skip past the first pair which has already been added
+	for (pairIt = ++pairVector.begin(); pairIt != pairVector.end(); pairIt++)
+		// copying over the bigger integer of all the other pairs
+		finalVector.push_back(pairIt->first);
+	
+	// DEBUG PRINT
+	std::cout << "Final vector (before insertion): ";
+	for (std::vector<int>::iterator testIt = finalVector.begin(); testIt != finalVector.end(); testIt++)
+		std::cout << *testIt << " ";
+	std::cout << "\n";
+}
+
+	//DELETE
+	std::vector<int> generateOrderedSequence(int n) {
+    std::vector<int> result;
+    std::vector<int> groupSizes = {2}; // Start with the initial group size
+
+    // Generate group sizes
+    while (result.size() < n) {
+        int lastSize = groupSizes.back();
+        if (groupSizes.size() == 1) {
+            groupSizes.push_back(lastSize); // Second group is also 2
+        } else {
+            int secondLastSize = groupSizes[groupSizes.size() - 2];
+            groupSizes.push_back(lastSize + secondLastSize);
+        }
+    }
+
+    int currentIndex = 1;
+    for (size_t i = 0; i < groupSizes.size() && result.size() < n; ++i) {
+        int groupSize = groupSizes[i];
+        int groupEndIndex = currentIndex + groupSize - 1;
+
+        // Add elements to the result in reverse order within the group
+        for (int j = groupEndIndex; j >= currentIndex && result.size() < n; --j) {
+            result.push_back(j);
+        }
+        currentIndex = groupEndIndex + 1;
+    }
+
+    return result;
+}
+
+// n is the size of the paired vector.
+void generateIndexSequence(int n, std::vector<int> &index)
+{
+	std::vector<int> groupSize;
+	groupSize.push_back(2);
+	int totalGroupSize = 2;
+	int power = 2;
+	
+	while (totalGroupSize < n)
+	{
+		// Adjacent group sizes are a rising power of 2 sequence.
+		// 2, 2, 6, 10
+		// 2 + 2 = 4 = 2^2
+		// 2 + 6 = 8 = 2^3
+		// 6 + 10 = 16 = 2^4
+		int nextGroupSize = std::pow(2, power) - groupSize.back();
+		if (totalGroupSize + nextGroupSize < n - 1)
+			groupSize.push_back(nextGroupSize);
+		// if nextGroupSize will exceed the number of indexes needed, just truncate the last group.
+		else
+		{
+			groupSize.push_back((n - 1) - totalGroupSize);
+			break;
+		}
+		totalGroupSize += nextGroupSize;
+		power++;
+	}
+	
+	
+
+}
+
+
+// Binary insetion of the smaller integers to the final sorted vector in the index order of the reversed Jacobsthal sequence.
+void insertSmallerIntegers(const std::vector< std::pair<int, int> > &pairVector, std::vector<int> &finalVector)
+{
+	std::vector<int> index;
+	
+	generateIndexSequence(pairVector.size(), index);
+	
 }
 
 // Ford Johnson Algorithm
@@ -209,7 +302,15 @@ void PmergeMe::sortVector()
 	std::cout << "Pair vector (ascending and big-sorted): ";
 	for (std::vector< std::pair<int, int> >::iterator testIt = pairVector.begin(); testIt != pairVector.end(); testIt++)
 		std::cout << testIt->first << " " << testIt-> second << " ";
-	std::cout << "\n";	  
+	std::cout << "\n";	 
+	
+	std::vector<int> finalVector;
+	// handles 4) and 5)
+	createFinalVector(pairVector, finalVector);
+	insertSmallerIntegers(pairVector, finalVector);
+
+	if (straggler > 0)
+		binaryInsert(straggler, finalVector);
 }
 
 void PmergeMe::compare(char **av)

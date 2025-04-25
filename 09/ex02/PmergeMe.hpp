@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/25 10:31:54 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/25 13:06:12 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <deque>
 #include <climits> // INT_MAX, INT_MIN
 #include <algorithm> // std::find(), std::swap()
+#include <cmath> //std::pow
 
 #define RED "\033[31m"
 #define YELLOW "\033[33m"
