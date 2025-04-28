@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/25 16:38:33 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/28 17:40:39 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,22 @@
 class PmergeMe
 {
 	private:
-		std::vector <int> _intVector;
-		std::deque <int> _intDeque;
+		std::vector<int> _originalVector;
+		std::vector< std::pair<int, int> > _pairVector;
+		std::vector<int> _sortedVector;
 
-		void createVector(char **av);
-		void sortVector();
+		std::deque<int> _originalDeque;
+		std::deque< std::pair<int, int> > _pairDeque;
+		std::deque<int> _sortedDeque;
+
+		void sortVector(char **av);
+		void createOriginalVector(char **av);
+		void createPairVector(int &straggler);
+		void mergePairVector(int left, int mid, int right);
+		void mergeSortPairVector(int left, int right);
+		void createSortedVector();
+		void generateIndexSequence(int n, std::vector<int> &index);\
+		void insertToSortedVector();
 
 	public:
 		// OCF
@@ -54,19 +65,19 @@ class PmergeMe
 				virtual ~ParsingException() throw();
 				const char *what() const throw();
 		};
-		
+
 		class InvalidNumberException : public ParsingException
 		{
 			public:
 				InvalidNumberException(std::string number);
 		};
-		
+
 		class IntegerOverflowException : public ParsingException
 		{
 			public:
 				IntegerOverflowException(std::string number);
 		};
-		
+
 		class DuplicateNumberException : public ParsingException
 		{
 			public:

@@ -12,6 +12,14 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98 -Wpedantic
 
 RM = rm -f
 
+# To enter debug mode, type "make DEBUG=1 re" in the terminal.
+ifeq ($(DEBUG), 1)
+# defines a macro called DEBUG
+# variable assignment must start in column 1 otherwise the Makefile
+# will think it is a recipe line
+CFLAGS += -DDEBUG
+endif
+
 all: $(NAME)
 
 # Create the obj directory if it doesn't exist
