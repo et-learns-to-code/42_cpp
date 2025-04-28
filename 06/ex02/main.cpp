@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:28:42 by etien             #+#    #+#             */
-/*   Updated: 2025/04/08 14:42:11 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/28 13:32:02 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "B.hpp"
 #include "C.hpp"
 
+#include <iostream>
 #include <cstdlib> // srand()
 #include <ctime> // time()
 
