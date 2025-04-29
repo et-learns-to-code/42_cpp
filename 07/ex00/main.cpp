@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 16:35:53 by etien             #+#    #+#             */
-/*   Updated: 2025/04/08 19:23:12 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/29 11:16:01 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ int main( void )
 	int a = 2;
 	int b = 3;
 
+	// ::swap instead of swap to call the function from the global namespace
+	// a global namespace includes anything not defined within a specific namespace
+	// swap alone will use argument-dependent lookup to find the correct swap function
 	::swap( a, b );
 	std::cout << "a = " << a << ", b = " << b << std::endl;
 	std::cout << "min( a, b ) = " << ::min( a, b ) << std::endl;

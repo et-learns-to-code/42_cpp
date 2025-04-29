@@ -6,14 +6,14 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 16:47:44 by etien             #+#    #+#             */
-/*   Updated: 2025/04/10 17:28:26 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/29 11:41:48 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ARRAY_HPP
 #define ARRAY_HPP
 
-#include <stdexcept>
+#include <stdexcept> // std::out_of_range
 
 template <typename T>
 class Array
