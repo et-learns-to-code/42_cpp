@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/28 17:31:06 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/29 15:39:08 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ void PmergeMe::createOriginalVector(char **av)
 	}
 
 	#ifdef DEBUG
-		for (std::vector<int>::iterator it = _originalVector.begin(); it != _originalVector.end(); it++)
-			std::cout << *it << " ";
-		std::cout << "\n";
+		std::cout << BLUE << "Original vector: ";
+		printContents(_originalVector.begin(), _originalVector.end());
+		std::cout << RESET;
 	#endif
 }
 
@@ -138,10 +138,9 @@ void PmergeMe::createPairVector(int &straggler)
 	}
 
 	#ifdef DEBUG
-		std::cout << "Pair vector (big-sorted): ";
-		for (std::vector< std::pair<int, int> >::iterator testIt = _pairVector.begin(); testIt != _pairVector.end(); testIt++)
-			std::cout << testIt->first << " " << testIt-> second << " ";
-		std::cout << "\n";
+		std::cout << BLUE << "Pair vector (big-sorted): ";
+		printContentsPair(_pairVector.begin(), _pairVector.end());
+		std::cout << RESET;
 	#endif
 }
 
@@ -186,10 +185,9 @@ void PmergeMe::mergeSortPairVector(int left, int right)
 	mergePairVector(left, mid, right);
 
 	#ifdef DEBUG
-		std::cout << "Pair vector (ascending and big-sorted): ";
-		for (std::vector< std::pair<int, int> >::iterator testIt = _pairVector.begin(); testIt != _pairVector.end(); testIt++)
-			std::cout << testIt->first << " " << testIt-> second << " ";
-		std::cout << "\n";
+		std::cout << BLUE << "Pair vector (ascending and big-sorted): ";
+		printContentsPair(_pairVector.begin(), _pairVector.end());
+		std::cout << RESET;
 	#endif
 }
 
@@ -207,10 +205,9 @@ void PmergeMe::createSortedVector()
 		_sortedVector.push_back(pairIt->first);
 
 	#ifdef DEBUG
-		std::cout << "Sorted vector (before insertion): ";
-		for (std::vector<int>::iterator testIt = _sortedVector.begin(); testIt != _sortedVector.end(); testIt++)
-			std::cout << *testIt << " ";
-		std::cout << "\n";
+		std::cout << BLUE << "Sorted vector (before insertion): ";
+		printContents(_sortedVector.begin(), _sortedVector.end());
+		std::cout << RESET;
 	#endif
 }
 
@@ -245,8 +242,10 @@ void PmergeMe::generateIndexSequence(int n, std::vector<int> &index)
 	for (size_t sizeIt = 0; sizeIt < groupSize.size(); sizeIt++)
 	{
 		for (int size = groupSize[sizeIt]; size > 0; size--)
-			// size will be >= 1 so index will also be >=1;
-			index.push_back(baseIndex + size);
+			// only add to the index vector if the index fits within pairVector
+			if (baseIndex + size < n)
+				// size will be >= 1 so index will also be >=1;
+				index.push_back(baseIndex + size);
 		baseIndex += groupSize[sizeIt];
 	}
 
@@ -255,10 +254,9 @@ void PmergeMe::generateIndexSequence(int n, std::vector<int> &index)
 	// 84 83 82 81 80 79 78 77 76 75 74 73 72 71 70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43
 	// 99 98 97 96 95 94 93 92 91 90 89 88 87 86 85
 	#ifdef DEBUG
-		std::cout << "Index sequence: ";
-		for (std::vector<int>::iterator testIt = index.begin(); testIt != index.end(); testIt++)
-			std::cout << *testIt << " ";
-		std::cout << "\n";
+		std::cout << GREEN << "Index sequence: ";
+		printContents(index.begin(), index.end());
+		std::cout << RESET;
 	#endif
 }
 
@@ -281,11 +279,10 @@ void PmergeMe::insertToSortedVector()
 		_sortedVector.insert(insertPos, integer);
 
 		#ifdef DEBUG
-			std::cout << "Integer added: " << integer << " from index " << index[i] << "\n";
-			std::cout << "Sorted vector (after insertion): ";
-			for (std::vector<int>::iterator testIt = _sortedVector.begin(); testIt != _sortedVector.end(); testIt++)
-				std::cout << *testIt << " ";
-			std::cout << "\n";
+			std::cout << BLUE << "Inserted " << integer << " from " << GREEN << "index " << index[i] << "\n";
+			std::cout << BLUE << "Sorted vector (after insertion): ";
+			printContents(_sortedVector.begin(), _sortedVector.end());
+			std::cout << RESET;
 		#endif
 	}
 }
@@ -308,6 +305,17 @@ void PmergeMe::sortVector(char **av)
 {
 	createOriginalVector(av);
 
+	if (isSorted(_originalVector.begin(), _originalVector.end()))
+	{
+		_sortedVector = _originalVector;
+
+		#ifdef DEBUG
+			std::cout << BLUE << "Vector was already sorted." << RESET << std::endl;
+		#endif
+
+		return;
+	}
+
 	// assign -1 to check for assignment because straggler must be a positive integer
 	int straggler = -1;
 
@@ -327,10 +335,9 @@ void PmergeMe::sortVector(char **av)
 		_sortedVector.insert(stragglerPos, straggler);
 
 		#ifdef DEBUG
-			std::cout << "Sorted vector (after inserting straggler): ";
-			for (std::vector<int>::iterator testIt = _sortedVector.begin(); testIt != _sortedVector.end(); testIt++)
-				std::cout << *testIt << " ";
-			std::cout << "\n";
+			std::cout << BLUE << "Sorted vector (after inserting straggler): ";
+			printContents(_sortedVector.begin(), _sortedVector.end());
+			std::cout << RESET;
 		#endif
 	}
 }
@@ -338,6 +345,25 @@ void PmergeMe::sortVector(char **av)
 void PmergeMe::compare(char **av)
 {
 	sortVector(av);
+	// sortDeque(av);
+
+	std::cout << "Before: ";
+	printContents(_originalVector.begin(), _originalVector.end());
+	// additional checks to preserve the integrity of the sequence:
+	// only print the sorted sequence if it is sorted and the number of elements match the original.
+	if (isSorted(_sortedVector.begin(), _sortedVector.end()) && _sortedVector.size() == _originalVector.size())
+	{
+		std::cout << "After:  ";
+		printContents(_sortedVector.begin(), _sortedVector.end());
+	}
+
+	std::cout << "Before: ";
+	printContents(_originalDeque.begin(), _originalDeque.end());
+	if (isSorted(_sortedDeque.begin(), _sortedDeque.end()))
+	{
+		std::cout << "After:  ";
+		printContents(_sortedDeque.begin(), _sortedDeque.end());
+	}
 }
 
 PmergeMe::ParsingException::ParsingException(std::string err) : _message(err) {}
