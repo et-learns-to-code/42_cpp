@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/29 17:46:20 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/29 19:01:22 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ std::string trim(const std::string& input)
 // The index generated here is an array index. The value will be between 1 and (n - 1).
 // We don't need index 0 because pair[0] has already been sorted.
 // n is the size of the paired vector.
-void generateIndexSequence(int n, std::vector<int> &index)
+void PmergeMe::generateIndexSequence(int n, std::vector<int> &index)
 {
 	std::vector<int> groupSize;
 	groupSize.push_back(2);
@@ -114,7 +114,7 @@ void PmergeMe::sortVector(char **av)
 		_sortedVector = _originalVector;
 
 		#ifdef DEBUG
-			std::cout << BLUE << "Vector was already sorted." << RESET << std::endl;
+			std::cout << YELLOW << "Vector was already sorted." << RESET << std::endl;
 		#endif
 
 		return;
@@ -127,6 +127,13 @@ void PmergeMe::sortVector(char **av)
 	createPairVector(straggler);
 	// handles 3)
 	mergeSortPairVector(0, _pairVector.size());
+
+	#ifdef DEBUG
+		std::cout << YELLOW << "Pair vector (ascending and big-sorted): ";
+		printContentsPair(_pairVector.begin(), _pairVector.end());
+		std::cout << RESET;
+	#endif
+
 	// handles 4) and 5)
 	createSortedVector();
 	// handles 6)
@@ -139,7 +146,7 @@ void PmergeMe::sortVector(char **av)
 		_sortedVector.insert(stragglerPos, straggler);
 
 		#ifdef DEBUG
-			std::cout << BLUE << "Sorted vector (after inserting straggler): ";
+			std::cout << YELLOW << "Sorted vector (after inserting straggler): ";
 			printContents(_sortedVector.begin(), _sortedVector.end());
 			std::cout << RESET;
 		#endif
@@ -173,7 +180,7 @@ void PmergeMe::createOriginalVector(char **av)
 	}
 
 	#ifdef DEBUG
-		std::cout << BLUE << "Original vector: ";
+		std::cout << YELLOW << "Original vector: ";
 		printContents(_originalVector.begin(), _originalVector.end());
 		std::cout << RESET;
 	#endif
@@ -210,7 +217,7 @@ void PmergeMe::createPairVector(int &straggler)
 	}
 
 	#ifdef DEBUG
-		std::cout << BLUE << "Pair vector (big-sorted): ";
+		std::cout << YELLOW << "Pair vector (big-sorted): ";
 		printContentsPair(_pairVector.begin(), _pairVector.end());
 		std::cout << RESET;
 	#endif
@@ -229,12 +236,6 @@ void PmergeMe::mergeSortPairVector(int left, int right)
 	mergeSortPairVector(left, mid);
 	mergeSortPairVector(mid, right);
 	mergePairVector(left, mid, right);
-
-	#ifdef DEBUG
-		std::cout << BLUE << "Pair vector (ascending and big-sorted): ";
-		printContentsPair(_pairVector.begin(), _pairVector.end());
-		std::cout << RESET;
-	#endif
 }
 
 void PmergeMe::mergePairVector(int left, int mid, int right)
@@ -277,7 +278,7 @@ void PmergeMe::createSortedVector()
 		_sortedVector.push_back(pairIt->first);
 
 	#ifdef DEBUG
-		std::cout << BLUE << "Sorted vector (before insertion): ";
+		std::cout << YELLOW << "Sorted vector (before insertion): ";
 		printContents(_sortedVector.begin(), _sortedVector.end());
 		std::cout << RESET;
 	#endif
@@ -302,8 +303,8 @@ void PmergeMe::insertToSortedVector()
 		_sortedVector.insert(insertPos, integer);
 
 		#ifdef DEBUG
-			std::cout << BLUE << "Inserted " << integer << " from " << GREEN << "index " << index[i] << "\n";
-			std::cout << BLUE << "Sorted vector (after insertion): ";
+			std::cout << YELLOW << "Inserting " << integer << " from " << GREEN << "index " << index[i] << ": \n";
+			std::cout << YELLOW << "Sorted vector (after insertion): ";
 			printContents(_sortedVector.begin(), _sortedVector.end());
 			std::cout << RESET;
 		#endif
@@ -331,6 +332,13 @@ void PmergeMe::sortDeque(char **av)
 
 	createPairDeque(straggler);
 	mergeSortPairDeque(0, _pairDeque.size());
+
+	#ifdef DEBUG
+		std::cout << BLUE << "Pair deque (ascending and big-sorted): ";
+		printContentsPair(_pairDeque.begin(), _pairDeque.end());
+		std::cout << RESET;
+	#endif
+
 	createSortedDeque();
 	insertToSortedDeque();
 
@@ -410,12 +418,6 @@ void PmergeMe::mergeSortPairDeque(int left, int right)
 	mergeSortPairDeque(left, mid);
 	mergeSortPairDeque(mid, right);
 	mergePairDeque(left, mid, right);
-
-	#ifdef DEBUG
-		std::cout << BLUE << "Pair deque (ascending and big-sorted): ";
-		printContentsPair(_pairDeque.begin(), _pairDeque.end());
-		std::cout << RESET;
-	#endif
 }
 
 void PmergeMe::mergePairDeque(int left, int mid, int right)
@@ -469,7 +471,7 @@ void PmergeMe::insertToSortedDeque()
 		_sortedDeque.insert(insertPos, integer);
 
 		#ifdef DEBUG
-			std::cout << BLUE << "Inserted " << integer << " from " << GREEN << "index " << index[i] << "\n";
+			std::cout << BLUE << "Inserted " << integer << " from " << GREEN << "index " << index[i] << ": \n";
 			std::cout << BLUE << "Sorted deque (after insertion): ";
 			printContents(_sortedDeque.begin(), _sortedDeque.end());
 			std::cout << RESET;
@@ -519,31 +521,57 @@ PmergeMe::~PmergeMe()
 
 void PmergeMe::compare(char **av)
 {
-	// clock_t vectorStart = clock();
+	// clock() returns the number of CPU clock ticks the program has consumed since it started.
+	// The difference between two clock() calls represents the CPU time used during that interval.
+	// Unlike wall-clock time, CPU time excludes idle periods (e.g. sleep), making it ideal for
+	// benchmarking the actual computational cost of an algorithm..
+	clock_t vectorStart = clock();
 	sortVector(av);
-	// clock_t vectorEnd = clock();
+	clock_t vectorEnd = clock();
 
-	// clock_t dequeStart = clock();
+	clock_t dequeStart = clock();
 	sortDeque(av);
-	// clock_t dequeEnd = clock();
+	clock_t dequeEnd = clock();
 
-	std::cout << "Before (vector): ";
-	printContents(_originalVector.begin(), _originalVector.end());
+	// convert CPU clock ticks to microseconds
+	// 1 second = 1e6 microseconds
+	double vectorTime = static_cast<double>(vectorEnd - vectorStart) * 1e6 / CLOCKS_PER_SEC;
+	double dequeTime = static_cast<double>(dequeEnd - dequeStart) * 1e6 / CLOCKS_PER_SEC;
+
+	std::cout << "Before: ";
+	printContentsTruncated(_originalVector.begin(), _originalVector.end(), _originalVector.size());
 	// additional checks to preserve the integrity of the sequence:
 	// only print the sorted sequence if it is sorted and the number of elements match the original.
 	if (isSorted(_sortedVector.begin(), _sortedVector.end()) && _sortedVector.size() == _originalVector.size())
 	{
-		std::cout << "After (vector):  ";
-		printContents(_sortedVector.begin(), _sortedVector.end());
+		std::cout << "After:  ";
+		printContentsTruncated(_sortedVector.begin(), _sortedVector.end(), _sortedVector.size());
+		std::cout << RESET;
 	}
+	std::cout << "Time to process a range of " << _originalVector.size() << " elements with std::vector: "
+				<< vectorTime << " µs\n";
+	std::cout << "Time to process a range of " << _originalDeque.size() << " elements with std::deque:  "
+				<< dequeTime  << " µs\n";
 
-	std::cout << "Before (deque): ";
-	printContents(_originalDeque.begin(), _originalDeque.end());
-	if (isSorted(_sortedDeque.begin(), _sortedDeque.end()) && _sortedDeque.size() == _originalDeque.size())
-	{
-		std::cout << "After (deque):  ";
-		printContents(_sortedDeque.begin(), _sortedDeque.end());
-	}
+	#ifdef DEBUG
+		std::cout << YELLOW << "\nBefore (vector): ";
+		printContents(_originalVector.begin(), _originalVector.end());
+		if (isSorted(_sortedVector.begin(), _sortedVector.end()) && _sortedVector.size() == _originalVector.size())
+		{
+			std::cout << "After (vector):  ";
+			printContents(_sortedVector.begin(), _sortedVector.end());
+			std::cout << RESET;
+		}
+
+		std::cout << BLUE << "Before (deque): ";
+		printContents(_originalDeque.begin(), _originalDeque.end());
+		if (isSorted(_sortedDeque.begin(), _sortedDeque.end()) && _sortedDeque.size() == _originalDeque.size())
+		{
+			std::cout << "After (deque):  ";
+			printContents(_sortedDeque.begin(), _sortedDeque.end());
+			std::cout << RESET;
+		}
+	#endif
 }
 
 PmergeMe::ParsingException::ParsingException(std::string err) : _message(err) {}

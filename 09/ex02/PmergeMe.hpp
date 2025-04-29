@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/29 17:36:51 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/29 18:25:09 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 #include <cmath> // std::pow
 #include <ctime> // clock()
 
-#define RED "\033[31m"
 #define GREEN "\033[32m"
 #define YELLOW "\033[33m"
 #define BLUE "\033[34m"
@@ -38,6 +37,8 @@ class PmergeMe
 		std::deque<int> _originalDeque;
 		std::deque< std::pair<int, int> > _pairDeque;
 		std::deque<int> _sortedDeque;
+
+		void generateIndexSequence(int n, std::vector<int> &index);
 
 		void sortVector(char **av);
 		void createOriginalVector(char **av);
@@ -91,6 +92,32 @@ class PmergeMe
 			{
 				std::cout << "(" << first->first << ", " << first->second << ") ";
 				first++;
+			}
+			std::cout << std::endl;
+		}
+
+		// template function to print out container contents (limited to first four integers)
+		template <typename it>
+		void printContentsTruncated(it first, it last, size_t size)
+		{
+			if (size <= 10)
+			{
+				while (first != last)
+				{
+					std::cout << *first << " ";
+					first++;
+				}
+			}
+			else
+			{
+				size_t count = 0;
+				while (first != last && count < 4)
+				{
+					std::cout << *first << " ";
+					first++;
+					count++;
+				}
+				std::cout << "[...]";
 			}
 			std::cout << std::endl;
 		}
