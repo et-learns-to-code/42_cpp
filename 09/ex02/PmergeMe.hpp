@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 17:31:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/29 15:40:50 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/29 17:36:51 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <climits> // INT_MAX, INT_MIN
 #include <algorithm> // std::find(), std::swap(), std::lower_bound()
 #include <cmath> // std::pow
+#include <ctime> // clock()
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -41,11 +42,18 @@ class PmergeMe
 		void sortVector(char **av);
 		void createOriginalVector(char **av);
 		void createPairVector(int &straggler);
-		void mergePairVector(int left, int mid, int right);
 		void mergeSortPairVector(int left, int right);
+		void mergePairVector(int left, int mid, int right);
 		void createSortedVector();
-		void generateIndexSequence(int n, std::vector<int> &index);\
 		void insertToSortedVector();
+
+		void sortDeque(char **av);
+		void createOriginalDeque(char **av);
+		void createPairDeque(int &straggler);
+		void mergeSortPairDeque(int left, int right);
+		void mergePairDeque(int left, int mid, int right);
+		void createSortedDeque();
+		void insertToSortedDeque();
 
 		// template function to checks that the container's elements are sorted in ascending order.
 		template <typename it>
