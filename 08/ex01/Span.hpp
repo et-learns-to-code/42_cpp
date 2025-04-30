@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:30:37 by etien             #+#    #+#             */
-/*   Updated: 2025/04/18 15:20:09 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/30 13:08:42 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ class Span
 		// OCF - prohibit default constructor
 		Span();
 
+		void sortVector();
+
 	public:
 		// OCF
 		Span(const Span &src);
@@ -35,7 +37,7 @@ class Span
 		~Span();
 
 		// parameterized constructor
-		Span(unsigned int n);
+		Span(unsigned int N);
 
 		// getter
 		const std::vector<int> &getIntVector() const;
@@ -54,8 +56,6 @@ class Span
 				begin++;
 			}
 		}
-
-		void sortVector();
 
 		long shortestSpan();
 		long longestSpan();

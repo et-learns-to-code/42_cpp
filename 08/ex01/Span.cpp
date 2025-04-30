@@ -6,11 +6,24 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:30:46 by etien             #+#    #+#             */
-/*   Updated: 2025/04/25 06:57:19 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/30 13:19:57 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Span.hpp"
+
+// This function will sort the vector in ascending order and remove duplicate values.
+void Span::sortVector()
+{
+	// std::sort sorts the elements in the range [first, last) in non-descending order
+	// std::unique moves consecutive duplicates to the end and returns an iterator to the new logical end.
+	// erase(...) trims the vector so it only keeps unique values.
+	// erase([first,last)) will trim a range of elements.
+	// begin() and end() are always updated after a std::vector::erase().
+	std::sort(_intVector.begin(), _intVector.end());
+	std::vector<int>::iterator newEnd = std::unique(_intVector.begin(), _intVector.end());
+	_intVector.erase(newEnd, _intVector.end());
+}
 
 // copy constructor
 Span::Span(const Span &src)
@@ -41,7 +54,7 @@ Span::~Span()
 }
 
 // parameterized constructor
-Span::Span(unsigned int n) : _N(n)
+Span::Span(unsigned int N) : _N(N)
 {
 	// std::cout << "Span object parameterized constructor called." << std::endl;
 }
@@ -62,19 +75,6 @@ void Span::addNumber(int number)
 	if (_intVector.size() >= _N)
 		throw Span::ContainerFullException();
 	_intVector.push_back(number);
-}
-
-// This function will sort the vector in ascending order and remove duplicate values.
-void Span::sortVector()
-{
-	// std::sort sorts the elements in the range [first, last) in non-descending order
-	// std::unique moves consecutive duplicates to the end and returns an iterator to the new logical end.
-	// erase(...) trims the vector so it only keeps unique values.
-	// erase([first,last)) will trim a range of elements.
-	// begin() and end() are always updated after a std::vector::erase().
-	std::sort(_intVector.begin(), _intVector.end());
-	std::vector<int>::iterator newEnd = std::unique(_intVector.begin(), _intVector.end());
-	_intVector.erase(newEnd, _intVector.end());
 }
 
 // This function will return the shortest span.
