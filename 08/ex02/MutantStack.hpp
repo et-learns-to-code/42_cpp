@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:03:44 by etien             #+#    #+#             */
-/*   Updated: 2025/04/17 18:01:47 by etien            ###   ########.fr       */
+/*   Updated: 2025/04/30 13:34:12 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ class MutantStack : public std::stack<T>
 		iterator begin() {return this->c.begin();}
 		iterator end() {return this->c.end();}
 		// function overloading works for const and non-const functions.
-		const_iterator begin() const {return this->c.begin();}
-		const_iterator end() const {return this->c.end();}
+		const_iterator begin() const {return this->c.cbegin();}
+		const_iterator end() const {return this->c.cend();}
 
 		// rbegin() returns a reverse iterator pointing to the last element.
 		// rend() returns a reverse iterator pointing to one before the first element.
@@ -77,8 +77,8 @@ class MutantStack : public std::stack<T>
 		// backward in the underlying container — toward the beginning.
 		reverse_iterator rbegin() {return this->c.rbegin();}
 		reverse_iterator rend() {return this->c.rend();}
-		const_reverse_iterator rbegin() const {return this->c.rbegin();}
-		const_reverse_iterator rend() const {return this->c.rend();}
+		const_reverse_iterator rbegin() const {return this->c.crbegin();}
+		const_reverse_iterator rend() const {return this->c.crend();}
 };
 
 #endif
