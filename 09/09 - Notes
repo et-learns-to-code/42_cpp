@@ -253,3 +253,95 @@ So:
 
 ❌ Not the goal: Being faster in practice than standard sort algorithms (like std::sort), which are optimized for real-world usage, cache locality, and low overhead.
 
+
+~~~
+
+🔍 Why std::deque is faster for small sequences:
+
+	Lower allocation overhead: For small sequences, the overhead of allocating memory in chunks (as deque does) is minimal, and deque avoids a full reallocation when growing.
+
+	No need to shift elements: Deques are optimized for fast insertion/removal at both ends. This can give small advantages in certain algorithms, especially if you push/pop elements at the front or back during sorting or merging.
+
+	Better cache usage for small blocks: Deques use multiple small blocks instead of one contiguous block, and for small datasets, the block management overhead is negligible.
+
+🚀 Why std::vector is faster for large sequences:
+
+	Contiguous memory layout: Vectors store elements in a single contiguous block. This is cache-friendly, and modern CPUs can access memory much faster when data is in a continuous chunk.
+
+	Fewer indirections: Unlike deque, vector doesn't require extra pointer lookups to access elements — just direct arithmetic on addresses. This matters more as the number of elements increases.
+
+	Optimized algorithms: Standard algorithms (like std::sort) tend to be highly optimized for contiguous memory, giving vectors a big speed advantage when sorting or manipulating large sequences.
+
+Summary:
+
+Feature					std::vector					std::deque
+Memory layout			Contiguous					Chunked blocks
+Access time				Slightly faster (direct)	Slightly slower (indirect)
+Insert/remove at ends	Fast at back				Fast at both ends
+Small sequences			Slightly slower				Faster
+Large sequences			Faster						Slower
+
+
+~~~
+
+Prompt:
+
+	So a deque has broken up blocks of memory and the way it accesses elements between chunks is to use a pointer to access the next chunk (kind of like traversing a linked list).
+
+	A vector uses contiguous memory and can easily access values with arithmetic (start + displacement).
+
+	With large sequences, deque has slower access time because of the traversal and vector a quicker access time.
+
+	With small sequences, a deque is not that chunked and may even be contigous in memory, so it can perform better than a vector.
+
+	When you say algorithms are more optimized for contigous memory, does that include std::lower_bound? because that is the function called multiple times for the insertion and would therefore set apart the vector from the deque in terms of performance for large sequences.
+
+Reply:
+
+✅ std::lower_bound and Contiguous Memory
+
+	Yes, std::lower_bound is absolutely optimized for contiguous memory. Here's why:
+
+1. Binary search pattern
+
+	std::lower_bound uses binary search, which repeatedly divides the search space and accesses elements at computed offsets (e.g., first + (last - first) / 2). On a std::vector, this arithmetic directly maps to memory addresses — fast and predictable.
+
+2. Cache locality
+
+	In std::vector, elements are stored contiguously, so once an element is loaded into cache, the neighboring elements are also likely to be in the cache. This means:
+
+	Fewer cache misses.
+
+	Faster access as the CPU prefetches data effectively.
+
+	In contrast, std::deque uses non-contiguous blocks, so a computed index might point to a different memory page or block, triggering:
+
+	Extra indirection (e.g., lookup in the internal map).
+
+	More cache misses, since neighboring elements may not be physically nearby.
+
+3. Pointer arithmetic
+
+	With a std::vector, random access is literally a single pointer addition:
+
+	element_address = base_address + index;
+	But with a std::deque, the same kind of indexing involves:
+
+	Checking which internal block contains the index.
+
+	Looking up the pointer to that block.
+
+	Accessing the element within that block.
+
+	This overhead adds up quickly in tight loops or frequent searches, like when calling std::lower_bound many times.
+
+Conclusion
+
+Yes, the performance difference you're seeing is strongly tied to how well std::lower_bound works with contiguous memory, and vectors give it the perfect conditions to shine — especially in large sequences where:
+
+	Memory access patterns dominate.
+
+	Cache efficiency matters.
+
+	Index calculations happen thousands of times.
+
