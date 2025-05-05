@@ -6,7 +6,7 @@
 /*   By: etien <etien@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:02:32 by etien             #+#    #+#             */
-/*   Updated: 2025/04/29 19:01:22 by etien            ###   ########.fr       */
+/*   Updated: 2025/05/05 13:50:50 by etien            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -546,7 +546,6 @@ void PmergeMe::compare(char **av)
 	{
 		std::cout << "After:  ";
 		printContentsTruncated(_sortedVector.begin(), _sortedVector.end(), _sortedVector.size());
-		std::cout << RESET;
 	}
 	std::cout << "Time to process a range of " << _originalVector.size() << " elements with std::vector: "
 				<< vectorTime << " µs\n";
